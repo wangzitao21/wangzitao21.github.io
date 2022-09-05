@@ -20,28 +20,34 @@
     var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","width":240,"display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"valine","storage":true,"lazyload":false,"nav":null,"activeClass":"valine"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Wang">
-<meta property="og:url" content="http://example.com/index.html">
+  <meta name="description" content="导入模块123%matplotlib inline%config InlineBackend.figure_format &#x3D; &amp;#x27;svg&amp;#x27;import matplotlib.pyplot as plt 自定义配置文件rcParams 中存储了 Matplotlib 绘图时所有参数的默认值，在 matplotlibrc 文件中。 可通过字典的形式来修改 rcParams: 1234">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Matplotlib">
+<meta property="og:url" content="http://example.com/2022/09/05/Matplotlib/index.html">
 <meta property="og:site_name" content="Wang">
+<meta property="og:description" content="导入模块123%matplotlib inline%config InlineBackend.figure_format &#x3D; &amp;#x27;svg&amp;#x27;import matplotlib.pyplot as plt 自定义配置文件rcParams 中存储了 Matplotlib 绘图时所有参数的默认值，在 matplotlibrc 文件中。 可通过字典的形式来修改 rcParams: 1234">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://matplotlib.org/stable/_images/sphx_glr_anatomy_001_2_0x.png">
+<meta property="article:published_time" content="2022-09-05T13:05:12.000Z">
+<meta property="article:modified_time" content="2022-09-05T13:05:43.774Z">
 <meta property="article:author" content="Wang">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://matplotlib.org/stable/_images/sphx_glr_anatomy_001_2_0x.png">
 
-<link rel="canonical" href="http://example.com/">
+<link rel="canonical" href="http://example.com/2022/09/05/Matplotlib/">
 
 
 <script id="page-configurations">
   // https://hexo.io/docs/variables.html
   CONFIG.page = {
     sidebar: "",
-    isHome : true,
-    isPost : false,
+    isHome : false,
+    isPost : true,
     lang   : 'zh-CN'
   };
 </script>
 
-  <title>Wang</title>
+  <title>Matplotlib | Wang</title>
   
 
 
@@ -173,9 +179,10 @@
         <div class="content-wrap">
           
 
-          <div class="content index posts-expand">
+          <div class="content post posts-expand">
             
-      
+
+    
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
@@ -191,10 +198,9 @@
       <meta itemprop="name" content="Wang">
     </span>
       <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/09/05/Matplotlib/" class="post-title-link" itemprop="url">Matplotlib</a>
-        </h2>
+        <h1 class="post-title" itemprop="name headline">
+          Matplotlib
+        </h1>
 
         <div class="post-meta">
             <span class="post-meta-item">
@@ -208,6 +214,13 @@
             </span>
 
           
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
   
   <span class="post-meta-item">
     
@@ -246,7 +259,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h2 id="导入模块"><a href="#导入模块" class="headerlink" title="导入模块"></a>导入模块</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">%matplotlib inline</span><br><span class="line">%config InlineBackend.figure_format = <span class="string">&#x27;svg&#x27;</span></span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br></pre></td></tr></table></figure>
+        <h2 id="导入模块"><a href="#导入模块" class="headerlink" title="导入模块"></a>导入模块</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">%matplotlib inline</span><br><span class="line">%config InlineBackend.figure_format = <span class="string">&#x27;svg&#x27;</span></span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br></pre></td></tr></table></figure>
 <h2 id="自定义配置文件"><a href="#自定义配置文件" class="headerlink" title="自定义配置文件"></a>自定义配置文件</h2><p>rcParams 中存储了 Matplotlib 绘图时所有参数的默认值，在 matplotlibrc 文件中。</p>
 <p>可通过字典的形式来修改 rcParams:</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">config = &#123;<span class="string">&#x27;font.family&#x27;</span>: <span class="string">&#x27;Times New Roman&#x27;</span>,</span><br><span class="line">          <span class="string">&#x27;font.size&#x27;</span>: <span class="number">15</span>,</span><br><span class="line">          <span class="string">&#x27;xtick.direction&#x27;</span>: <span class="string">&#x27;in&#x27;</span>,</span><br><span class="line">          <span class="string">&#x27;ytick.direction&#x27;</span>: <span class="string">&#x27;in&#x27;</span>,</span><br><span class="line">          <span class="string">&#x27;mathtext.fontset&#x27;</span>: <span class="string">&#x27;stix&#x27;</span>,</span><br><span class="line">          <span class="string">&#x27;savefig.dpi&#x27;</span>: <span class="number">300</span></span><br><span class="line">         &#125;</span><br><span class="line">plt.rcParams.update(config)</span><br></pre></td></tr></table></figure>
@@ -321,314 +334,88 @@
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">fig = plt.figure(figsize=(<span class="number">10</span>, <span class="number">8</span>))</span><br><span class="line">ax = fig.add_subplot(<span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, projection=<span class="string">&#x27;3d&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 假设生成一组数据</span></span><br><span class="line">zdata = <span class="number">15</span> * np.random.random(<span class="number">100</span>)</span><br><span class="line">xdata = np.sin(zdata) + <span class="number">0.1</span> * np.random.randn(<span class="number">100</span>)</span><br><span class="line">ydata = np.cos(zdata) + <span class="number">0.1</span> * np.random.randn(<span class="number">100</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 绘制三维图</span></span><br><span class="line">ax.scatter3D(xdata, ydata, zdata, c=zdata, cmap=<span class="string">&#x27;Greens&#x27;</span>)</span><br></pre></td></tr></table></figure>
 <p>还可以和平面图互动:</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">X, Y = np.meshgrid(np.arange(-<span class="number">4</span>, <span class="number">4</span>, <span class="number">0.25</span>), np.arange(-<span class="number">4</span>, <span class="number">4</span>, <span class="number">0.25</span>)) </span><br><span class="line">Z = <span class="number">3</span> * (<span class="number">1</span>-X)**<span class="number">2</span> * np.e**(-(X**<span class="number">2</span>) - (Y+<span class="number">1</span>)**<span class="number">2</span>)- <span class="number">10</span>*(X/<span class="number">5</span> - X**<span class="number">3</span> - Y**<span class="number">5</span>)*np.e**(-X**<span class="number">2</span>-Y**<span class="number">2</span>)- <span class="number">1</span>/<span class="number">3</span>*np.e**(-(X+<span class="number">1</span>)**<span class="number">2</span> - Y**<span class="number">2</span>)</span><br><span class="line"></span><br><span class="line">fig = plt.figure(figsize=(<span class="number">10</span>,<span class="number">10</span>))</span><br><span class="line">ax = fig.add_subplot(<span class="number">1</span>,<span class="number">1</span>,<span class="number">1</span>, projection=<span class="string">&#x27;3d&#x27;</span>)</span><br><span class="line">m = ax.plot_surface(X, Y, Z, rstride=<span class="number">1</span>, cstride=<span class="number">1</span>, cmap=plt.get_cmap(<span class="string">&#x27;Spectral&#x27;</span>))</span><br><span class="line">ax.contourf(X, Y, Z, zdir=<span class="string">&#x27;x&#x27;</span>, offset=-<span class="number">4</span>) <span class="comment"># offset 用来挪位置</span></span><br><span class="line">ax.contourf(X, Y, Z, zdir=<span class="string">&#x27;z&#x27;</span>, offset=-<span class="number">7</span>)</span><br><span class="line">plt.colorbar(m, shrink=<span class="number">0.6</span>)</span><br></pre></td></tr></table></figure>
-      
     </div>
 
     
     
     
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
+        <div class="reward-container">
+  <div></div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
       
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/09/05/Awesome-Hydrology-models/">
+      <div style="display: inline-block;">
+        <img src="/images/wechatpay.jpg" alt="Wang 微信支付">
+        <p>微信支付</p>
+      </div>
 
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Wang">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Wang">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/09/05/Awesome-Hydrology-models/" class="post-title-link" itemprop="url">Awesome-Hydrology-models</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2022-09-05 13:47:09 / 修改时间：20:55:19" itemprop="dateCreated datePublished" datetime="2022-09-05T13:47:09+08:00">2022-09-05</time>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine：</span>
-    
-    <a title="valine" href="/2022/09/05/Awesome-Hydrology-models/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2022/09/05/Awesome-Hydrology-models/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>195</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <script id="ribbon" src="js/canvas-ribbon.js"></script>
-
-<p><a target="_blank" rel="noopener" href="https://www.hec.usace.army.mil/software/hec-ras/">HEC-RAS</a>: This software allows the user to perform one-dimensional steady flow, one and two-dimensional unsteady flow calculations, sediment transport/mobile bed computations, and water temperature/water quality modeling.</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/09/05/%E8%BF%9B%E5%88%B6%E4%B9%8B%E9%97%B4%E5%85%B3%E7%B3%BB/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Wang">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Wang">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/09/05/%E8%BF%9B%E5%88%B6%E4%B9%8B%E9%97%B4%E5%85%B3%E7%B3%BB/" class="post-title-link" itemprop="url">进制之间关系</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2022-09-05 13:47:09 / 修改时间：14:22:43" itemprop="dateCreated datePublished" datetime="2022-09-05T13:47:09+08:00">2022-09-05</time>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine：</span>
-    
-    <a title="valine" href="/2022/09/05/%E8%BF%9B%E5%88%B6%E4%B9%8B%E9%97%B4%E5%85%B3%E7%B3%BB/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2022/09/05/%E8%BF%9B%E5%88%B6%E4%B9%8B%E9%97%B4%E5%85%B3%E7%B3%BB/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>1.2k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>因为常用的进制只有十六进制，十进制和二进制，所以我们只讲这三个。</p>
-<h2 id="十进制"><a href="#十进制" class="headerlink" title="十进制"></a>十进制</h2><p>首先说十进制，所谓十进制就是满十进一。打个比方，十进制中 123 这个数字。那么它是如何得到的呢？</p>
-<script type="math/tex; mode=display">
-123 = 1 \times 10^2 + 2 \times 10^1 + 3</script><p>所以看出来了吧，十进制和其他进制没有本质区别，只是它的进制是 10，所以每进一位，就要加上 10 的一个次方。</p>
-<p>我们再来一个十进制数 9999:</p>
-<script type="math/tex; mode=display">
-999 = 9 \times 10^3 + 9 \times 10^2 + 9 \times 10^1 + 9</script><h2 id="二进制"><a href="#二进制" class="headerlink" title="二进制"></a>二进制</h2><p>二进制和十进制的区别，就是满二进一，也就意味着，二进制中最大的单个数字只能是 1，就像十进制最大的单个数字只能是 9 一样。</p>
-<p>所以假设一个二进制数是 111，我们把它转成十进制，那么他就是:</p>
-<script type="math/tex; mode=display">
-(111)_2 = 1 \times 2^2 + 1 \times 2^1 + 1 = 7</script><p>注意二进制就是进制为 2，所以每进一位，就要加上 2 的一个次方。</p>
-<p>我们再来一个十进制数 1011，我们把它转成十进制，那么他就是:</p>
-<script type="math/tex; mode=display">
-(1011)_2 = 1 \times 2^3 + 0 \times 2^2 + 1 \times 2^1 + 1 = 11</script><h2 id="十六进制"><a href="#十六进制" class="headerlink" title="十六进制"></a>十六进制</h2><p>再来说十六进制，十六进制比十进制多了几个数，而人类社会长期使用十进制，没有给 10，11，12，13，14，15 设单一字符，所以将字母代替了数字，即:</p>
-<script type="math/tex; mode=display">
-A = 10</script><script type="math/tex; mode=display">
-B = 11</script><script type="math/tex; mode=display">
-C = 12</script><script type="math/tex; mode=display">
-D = 13</script><script type="math/tex; mode=display">
-E = 14</script><script type="math/tex; mode=display">
-F = 15</script><p>注意到了 15 就没有了，因为十六进制是满 16 就进一位了。</p>
-<p>现在我们以上面的二进制为例，把他转换为十六进制，比如一个二进制数 1011:</p>
-<script type="math/tex; mode=display">
-(1011)_2 = 1 \times 2^3 + 0 \times 2^2 + 1 \times 2^1 + 1 = 11</script><p>那么此时这个 11 是十进制数，所以转成十六进制就是:</p>
-<script type="math/tex; mode=display">
-11 = (B)_{16}</script><p>所以看出来了，二进制的 1011 就是十进制的 11，就是十六进制的 B。</p>
-<p>那么再来一个大一点的数。比如 1011 0100 0011:</p>
-<script type="math/tex; mode=display">
-(1011\quad 0100\quad 0011)_2 = 1 \times 2^{11}  + 1 \times 2^{9} + 1 \times 2^{8} + 1 \times 2^{6} + 1 \times 2^{1} + 1 = 2883</script><p>注意上式我把为 0 的项给删了，不然太长了不方便看。</p>
-<p>所以呀，1011 0100 0011 这个数的十进制就是 2883，然后换成十六进制:</p>
-<script type="math/tex; mode=display">
-2883 / 16 = 180...3</script><script type="math/tex; mode=display">
-180 / 16 = 11...4</script><script type="math/tex; mode=display">
-11 / 16 = 0...11</script><p>因为 11=B，所以十六进制就是 B43。</p>
-<p>但是不是感觉这样好难算？所以十六进制就比它方便。因为十六进制是二进制的四次方，所以每四位二进制就能换成一个十六进制数，也就是:</p>
-<div class="table-container">
-<table>
-<thead>
-<tr>
-<th style="text-align:center">Binario</th>
-<th style="text-align:center">Hex</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">0</td>
-<td style="text-align:center">0</td>
-</tr>
-<tr>
-<td style="text-align:center">1</td>
-<td style="text-align:center">1</td>
-</tr>
-<tr>
-<td style="text-align:center">10</td>
-<td style="text-align:center">2</td>
-</tr>
-<tr>
-<td style="text-align:center">11</td>
-<td style="text-align:center">3</td>
-</tr>
-<tr>
-<td style="text-align:center">100</td>
-<td style="text-align:center">4</td>
-</tr>
-<tr>
-<td style="text-align:center">101</td>
-<td style="text-align:center">5</td>
-</tr>
-<tr>
-<td style="text-align:center">110</td>
-<td style="text-align:center">6</td>
-</tr>
-<tr>
-<td style="text-align:center">111</td>
-<td style="text-align:center">7</td>
-</tr>
-<tr>
-<td style="text-align:center">1000</td>
-<td style="text-align:center">8</td>
-</tr>
-<tr>
-<td style="text-align:center">1001</td>
-<td style="text-align:center">9</td>
-</tr>
-<tr>
-<td style="text-align:center">1010</td>
-<td style="text-align:center">A</td>
-</tr>
-<tr>
-<td style="text-align:center">1011</td>
-<td style="text-align:center">B</td>
-</tr>
-<tr>
-<td style="text-align:center">1100</td>
-<td style="text-align:center">C</td>
-</tr>
-<tr>
-<td style="text-align:center">1101</td>
-<td style="text-align:center">D</td>
-</tr>
-<tr>
-<td style="text-align:center">1110</td>
-<td style="text-align:center">E</td>
-</tr>
-<tr>
-<td style="text-align:center">1111</td>
-<td style="text-align:center">F</td>
-</tr>
-</tbody>
-</table>
+  </div>
 </div>
-<p>所以我们只需要根据四位来换算一下:</p>
-<script type="math/tex; mode=display">
-(1011\quad 0100\quad 0011)_2 = B43</script>
-      
-    </div>
 
-    
-    
-    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Wang
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://example.com/2022/09/05/Matplotlib/" title="Matplotlib">http://example.com/2022/09/05/Matplotlib/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+        
+
+  <div class="followme">
+    <p>欢迎关注我的其它发布渠道</p>
+
+    <div class="social-list">
+
+        <div class="social-item">
+          <a target="_blank" class="social-link" href="/images/wechatpay.jpg">
+            <span class="icon">
+              <i class="fab fa-weixin"></i>
+            </span>
+
+            <span class="label">WeChat</span>
+          </a>
+        </div>
+    </div>
+  </div>
+
+
       <footer class="post-footer">
-        <div class="post-eof"></div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/09/05/Awesome-Hydrology-models/" rel="prev" title="Awesome-Hydrology-models">
+      <i class="fa fa-chevron-left"></i> Awesome-Hydrology-models
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
       </footer>
+    
   </article>
   
   
-  
-
-
   
 
 
 
           </div>
           
+    <div class="comments" id="valine-comments"></div>
 
 <script>
   window.addEventListener('tabs:register', () => {
@@ -675,6 +462,7 @@ F = 15</script><p>注意到了 15 就没有了，因为十六进制是满 16 就
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AF%BC%E5%85%A5%E6%A8%A1%E5%9D%97"><span class="nav-number">1.</span> <span class="nav-text">导入模块</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%87%AA%E5%AE%9A%E4%B9%89%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="nav-number">2.</span> <span class="nav-text">自定义配置文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%98%E5%9B%BE%E9%A3%8E%E6%A0%BC"><span class="nav-number">3.</span> <span class="nav-text">绘图风格</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Anatomy-of-a-figure"><span class="nav-number">4.</span> <span class="nav-text">Anatomy of a figure</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#API"><span class="nav-number">5.</span> <span class="nav-text">API</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AD%90%E5%9B%BE%E5%B8%83%E5%B1%80"><span class="nav-number">6.</span> <span class="nav-text">子图布局</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9D%90%E6%A0%87%E8%BD%B4-Axis-Spine"><span class="nav-number">7.</span> <span class="nav-text">坐标轴 Axis &#x2F; Spine</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%BB%E5%BA%A6-Tick"><span class="nav-number">8.</span> <span class="nav-text">刻度 Tick</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A0%87%E9%A2%98"><span class="nav-number">9.</span> <span class="nav-text">标题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BD%91%E6%A0%BC"><span class="nav-number">10.</span> <span class="nav-text">网格</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%BE%E4%BE%8B"><span class="nav-number">11.</span> <span class="nav-text">图例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%87%E6%9C%AC"><span class="nav-number">12.</span> <span class="nav-text">文本</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AE%AD%E5%A4%B4%E6%A0%87%E6%B3%A8"><span class="nav-number">13.</span> <span class="nav-text">箭头标注</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BF%9D%E5%AD%98"><span class="nav-number">14.</span> <span class="nav-text">保存</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Bar-amp-Barh"><span class="nav-number">15.</span> <span class="nav-text">Bar &amp; Barh</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Pie"><span class="nav-number">16.</span> <span class="nav-text">Pie</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9E%81%E5%9D%90%E6%A0%87"><span class="nav-number">17.</span> <span class="nav-text">极坐标</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E7%BB%B4%E5%9B%BE"><span class="nav-number">18.</span> <span class="nav-text">三维图</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
