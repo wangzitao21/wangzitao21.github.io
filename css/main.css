@@ -1169,7 +1169,7 @@ pre .javascript .function {
 }
 .links-of-author a::before,
 .links-of-author span.exturl::before {
-  background: #5ca21a;
+  background: #587961;
   border-radius: 50%;
   content: ' ';
   display: inline-block;
@@ -2572,7 +2572,7 @@ mjx-container + br {
   }
 }
 body {
-  background: url("https://source.unsplash.com/random/1600x900?wallpapers");
+  background: url("https://source.unsplash.com/random/1920x1080?wallpapers");
   background-repeat: no-repeat;
   background-attachment: fixed;
   background-position: 100% 100%;
