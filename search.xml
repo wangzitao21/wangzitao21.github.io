@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Awesome-Hydrology-models</title>
+    <url>/2022/09/05/Awesome-Hydrology-models/</url>
+    <content><![CDATA[<script id="ribbon" src="js/canvas-ribbon.js"></script>
+
+<p><a href="https://www.hec.usace.army.mil/software/hec-ras/">HEC-RAS</a>: This software allows the user to perform one-dimensional steady flow, one and two-dimensional unsteady flow calculations, sediment transport/mobile bed computations, and water temperature/water quality modeling.</p>
+]]></content>
+  </entry>
+  <entry>
     <title>Matplotlib</title>
     <url>/2022/09/05/Matplotlib/</url>
     <content><![CDATA[<h2 id="导入模块"><a href="#导入模块" class="headerlink" title="导入模块"></a>导入模块</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">%matplotlib inline</span><br><span class="line">%config InlineBackend.figure_format = <span class="string">&#x27;svg&#x27;</span></span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br></pre></td></tr></table></figure>
@@ -78,14 +86,6 @@
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">fig = plt.figure(figsize=(<span class="number">10</span>, <span class="number">8</span>))</span><br><span class="line">ax = fig.add_subplot(<span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, projection=<span class="string">&#x27;3d&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 假设生成一组数据</span></span><br><span class="line">zdata = <span class="number">15</span> * np.random.random(<span class="number">100</span>)</span><br><span class="line">xdata = np.sin(zdata) + <span class="number">0.1</span> * np.random.randn(<span class="number">100</span>)</span><br><span class="line">ydata = np.cos(zdata) + <span class="number">0.1</span> * np.random.randn(<span class="number">100</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 绘制三维图</span></span><br><span class="line">ax.scatter3D(xdata, ydata, zdata, c=zdata, cmap=<span class="string">&#x27;Greens&#x27;</span>)</span><br></pre></td></tr></table></figure>
 <p>还可以和平面图互动:</p>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">X, Y = np.meshgrid(np.arange(-<span class="number">4</span>, <span class="number">4</span>, <span class="number">0.25</span>), np.arange(-<span class="number">4</span>, <span class="number">4</span>, <span class="number">0.25</span>)) </span><br><span class="line">Z = <span class="number">3</span> * (<span class="number">1</span>-X)**<span class="number">2</span> * np.e**(-(X**<span class="number">2</span>) - (Y+<span class="number">1</span>)**<span class="number">2</span>)- <span class="number">10</span>*(X/<span class="number">5</span> - X**<span class="number">3</span> - Y**<span class="number">5</span>)*np.e**(-X**<span class="number">2</span>-Y**<span class="number">2</span>)- <span class="number">1</span>/<span class="number">3</span>*np.e**(-(X+<span class="number">1</span>)**<span class="number">2</span> - Y**<span class="number">2</span>)</span><br><span class="line"></span><br><span class="line">fig = plt.figure(figsize=(<span class="number">10</span>,<span class="number">10</span>))</span><br><span class="line">ax = fig.add_subplot(<span class="number">1</span>,<span class="number">1</span>,<span class="number">1</span>, projection=<span class="string">&#x27;3d&#x27;</span>)</span><br><span class="line">m = ax.plot_surface(X, Y, Z, rstride=<span class="number">1</span>, cstride=<span class="number">1</span>, cmap=plt.get_cmap(<span class="string">&#x27;Spectral&#x27;</span>))</span><br><span class="line">ax.contourf(X, Y, Z, zdir=<span class="string">&#x27;x&#x27;</span>, offset=-<span class="number">4</span>) <span class="comment"># offset 用来挪位置</span></span><br><span class="line">ax.contourf(X, Y, Z, zdir=<span class="string">&#x27;z&#x27;</span>, offset=-<span class="number">7</span>)</span><br><span class="line">plt.colorbar(m, shrink=<span class="number">0.6</span>)</span><br></pre></td></tr></table></figure>]]></content>
-  </entry>
-  <entry>
-    <title>Awesome-Hydrology-models</title>
-    <url>/2022/09/05/Awesome-Hydrology-models/</url>
-    <content><![CDATA[<script id="ribbon" src="js/canvas-ribbon.js"></script>
-
-<p><a href="https://www.hec.usace.army.mil/software/hec-ras/">HEC-RAS</a>: This software allows the user to perform one-dimensional steady flow, one and two-dimensional unsteady flow calculations, sediment transport/mobile bed computations, and water temperature/water quality modeling.</p>
-]]></content>
   </entry>
   <entry>
     <title>进制之间关系</title>
