@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://wangzitao.xyz/about/index.html</loc>
+    
+    <lastmod>2022-09-06T11:41:11.767Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://wangzitao.xyz/2022/09/05/Matplotlib/</loc>
     
     <lastmod>2022-09-06T09:25:03.687Z</lastmod>
@@ -19,13 +26,6 @@
     <loc>https://wangzitao.xyz/tags/index.html</loc>
     
     <lastmod>2022-09-06T09:23:14.005Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://wangzitao.xyz/about/index.html</loc>
-    
-    <lastmod>2022-09-06T09:10:09.570Z</lastmod>
     
   </url>
   
