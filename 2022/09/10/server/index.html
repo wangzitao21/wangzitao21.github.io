@@ -1,0 +1,1022 @@
+<!DOCTYPE html>
+<html lang="zh-CN,en,default">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"wangzitao.xyz","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","width":240,"display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"valine","storage":true,"lazyload":false,"nav":null,"activeClass":"valine"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="服务器和域名本次是在 NameSilo 上购买的域名。 域名购买非常简单，购买完毕后，依次选择 Manage My Domains &gt; Manage DNS for this domain 即可配置 DNS。 服务器可在 AWS 上申请三个月免费，可利用 美国身份随机生成器。 如果有 Visa 卡，也可以在 Google Cloud 上申请免费一年的服务器。 AWS 服务器和国内服务器有个较">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Server">
+<meta property="og:url" content="https://wangzitao.xyz/2022/09/10/server/index.html">
+<meta property="og:site_name" content="Wang">
+<meta property="og:description" content="服务器和域名本次是在 NameSilo 上购买的域名。 域名购买非常简单，购买完毕后，依次选择 Manage My Domains &gt; Manage DNS for this domain 即可配置 DNS。 服务器可在 AWS 上申请三个月免费，可利用 美国身份随机生成器。 如果有 Visa 卡，也可以在 Google Cloud 上申请免费一年的服务器。 AWS 服务器和国内服务器有个较">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-09-10T14:02:19.000Z">
+<meta property="article:modified_time" content="2022-09-13T07:34:49.935Z">
+<meta property="article:author" content="Wang">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://wangzitao.xyz/2022/09/10/server/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Server | Wang</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Wang</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">1</span></a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">3</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">4</span></a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-guestbook">
+
+    <a href="/guestbook/" rel="section"><i class="fa fa-book fa-fw"></i>留言板</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://wangzitao.xyz/2022/09/10/server/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Wang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Wang">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Server
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-09-10 22:02:19" itemprop="dateCreated datePublished" datetime="2022-09-10T22:02:19+08:00">2022-09-10</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-09-13 15:34:49" itemprop="dateModified" datetime="2022-09-13T15:34:49+08:00">2022-09-13</time>
+              </span>
+
+          
+            <span id="/2022/09/10/server/" class="post-meta-item leancloud_visitors" data-flag-title="Server" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2022/09/10/server/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2022/09/10/server/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>6.3k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>6 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="服务器和域名"><a href="#服务器和域名" class="headerlink" title="服务器和域名"></a>服务器和域名</h1><p>本次是在 <a target="_blank" rel="noopener" href="https://www.namesilo.com/">NameSilo</a> 上购买的域名。</p>
+<p>域名购买非常简单，购买完毕后，依次选择 Manage My Domains &gt; Manage DNS for this domain 即可配置 DNS。</p>
+<p>服务器可在 AWS 上申请三个月免费，可利用 <a target="_blank" rel="noopener" href="http://haoweichi.com/Index">美国身份随机生成器</a>。</p>
+<p>如果有 Visa 卡，也可以在 Google Cloud 上申请免费一年的服务器。</p>
+<p>AWS 服务器和国内服务器有个较大的不同，即当服务器新建后，AWS 只能以 user 名义进入服务器，即 <code>ubuntu@&lt;ip address&gt;</code>。</p>
+<p>然后才可以通过 <code>sudo passwd root</code> 来创建密码，并用 <code>su root</code> 切换到 root 账户。</p>
+<span id="more"></span>
+<h1 id="服务器配置"><a href="#服务器配置" class="headerlink" title="服务器配置"></a>服务器配置</h1><h2 id="Windows-Terminal"><a href="#Windows-Terminal" class="headerlink" title="Windows Terminal"></a>Windows Terminal</h2><p>在云服务器平台生成密钥对，将云服务器平台将密钥对和服务器绑定，并 <code>Download default key</code>。</p>
+<p>然后将密钥 <code>.pem</code> 文件需放在 <code>C:\\Users\\wang</code> 或 <code>C:\\Users\\wang\\.ssh</code> 中，否则可能会失效。</p>
+<p>此外，为了确保 Windows 可以使用 ssh 命令，需把 Openssh 添加至环境变量，即将 <code>C:\Windows\System32\OpenSSH</code> 添加到 System variables &gt; Path 中。</p>
+<p>然后打开 Windows Terminal 的 <code>setting.json</code>，在 <code>&quot;list&quot;</code> 添加:</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;colorScheme&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Neutron&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;commandline&quot;</span><span class="punctuation">:</span> <span class="string">&quot;ssh -i C:\\Users\\wang\\KeyPair.pem root@&lt;ip address&gt;&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;guid&quot;</span><span class="punctuation">:</span> <span class="string">&quot;&#123;fab51f40-a79e-9c0c-ded2-d6411db66b27&#125;&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;hidden&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">false</span></span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;icon&quot;</span><span class="punctuation">:</span> <span class="string">&quot;C:\\Windows\\SystemApps\\Microsoft.Windows.SecHealthUI_cw5n1h2txyewy\\Assets\\Device.contrast-black.ico&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Server&quot;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>commandline 中，为 <code>ssh -i &lt;.pem 绝对路径&gt; &lt;用户名&gt;@&lt;ip address&gt;</code>。</li>
+<li>guid 可在 <a target="_blank" rel="noopener" href="http://tool.pfan.cn/guidgen">在线生成GUID</a> 中生成。</li>
+<li>icon 和 name 随意。</li>
+<li>其他可参考 <a target="_blank" rel="noopener" href="https://docs.microsoft.com/en-us/windows/terminal/dynamic-profiles">Dynamic profiles in Windows Terminal</a>。</li>
+</ul>
+<h2 id="PuTTY"><a href="#PuTTY" class="headerlink" title="PuTTY"></a>PuTTY</h2><p>安装 <a target="_blank" rel="noopener" href="https://www.putty.org/">PuTTY</a>，这是一款开源免费的 SSH 客户端。</p>
+<p>安装完毕后配置以下内容:</p>
+<ul>
+<li>打开 PuTTYgen &gt; Load &gt; 导入 <code>.pem</code> &gt; Save private key &gt; 保存为 <code>.ppk</code> 格式密钥。</li>
+<li>打开 PuTTY &gt; PuTTY Configuration:<ul>
+<li>Session &gt; Host Name (or IP address): <code>云服务器的地址</code> &gt; Port: <code>22</code> &gt; Connection type: <code>SSH</code></li>
+<li>Connection &gt; Data &gt; Auto-login username: <code>root 或 用户名</code></li>
+<li>Connection &gt; SSH &gt; Auth &gt; Browse: <code>.ppk</code></li>
+<li>Session &gt; Saved Sessions: <code>配置名</code> &gt; Save</li>
+</ul>
+</li>
+</ul>
+<p>完成上述步骤后，点击 Open 即可连接上 PuTTY。</p>
+<p>除了基本的配置外，PuTTY 初始界面比较丑，可对其进行美化:</p>
+<ul>
+<li>Window &gt; Font settings &gt; Font: <code>Consolas, 14-point</code></li>
+<li>Window &gt; Behaviour &gt; <strong>Checking</strong> System appears on ALT-Space</li>
+<li>Window &gt; Selection &gt; Assign copy/paste actions to clipboard:<ul>
+<li>Mouse paste action: <code>Last selected text</code></li>
+<li>{Ctrl, Shift} + Ins: <code>No action</code></li>
+<li>Ctrl + Shift + {C, V}: <code>System clipboard</code></li>
+</ul>
+</li>
+<li>Window &gt; Colours &gt; Select a colour to adjust:<ul>
+<li>Default Foreground: 255, 255, 255</li>
+<li>ANSI Blue: 0, 128, 255</li>
+<li>ANSI Blue Bold: 0, 128, 255</li>
+<li>ANSI Magenta: 255, 128, 255</li>
+<li>ANSI Magenta Blod:  255, 128, 255</li>
+</ul>
+</li>
+</ul>
+<p>PuTTY 的配置可以导出，并加载到其他电脑里:</p>
+<ul>
+<li>Win + R 并输入 regedit，打开 Registry Editor</li>
+<li>找到 Computer\HKEY_CURRENT_USER\SOFTWARE\SimonTatham\PuTTY</li>
+<li>右键 PuTTY &gt; Export &gt; 保存为 <code>PuTTY.reg</code></li>
+<li>在其他电脑，右键 <code>PuTTY.reg</code> &gt; Merge 即可</li>
+</ul>
+<h1 id="搭建网站"><a href="#搭建网站" class="headerlink" title="搭建网站"></a>搭建网站</h1><p>使用 <a target="_blank" rel="noopener" href="https://www.hestiacp.com/">Hestia Control Panel</a> 来搭建网站。<a target="_blank" rel="noopener" href="https://github.com/hestiacp/hestiacp">Hestia</a> 是一款开源免费的面板。</p>
+<p>Hestia 目前支持的服务器版本包括 Debian 10/11，Ubuntu 18.04/20.04/22.04。</p>
+<p>首先需下载 Hestia:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget https://raw.githubusercontent.com/hestiacp/hestiacp/release/install/hst-install.sh</span><br></pre></td></tr></table></figure>
+<p>下载完成后安装 Hestia，可选择以下几种方式安装:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 正常安装，安装过程中需要输入一些信息</span></span><br><span class="line">bash hst-install.sh</span><br><span class="line"><span class="comment"># 一次性安装到底</span></span><br><span class="line">bash hst-install.sh --interactive no --email email@domain.tld --password p4ssw0rd --hostname hostname.domain.tld -f</span><br><span class="line"><span class="comment"># 挑选自己需要的安装项目</span></span><br><span class="line">bash hst-install.sh --apache no --postgresql <span class="built_in">yes</span> --clamav no --spamassassin no</span><br></pre></td></tr></table></figure>
+<p>本次选择正常安装。安装过程中会有以下信息需要输入 ([y/n] 项除外，可根据英文类型自行选择):</p>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">Please enter admin email address:</span> <span class="string">输入邮箱即可</span></span><br><span class="line"><span class="attr">Please enter FQDN hostname:</span> <span class="string">输入网站的域名</span></span><br><span class="line"><span class="comment"># FQDN 是 Fully Qualified Domain Name 的缩写，即需要输入完整的域名</span></span><br><span class="line"><span class="comment"># ex. hostname.domain.tld, tld 是 Top Level Domain 的缩写</span></span><br></pre></td></tr></table></figure>
+<p>以后需要等待一段时间，Hestia 会为我们下载以下组件:</p>
+<ul>
+<li>NGINX Web / Proxy Server</li>
+<li>Apache Web Server (as backend)</li>
+<li>PHP-FPM Application Server</li>
+<li>Bind DNS Server</li>
+<li>Exim Mail Server + ClamAV + SpamAssassin</li>
+<li>Dovecot POP3/IMAP Server</li>
+<li>MariaDB Database Server</li>
+<li>Vsftpd FTP Server</li>
+<li>Firewall (iptables) + Fail2Ban Access Monitor</li>
+</ul>
+<p>完成上述步骤后，会出现以下信息:</p>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">Congratulations!</span></span><br><span class="line"></span><br><span class="line"><span class="string">You</span> <span class="string">have</span> <span class="string">successfully</span> <span class="string">installed</span> <span class="string">Hestia</span> <span class="string">Control</span> <span class="string">Panel</span> <span class="string">on</span> <span class="string">your</span> <span class="string">server.</span></span><br><span class="line"></span><br><span class="line"><span class="string">Ready</span> <span class="string">to</span> <span class="string">get</span> <span class="string">started?</span> <span class="attr">Log in using the following credentials:</span></span><br><span class="line"></span><br><span class="line">    <span class="attr">Admin URL:</span>  <span class="string">https://&lt;ip</span> <span class="string">address&gt;:8083</span></span><br><span class="line">    <span class="attr">Username:</span>   <span class="string">admin</span></span><br><span class="line">    <span class="attr">Password:</span>   <span class="string">rUDW8VuAoBo9oil8</span></span><br><span class="line"></span><br><span class="line"><span class="string">Thank</span> <span class="string">you</span> <span class="string">for</span> <span class="string">choosing</span> <span class="string">Hestia</span> <span class="string">Control</span> <span class="string">Panel</span> <span class="string">to</span> <span class="string">power</span> <span class="string">your</span> <span class="string">full</span> <span class="string">stack</span> <span class="string">web</span> <span class="string">server,</span></span><br><span class="line"><span class="string">we</span> <span class="string">hope</span> <span class="string">that</span> <span class="string">you</span> <span class="string">enjoy</span> <span class="string">using</span> <span class="string">it</span> <span class="string">as</span> <span class="string">much</span> <span class="string">as</span> <span class="string">we</span> <span class="string">do!</span></span><br></pre></td></tr></table></figure>
+<p>至此 Hestia 安装完成。</p>
+<p>在服务器安全组中，放行 8083 端口。然后在浏览器中直接打开并登录 Hestia 给的网站。</p>
+<ul>
+<li>登陆 <code>&lt;ip address&gt;:8083</code> 后进入到 admin 账户。</li>
+<li>选择 Add user，按要求分别输入 Username，Email，Password 等信息。</li>
+<li>进入新建的用户账户 &gt; Add Web Domain &gt; 填写相应信息 &gt; Quick Install App</li>
+<li>Quick Install App 有现成的软件可供安装，分别为:<ul>
+<li><a target="_blank" rel="noopener" href="https://laravel.com/">Laravel</a>: 用于 web 项目的 PHP框架</li>
+<li><a target="_blank" rel="noopener" href="https://getgrav.org/">Grav</a>: 开源 CMS (Content management system)</li>
+<li><a target="_blank" rel="noopener" href="https://www.drupal.org/">Drupal</a>: 开源 CMS</li>
+<li><a target="_blank" rel="noopener" href="https://nextcloud.com/">Nextcloud</a>: 网络云盘</li>
+<li><a target="_blank" rel="noopener" href="https://www.opencart.com/">Opencart</a>: 电商平台</li>
+<li><a target="_blank" rel="noopener" href="https://symfony.com/">Symfony</a>: 用于 web 项目的 PHP框架</li>
+<li><a target="_blank" rel="noopener" href="https://wordpress.org/">Wordpress</a>: 大名鼎鼎</li>
+<li><a target="_blank" rel="noopener" href="https://www.dokuwiki.org/dokuwiki">DokuWiki</a>: 开源 wiki</li>
+<li><a target="_blank" rel="noopener" href="https://www.mediawiki.org/wiki/MediaWiki">MediaWiki</a>: 同上</li>
+<li><a target="_blank" rel="noopener" href="https://www.prestashop.com/en">Prestashop</a>: 电商平台</li>
+</ul>
+</li>
+<li>本次选择 Wordpress，等待片刻后，安装完成。</li>
+<li>前往域名管理的官网，添加 DNS 解析，即把子域名指向服务器地址 (A record)。</li>
+<li>等待一段时间后，即可打开新建的网站，按照 Wordpress 配置一步步选择语言，标题，用户和主题等信息。</li>
+</ul>
+<h1 id="搭建邮箱服务器"><a href="#搭建邮箱服务器" class="headerlink" title="搭建邮箱服务器"></a>搭建邮箱服务器</h1><p>网上查到的构建邮箱服务器方法有多种。</p>
+<h2 id="一种简单的方法、"><a href="#一种简单的方法、" class="headerlink" title="一种简单的方法、"></a>一种简单的方法、</h2><p>该简单的方法即直接用 Hestia。</p>
+<ul>
+<li>打开 Hestia &gt; 进入新建的用户账户</li>
+<li>MAIL &gt; Add Mail Domain &gt; 输入 Domain，Webmail Cilent 默认选择为 Roundcube Webmail</li>
+</ul>
+<blockquote>
+<p>假如我们要建一个 <code>@mail.mydomain.tld</code> 后缀的邮箱，则在 Domain 项目直接输入 <code>mydomain.tld</code> 即可。<br>Hestia 会自动为我们建立两个子域名，一个是 <code>webmail.mymain.tld</code> 的网站，一个是 <code>@mail.mydomain.tld</code> 的邮箱后缀。</p>
+</blockquote>
+<ul>
+<li>打开该邮箱的 DNS records，会发现 Hestia 已经写好了邮箱的 DNS 配置方案，按照其方式前往域名购买官网去配置 DNS，即:</li>
+</ul>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>record</th>
+<th>type</th>
+<th>IP or value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>mail.mydomin.tld</td>
+<td>A</td>
+<td>ip address</td>
+</tr>
+<tr>
+<td>webmail.mydomain.tld</td>
+<td>A</td>
+<td>ip address</td>
+</tr>
+<tr>
+<td>mydomain.tld</td>
+<td>MX</td>
+<td>mail.mydomin.tld</td>
+</tr>
+</tbody>
+</table>
+</div>
+<ul>
+<li>点击 Add Mail Account 来创建邮箱。</li>
+<li>前往安全组开放端口，包括 25、109、110、143、465、587、993、995 等。</li>
+<li>完成上述步骤后打开 <code>webmail.mydomain.tld</code> 即可访问邮箱网站并登录。</li>
+</ul>
+<p>邮箱搭建完成后，我遇到一个问题，即邮箱只能接收其他邮箱 (163, gmail, edu 等) 发来的邮件，却不能成功发送邮件。</p>
+<p>但是我自己建的两个账号之间是可以互发邮件的。</p>
+<p>如果我发送到其他邮箱后，Roundcube Webmail 仍旧会提示发送成功，但其他邮箱收不到，也不存在于垃圾邮件的分类里。</p>
+<p>网上搜索该问题后，有人提出将 SMTP Relay 开启，并将其 Host 改成 <code>127.0.0.1</code>，Port 改成 465 或 587 或 25，均不奏效。</p>
+<p>该问题待解决。</p>
+<blockquote>
+<p>补充: 在 Hestia 论坛咨询后得知，可能是需要开通 Amazon SES 服务，才可正常发送邮件。</p>
+</blockquote>
+<p>SSL/POP/STMP/IMTP/DKIM</p>
+<h2 id="其他方法"><a href="#其他方法" class="headerlink" title="其他方法"></a>其他方法</h2><p>待续。</p>
+<h1 id="搭建代理服务器"><a href="#搭建代理服务器" class="headerlink" title="搭建代理服务器"></a>搭建代理服务器</h1><h2 id="一种简单的方法"><a href="#一种简单的方法" class="headerlink" title="一种简单的方法"></a>一种简单的方法</h2><p>在上述 PuTTY 配置过程中，添加以下内容:</p>
+<ul>
+<li>Connection &gt; SSH &gt; Tunnels &gt; <strong>Checking</strong> Auto, Dynamic &gt; Source port: <code>77777 或其他不冲突的端口号均可</code> &gt; Add</li>
+<li>Session &gt; Saved Sessions: <code>配置名</code> &gt; Save</li>
+</ul>
+<p>然后打开浏览器的 Proxy SwitchyOmega 插件，在选项中配置以下内容:</p>
+<ul>
+<li>新建情景模式 &gt; 输入情景模式名称: <code>new_proxy</code></li>
+<li>选择情景模式的类型: <code>代理服务器</code> &gt; 创建</li>
+<li>代理协议: <code>SOCKS5</code> &gt; 代理服务器: <code>127.0.0.1</code> &gt; 代理端口: <code>77777</code></li>
+<li>应用选项</li>
+</ul>
+<p>开启 <code>new_proxy</code>，打开 <a target="_blank" rel="noopener" href="https://whatismyipaddress.com/">what is my ip address</a> 查询，此时已是代理服务器的地址。</p>
+<p>该方法来自 <a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_38656841/article/details/103631836">代理服务器搭建</a>， <a target="_blank" rel="noopener" href="https://www.techrepublic.com/article/use-putty-as-a-secure-proxy-on-windows/">Use PuTTY as a secure proxy on Windows</a> 以及 <a target="_blank" rel="noopener" href="https://www.filecloud.com/blog/create-your-own-virtual-private-network-for-ssh-with-putty/">Create your own Virtual Private Network for SSH with Putty</a>。</p>
+<h2 id="常用方法"><a href="#常用方法" class="headerlink" title="常用方法"></a>常用方法</h2><p>安装 Ubuntu 20.04 server 64bit 版本 Linux。</p>
+<p>这种方法是安装一个 V2ray 服务器。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 下载</span></span><br><span class="line">wget https://github.com/dreamrover/v2ray-deb/releases/download/4.45.2/v2ray-4.45.2-amd64.deb</span><br><span class="line"><span class="comment"># 安装</span></span><br><span class="line">sudo dpkg -i v2ray-4.45.2-amd64.deb</span><br><span class="line"><span class="comment"># 卸载</span></span><br><span class="line">sudo dpkg -r v2ray</span><br><span class="line">sudo apt-get remove v2ray</span><br><span class="line"><span class="comment"># 完全卸载 (移除配置文件和日志)</span></span><br><span class="line">sudo apt-get purge v2ray</span><br></pre></td></tr></table></figure>
+<p>上述安装过程会随机生成端口号和 UUID 用户号，额外 ID (alterId) 为 0。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 设置 v2ray 为开机启动</span></span><br><span class="line">systemctl <span class="built_in">enable</span> v2ray.service</span><br><span class="line"><span class="comment"># 重启 v2ray 服务使之生效</span></span><br><span class="line">sudo systemctl restart v2ray</span><br><span class="line"><span class="comment"># 查看 v2ray 配置信息</span></span><br><span class="line"><span class="built_in">cat</span> /etc/v2ray/config.json</span><br></pre></td></tr></table></figure>
+<p>查看配置信息后，记下 <code>inbounds</code> &gt; <code>port</code>，以及 <code>inbounds</code> &gt; <code>clients</code> 的 <code>id</code> 和 <code>alterId</code> 等，例如:</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 其余内容已省略</span></span><br><span class="line"><span class="attr">&quot;inbounds&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">  <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;port&quot;</span><span class="punctuation">:</span> <span class="number">20376</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;settings&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;clients&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">        <span class="punctuation">&#123;</span></span><br><span class="line">          <span class="attr">&quot;id&quot;</span><span class="punctuation">:</span> <span class="string">&quot;312a7742-c925-4a36-9f90-e11649ea5897&quot;</span><span class="punctuation">,</span></span><br><span class="line">          <span class="attr">&quot;level&quot;</span><span class="punctuation">:</span> <span class="number">1</span><span class="punctuation">,</span></span><br><span class="line">          <span class="attr">&quot;alterId&quot;</span><span class="punctuation">:</span> <span class="number">0</span></span><br><span class="line">        <span class="punctuation">&#125;</span><span class="punctuation">]</span><span class="punctuation">&#125;</span><span class="punctuation">,</span><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+<p>在服务器安全组中，放行该 <code>port</code>。</p>
+<p>至此服务器配置成功。</p>
+<p>然后在客户端安装 v2rayN。对应客户端版本可在 <a target="_blank" rel="noopener" href="https://github.com/XTLS/Xray-core/releases">此处</a> 下载。</p>
+<p>安装完软件后打开，点击添加服务器，并填写以下内容:</p>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">别名</span> <span class="string">(remarks):</span> <span class="string">随意取</span></span><br><span class="line"><span class="string">地址</span> <span class="string">(address):</span> <span class="string">服务器弹性公网</span> <span class="string">ip</span></span><br><span class="line"><span class="string">端口</span> <span class="string">(port):</span> <span class="string">对应上述</span> <span class="string">port</span> <span class="string">号，如本例</span> <span class="number">20376</span></span><br><span class="line"><span class="string">用户</span> <span class="string">ID</span> <span class="string">(id):</span> <span class="string">对应上述</span> <span class="string">id</span> <span class="string">号，如本例</span> <span class="string">312a7742-c925-4a36-9f90-e11649ea5897</span></span><br><span class="line"><span class="string">额外</span> <span class="string">ID</span> <span class="string">(alterId):</span> <span class="string">对应上述</span> <span class="string">alterId</span> <span class="string">号，如本例</span> <span class="number">0</span></span><br></pre></td></tr></table></figure>
+<p>打开设置 &gt; 参数设置 &gt; Core 类型设置 &gt; 所有项目均选择 Xray。</p>
+<p>右键软件托盘图标 &gt; 系统代理 &gt; 自动配置系统代理。</p>
+<p>至此代理完成。打开 <a target="_blank" rel="noopener" href="https://whatismyipaddress.com/">what is my ip address</a> 查询，此时已是代理服务器的地址。</p>
+<p>该方法来自 <a target="_blank" rel="noopener" href="https://github.com/dreamrover/v2ray-deb">v2ray-deb</a>。</p>
+<p>此外还发现一种搭建方案 <a target="_blank" rel="noopener" href="https://www.wrysmile.cn/V2Ray-02.html">V2Ray 搭建服务器之基础搭建教程</a>，未作尝试。</p>
+
+    </div>
+
+    
+    
+    
+        <div class="reward-container">
+  <div></div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/wechatpay.jpg" alt="Wang 微信支付">
+        <p>微信支付</p>
+      </div>
+
+  </div>
+</div>
+
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Wang
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://wangzitao.xyz/2022/09/10/server/" title="Server">https://wangzitao.xyz/2022/09/10/server/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+        
+
+  <div class="followme">
+    <p>欢迎关注我的其它发布渠道</p>
+
+    <div class="social-list">
+
+        <div class="social-item">
+          <a target="_blank" class="social-link" href="/images/wechatpay.jpg">
+            <span class="icon">
+              <i class="fab fa-weixin"></i>
+            </span>
+
+            <span class="label">WeChat</span>
+          </a>
+        </div>
+    </div>
+  </div>
+
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/09/05/Matplotlib/" rel="prev" title="Matplotlib">
+      <i class="fa fa-chevron-left"></i> Matplotlib
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%92%8C%E5%9F%9F%E5%90%8D"><span class="nav-number">1.</span> <span class="nav-text">服务器和域名</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%85%8D%E7%BD%AE"><span class="nav-number">2.</span> <span class="nav-text">服务器配置</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Windows-Terminal"><span class="nav-number">2.1.</span> <span class="nav-text">Windows Terminal</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PuTTY"><span class="nav-number">2.2.</span> <span class="nav-text">PuTTY</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%90%AD%E5%BB%BA%E7%BD%91%E7%AB%99"><span class="nav-number">3.</span> <span class="nav-text">搭建网站</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%90%AD%E5%BB%BA%E9%82%AE%E7%AE%B1%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="nav-number">4.</span> <span class="nav-text">搭建邮箱服务器</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E7%A7%8D%E7%AE%80%E5%8D%95%E7%9A%84%E6%96%B9%E6%B3%95%E3%80%81"><span class="nav-number">4.1.</span> <span class="nav-text">一种简单的方法、</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B6%E4%BB%96%E6%96%B9%E6%B3%95"><span class="nav-number">4.2.</span> <span class="nav-text">其他方法</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%90%AD%E5%BB%BA%E4%BB%A3%E7%90%86%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="nav-number">5.</span> <span class="nav-text">搭建代理服务器</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E7%A7%8D%E7%AE%80%E5%8D%95%E7%9A%84%E6%96%B9%E6%B3%95"><span class="nav-number">5.1.</span> <span class="nav-text">一种简单的方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8%E6%96%B9%E6%B3%95"><span class="nav-number">5.2.</span> <span class="nav-text">常用方法</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Wang"
+      src="/images/avatar.gif">
+  <p class="site-author-name" itemprop="name">Wang</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">4</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="sidebar-button motion-element"><i class="fa fa-comment"></i>
+    Chat
+  </a>
+  </div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/yourname" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;yourname" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:yourname@gmail.com" title="E-Mail → mailto:yourname@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.zhihu.com/people/hydrogeology" title="Zhihu → https:&#x2F;&#x2F;www.zhihu.com&#x2F;people&#x2F;hydrogeology" rel="noopener" target="_blank"><i class="fab fa-zhihu fa-fw"></i>Zhihu</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://resume.wangzitao.xyz/" title="Resume → https:&#x2F;&#x2F;resume.wangzitao.xyz" rel="noopener" target="_blank"><i class="fa fa-link fa-fw"></i>Resume</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+      
+ 
+<script type="text/javascript" charset="utf-8" src="/js/tagcloud.js"></script>
+<script type="text/javascript" charset="utf-8" src="/js/tagcanvas.js"></script>
+<div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div id="myCanvasContainer" class="widget tagcloud">
+        <canvas width="250" height="250" id="resCanvas" style="width:100%">
+            <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Misc/" rel="tag">Misc</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/" rel="tag">Python</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%94%BB%E5%9B%BE/" rel="tag">画图</a><span class="tag-list-count">1</span></li></ul>
+        </canvas>
+    </div>
+</div>
+
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+  <div class="languages">
+    <label class="lang-select-label">
+      <i class="fa fa-language"></i>
+      <span>简体中文</span>
+      <i class="fa fa-angle-up" aria-hidden="true"></i>
+    </label>
+    <select class="lang-select" data-canonical="">
+      
+        <option value="zh-CN" data-href="/2022/09/10/server/" selected="">
+          简体中文
+        </option>
+      
+        <option value="en" data-href="/en/2022/09/10/server/" selected="">
+          English
+        </option>
+      
+    </select>
+  </div>
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Wang</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">16k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">14 分钟</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+  <div id="site-runtime">
+  <span class="post-meta-item-icon">
+    <i class="fa fa-clock-o"></i>
+  </span>
+  <span id="runtime"></span>
+</div>
+
+<script language="javascript">
+  function isPC() {
+    var userAgentInfo = navigator.userAgent;
+    var agents = ["Android", "iPhone", "SymbianOS", "Windows Phone", "iPad", "iPod"];
+    for (var i = 0; i < agents.length; i++) {
+      if (userAgentInfo.indexOf(agents[i]) > 0) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  function siteTime(openOnPC, start) {
+    window.setTimeout("siteTime(openOnPC, start)", 1000);
+    var seconds = 1000;
+    var minutes = seconds * 60;
+    var hours = minutes * 60;
+    var days = hours * 24;
+    var years = days * 365;
+      start = new Date("2022-1-17 11:00:00 +0800");
+    var now = new Date();
+    var year = now.getFullYear();
+    var month = now.getMonth() + 1;
+    var date = now.getDate();
+    var hour = now.getHours();
+    var minute = now.getMinutes();
+    var second = now.getSeconds();
+    var diff = now - start;
+
+    var diffYears = Math.floor(diff / years);
+    var diffDays = Math.floor((diff / days) - diffYears * 365);
+    var diffHours = Math.floor((diff - (diffYears * 365 + diffDays) * days) / hours);
+    var diffMinutes = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours) / minutes);
+    var diffSeconds = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours - diffMinutes * minutes) / seconds);
+
+    if (openOnPC) {
+      document.getElementById("runtime").innerHTML = "运行了: " + diffYears + " 年 " + diffDays + " 天 " + diffHours + " 小时 " + diffMinutes + " 分钟 " + diffSeconds + " 秒";
+    } else {
+      document.getElementById("runtime").innerHTML = "Running: " + diffYears + "y " + diffDays + "d " + diffHours + "h " + diffMinutes + "m " + diffSeconds + "s";
+    }
+  }
+
+  var showOnMobile = true;
+  var openOnPC = isPC();
+  var start = new Date();
+  siteTime(openOnPC, start);
+
+  if (!openOnPC && !showOnMobile) {
+    document.getElementById('site-runtime').style.display = 'none';
+  }
+</script>
+
+
+        
+<div class="busuanzi-count">
+  <script data-pjax async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/pjax/pjax.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+  <script>
+var pjax = new Pjax({
+  selectors: [
+    'head title',
+    '#page-configurations',
+    '.content-wrap',
+    '.post-toc-wrap',
+    '.languages',
+    '#pjax'
+  ],
+  switches: {
+    '.post-toc-wrap': Pjax.switches.innerHTML
+  },
+  analytics: false,
+  cacheBust: false,
+  scrollTo : !CONFIG.bookmark.enable
+});
+
+window.addEventListener('pjax:success', () => {
+  document.querySelectorAll('script[data-pjax], script#page-configurations, #pjax script').forEach(element => {
+    var code = element.text || element.textContent || element.innerHTML || '';
+    var parent = element.parentNode;
+    parent.removeChild(element);
+    var script = document.createElement('script');
+    if (element.id) {
+      script.id = element.id;
+    }
+    if (element.className) {
+      script.className = element.className;
+    }
+    if (element.type) {
+      script.type = element.type;
+    }
+    if (element.src) {
+      script.src = element.src;
+      // Force synchronous loading of peripheral JS.
+      script.async = false;
+    }
+    if (element.dataset.pjax !== undefined) {
+      script.dataset.pjax = '';
+    }
+    if (code !== '') {
+      script.appendChild(document.createTextNode(code));
+    }
+    parent.appendChild(script);
+  });
+  NexT.boot.refresh();
+  // Define Motion Sequence & Bootstrap Motion.
+  if (CONFIG.motion.enable) {
+    NexT.motion.integrator
+      .init()
+      .add(NexT.motion.middleWares.subMenu)
+      .add(NexT.motion.middleWares.postList)
+      .bootstrap();
+  }
+  NexT.utils.updateSidebarPosition();
+});
+</script>
+
+
+  <script defer src="//cdn.jsdelivr.net/gh/theme-next/theme-next-three@1/three.min.js"></script>
+    <script defer src="//cdn.jsdelivr.net/gh/theme-next/theme-next-three@1/three-waves.min.js"></script>
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div id="pjax">
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+          load: ['[tex]/mhchem'],
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+          packages: {'[+]': ['mhchem']},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : '7nOPhSR9CN8MTS1kvxBxmXW1-MdYXbMMI',
+      appKey     : 'JFhm3jSHlilSxVJufkg3tNOY',
+      placeholder: "欢迎评论！",
+      avatar     : '',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : true,
+      lang       : '' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : true,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+
+  <canvas class="fireworks" style="position: fixed;left: 0;top: 0;z-index: 1; pointer-events: none;" ></canvas>
+  <script src="//cdn.bootcss.com/animejs/2.2.0/anime.min.js"></script>
+  <script async src="/js/cursor/explosion.min.js"></script>
+
+    </div>
+</body>
+</html>
