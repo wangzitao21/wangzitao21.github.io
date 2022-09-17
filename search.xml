@@ -2,7 +2,7 @@
 <search>
   <entry>
     <title>Awesome-Hydrology-models</title>
-    <url>/2022/09/05/Awesome-Hydrology-models/</url>
+    <url>/2022/Awesome-Hydrology-models/</url>
     <content><![CDATA[<script id="ribbon" src="js/canvas-ribbon.js"></script>
 
 <p><a href="https://www.hec.usace.army.mil/software/hec-ras/">HEC-RAS</a>: This software allows the user to perform one-dimensional steady flow, one and two-dimensional unsteady flow calculations, sediment transport/mobile bed computations, and water temperature/water quality modeling.</p>
@@ -10,12 +10,12 @@
   </entry>
   <entry>
     <title>Server</title>
-    <url>/2022/09/10/server/</url>
+    <url>/2022/server/</url>
     <content><![CDATA[<h1 id="服务器和域名"><a href="#服务器和域名" class="headerlink" title="服务器和域名"></a>服务器和域名</h1><p>本次是在 <a href="https://www.namesilo.com/">NameSilo</a> 上购买的域名。</p>
 <p>域名购买非常简单，购买完毕后，依次选择 Manage My Domains &gt; Manage DNS for this domain 即可配置 DNS。</p>
-<p>服务器可在 AWS 上申请三个月免费，可利用 <a href="http://haoweichi.com/Index">美国身份随机生成器</a>。</p>
+<p>服务器可在 AWS 上申请三个月免费，可利用 <a href="https://www.fakenamegenerator.com/">Fake name generator</a> 生成美国人身份信息。</p>
 <p>如果有 Visa 卡，也可以在 Google Cloud 上申请免费一年的服务器。</p>
-<p>AWS 服务器和国内服务器有个较大的不同，即当服务器新建后，AWS 只能以 user 名义进入服务器，即 <code>ubuntu@&lt;ip address&gt;</code>。</p>
+<p>AWS 服务器和国内服务器有个较大的不同，即国内服务器可以直接以 root 用户的名义进入服务器。而 AWS 只能以 user 名义进入服务器，如 <code>ubuntu@&lt;ip address&gt;</code>。</p>
 <p>然后才可以通过 <code>sudo passwd root</code> 来创建密码，并用 <code>su root</code> 切换到 root 账户。</p>
 <span id="more"></span>
 <h1 id="服务器配置"><a href="#服务器配置" class="headerlink" title="服务器配置"></a>服务器配置</h1><h2 id="Windows-Terminal"><a href="#Windows-Terminal" class="headerlink" title="Windows Terminal"></a>Windows Terminal</h2><p>在云服务器平台生成密钥对，将云服务器平台将密钥对和服务器绑定，并 <code>Download default key</code>。</p>
@@ -114,7 +114,7 @@
 <li>等待一段时间后，即可打开新建的网站，按照 Wordpress 配置一步步选择语言，标题，用户和主题等信息。</li>
 </ul>
 <h1 id="搭建邮箱服务器"><a href="#搭建邮箱服务器" class="headerlink" title="搭建邮箱服务器"></a>搭建邮箱服务器</h1><p>网上查到的构建邮箱服务器方法有多种。</p>
-<h2 id="一种简单的方法、"><a href="#一种简单的方法、" class="headerlink" title="一种简单的方法、"></a>一种简单的方法、</h2><p>该简单的方法即直接用 Hestia。</p>
+<p>最简单的方法即直接用 Hestia。</p>
 <ul>
 <li>打开 Hestia &gt; 进入新建的用户账户</li>
 <li>MAIL &gt; Add Mail Domain &gt; 输入 Domain，Webmail Cilent 默认选择为 Roundcube Webmail</li>
@@ -164,11 +164,16 @@
 <p>网上搜索该问题后，有人提出将 SMTP Relay 开启，并将其 Host 改成 <code>127.0.0.1</code>，Port 改成 465 或 587 或 25，均不奏效。</p>
 <p>该问题待解决。</p>
 <blockquote>
-<p>补充: 在 Hestia 论坛咨询后得知，可能是需要开通 Amazon SES 服务，才可正常发送邮件。</p>
+<p>补充: 在 Hestia 论坛咨询后得知，可能是 AWS 屏蔽了 outbound 的 25 端口。需要申请才能放开。</p>
 </blockquote>
-<p>SSL/POP/STMP/IMTP/DKIM</p>
-<h2 id="其他方法"><a href="#其他方法" class="headerlink" title="其他方法"></a>其他方法</h2><p>待续。</p>
-<h1 id="搭建代理服务器"><a href="#搭建代理服务器" class="headerlink" title="搭建代理服务器"></a>搭建代理服务器</h1><h2 id="一种简单的方法"><a href="#一种简单的方法" class="headerlink" title="一种简单的方法"></a>一种简单的方法</h2><p>在上述 PuTTY 配置过程中，添加以下内容:</p>
+<p>搭建邮箱服务器，需要简单知道几种邮件协议。SMTP 主要是负责传送邮件，而 POP 和 IMAP 是负责接收邮件:</p>
+<ul>
+<li>SMTP (Simple Mail Transfer Protocol): 默认端口是 25，通过 SSL 协议加密之后的默认端口是 465。</li>
+<li>POP3 (Post Office Protocol 3): 某人收到邮件，但不在线上，邮件服务器必须通过 POP 通讯协定，才能保存邮件。默认端口是 110，过 SSL 协议加密之后的默认端口是 995。</li>
+<li>IMAP (Internet Mail Access Protocol): 与 POP3 类似。不同的是，开启 IMAP 后，客户端收取的邮件仍然保留在服务器上，同时在客户端上的操作都会反馈到服务器上，如删除邮件，标记已读等，服务器上的邮件也会做相应的动作。默认端口是 143，通过 SSL 协议加密之后的默认端口是 993。<br>SSL/POP/STMP/IMTP/DKIM</li>
+</ul>
+<p>此外，SSL (Secure Socket Layer) 是一种加密技术，用于确保数据在网络上之传输过程中不会被截取。TLS (Transport Layer Security) 与之相似，可被认为是 SSL 的后续版本。</p>
+<h1 id="搭建代理服务器"><a href="#搭建代理服务器" class="headerlink" title="搭建代理服务器"></a>搭建代理服务器</h1><h2 id="PuTTY-法"><a href="#PuTTY-法" class="headerlink" title="PuTTY 法"></a>PuTTY 法</h2><p>在上述 PuTTY 配置过程中，添加以下内容:</p>
 <ul>
 <li>Connection &gt; SSH &gt; Tunnels &gt; <strong>Checking</strong> Auto, Dynamic &gt; Source port: <code>77777 或其他不冲突的端口号均可</code> &gt; Add</li>
 <li>Session &gt; Saved Sessions: <code>配置名</code> &gt; Save</li>
@@ -182,7 +187,13 @@
 </ul>
 <p>开启 <code>new_proxy</code>，打开 <a href="https://whatismyipaddress.com/">what is my ip address</a> 查询，此时已是代理服务器的地址。</p>
 <p>该方法来自 <a href="https://blog.csdn.net/qq_38656841/article/details/103631836">代理服务器搭建</a>， <a href="https://www.techrepublic.com/article/use-putty-as-a-secure-proxy-on-windows/">Use PuTTY as a secure proxy on Windows</a> 以及 <a href="https://www.filecloud.com/blog/create-your-own-virtual-private-network-for-ssh-with-putty/">Create your own Virtual Private Network for SSH with Putty</a>。</p>
-<h2 id="常用方法"><a href="#常用方法" class="headerlink" title="常用方法"></a>常用方法</h2><p>安装 Ubuntu 20.04 server 64bit 版本 Linux。</p>
+<blockquote>
+<p>补充:<br>如果需要全局代理，也可以使用 V2rayN &gt; 服务器 &gt; 添加 Socks 5 服务器，地址和端口如上所示。</p>
+</blockquote>
+<h2 id="SSH-法"><a href="#SSH-法" class="headerlink" title="SSH 法"></a>SSH 法</h2><p>如果不使用 PuTTY，也可以直接在 Windows Terminal 中完成代理:</p>
+<p>即打开 Command Prompt，输入: <code>ssh &lt;user&gt;@&lt;ip address&gt; -D &lt;port&gt;</code>。</p>
+<p>输入密码，然后按照上节方法在客户端进行配置即可。</p>
+<h2 id="V2ray-法"><a href="#V2ray-法" class="headerlink" title="V2ray 法"></a>V2ray 法</h2><p>安装 Ubuntu 20.04 server 64bit 版本 Linux。</p>
 <p>这种方法是安装一个 V2ray 服务器。</p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 下载</span></span><br><span class="line">wget https://github.com/dreamrover/v2ray-deb/releases/download/4.45.2/v2ray-4.45.2-amd64.deb</span><br><span class="line"><span class="comment"># 安装</span></span><br><span class="line">sudo dpkg -i v2ray-4.45.2-amd64.deb</span><br><span class="line"><span class="comment"># 卸载</span></span><br><span class="line">sudo dpkg -r v2ray</span><br><span class="line">sudo apt-get remove v2ray</span><br><span class="line"><span class="comment"># 完全卸载 (移除配置文件和日志)</span></span><br><span class="line">sudo apt-get purge v2ray</span><br></pre></td></tr></table></figure>
 <p>上述安装过程会随机生成端口号和 UUID 用户号，额外 ID (alterId) 为 0。</p>
@@ -191,7 +202,7 @@
 <figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 其余内容已省略</span></span><br><span class="line"><span class="attr">&quot;inbounds&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">  <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;port&quot;</span><span class="punctuation">:</span> <span class="number">20376</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;settings&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;clients&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">        <span class="punctuation">&#123;</span></span><br><span class="line">          <span class="attr">&quot;id&quot;</span><span class="punctuation">:</span> <span class="string">&quot;312a7742-c925-4a36-9f90-e11649ea5897&quot;</span><span class="punctuation">,</span></span><br><span class="line">          <span class="attr">&quot;level&quot;</span><span class="punctuation">:</span> <span class="number">1</span><span class="punctuation">,</span></span><br><span class="line">          <span class="attr">&quot;alterId&quot;</span><span class="punctuation">:</span> <span class="number">0</span></span><br><span class="line">        <span class="punctuation">&#125;</span><span class="punctuation">]</span><span class="punctuation">&#125;</span><span class="punctuation">,</span><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
 <p>在服务器安全组中，放行该 <code>port</code>。</p>
 <p>至此服务器配置成功。</p>
-<p>然后在客户端安装 v2rayN。对应客户端版本可在 <a href="https://github.com/XTLS/Xray-core/releases">此处</a> 下载。</p>
+<p>然后在客户端安装 v2rayN。对应客户端版本可在 <a href="https://github.com/2dust/v2rayN/releases">此处</a> 下载。</p>
 <p>安装完软件后打开，点击添加服务器，并填写以下内容:</p>
 <figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="string">别名</span> <span class="string">(remarks):</span> <span class="string">随意取</span></span><br><span class="line"><span class="string">地址</span> <span class="string">(address):</span> <span class="string">服务器弹性公网</span> <span class="string">ip</span></span><br><span class="line"><span class="string">端口</span> <span class="string">(port):</span> <span class="string">对应上述</span> <span class="string">port</span> <span class="string">号，如本例</span> <span class="number">20376</span></span><br><span class="line"><span class="string">用户</span> <span class="string">ID</span> <span class="string">(id):</span> <span class="string">对应上述</span> <span class="string">id</span> <span class="string">号，如本例</span> <span class="string">312a7742-c925-4a36-9f90-e11649ea5897</span></span><br><span class="line"><span class="string">额外</span> <span class="string">ID</span> <span class="string">(alterId):</span> <span class="string">对应上述</span> <span class="string">alterId</span> <span class="string">号，如本例</span> <span class="number">0</span></span><br></pre></td></tr></table></figure>
 <p>打开设置 &gt; 参数设置 &gt; Core 类型设置 &gt; 所有项目均选择 Xray。</p>
@@ -203,7 +214,7 @@
   </entry>
   <entry>
     <title>进制之间关系</title>
-    <url>/2022/09/05/%E8%BF%9B%E5%88%B6%E4%B9%8B%E9%97%B4%E5%85%B3%E7%B3%BB/</url>
+    <url>/2022/%E8%BF%9B%E5%88%B6%E4%B9%8B%E9%97%B4%E5%85%B3%E7%B3%BB/</url>
     <content><![CDATA[<p>因为常用的进制只有十六进制，十进制和二进制，所以我们只讲这三个。</p>
 <h2 id="十进制"><a href="#十进制" class="headerlink" title="十进制"></a>十进制</h2><p>首先说十进制，所谓十进制就是满十进一。打个比方，十进制中 123 这个数字。那么它是如何得到的呢？</p>
 <script type="math/tex; mode=display">
@@ -323,7 +334,7 @@ F = 15</script><p>注意到了 15 就没有了，因为十六进制是满 16 就
   </entry>
   <entry>
     <title>Matplotlib</title>
-    <url>/2022/09/05/Matplotlib/</url>
+    <url>/2022/Matplotlib/</url>
     <content><![CDATA[<h2 id="导入模块"><a href="#导入模块" class="headerlink" title="导入模块"></a>导入模块</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">%matplotlib inline</span><br><span class="line">%config InlineBackend.figure_format = <span class="string">&#x27;svg&#x27;</span></span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br></pre></td></tr></table></figure>
 <h2 id="自定义配置文件"><a href="#自定义配置文件" class="headerlink" title="自定义配置文件"></a>自定义配置文件</h2><p>rcParams 中存储了 Matplotlib 绘图时所有参数的默认值，在 matplotlibrc 文件中。</p>
 <p>可通过字典的形式来修改 rcParams:</p>
