@@ -95,6 +95,33 @@
       </tags>
   </entry>
   <entry>
+    <title>everything</title>
+    <url>/2022/everything/</url>
+    <content><![CDATA[<p><a href="https://www.voidtools.com/zh-cn/">Everything</a> is not an open source software.</p>
+<h2 id="Settings"><a href="#Settings" class="headerlink" title="Settings"></a>Settings</h2><ul>
+<li>View &gt; <strong>Unselecting</strong> Status Bar</li>
+<li>View &gt; Sort by &gt; Name</li>
+<li>Tools &gt; Options &gt; General &gt; Start Everything on system startup</li>
+<li>Tools &gt; Options &gt; General &gt; Everything Service</li>
+</ul>
+<blockquote>
+<p>A UAC warning would always appear if <code>Run as administrator</code> was selected. So we select Everything Service as alternate.</p>
+</blockquote>
+<ul>
+<li>UI &gt; Run in background</li>
+<li>UI &gt; Show tray icon (unselecting)</li>
+<li>Search &gt; Match path when a serach term contains a path separator</li>
+<li>Results &gt; Open path with double click path column</li>
+<li>View &gt; Alternate row color</li>
+<li>Keyboard &gt; New window Hotkey: Ctrl+`</li>
+</ul>
+<h2 id="Content-searching"><a href="#Content-searching" class="headerlink" title="Content searching"></a>Content searching</h2><p><strong>Selecting</strong> Search &gt; Add to Filters &gt; New Fillter:</p>
+<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="attr">Name:</span> <span class="string">Content</span> <span class="string">Search</span></span><br><span class="line"><span class="attr">Search:</span> <span class="string">content:search:|UTF*content:search</span></span><br><span class="line"><span class="attr">Macro:</span> <span class="string">ct&lt;search&gt;</span></span><br></pre></td></tr></table></figure>
+<p>Adding a new defined phrase <code>\Archives\Notes ct:</code> in Microsoft Pinyin.</p>
+<p>reference: <a href="https://zhuanlan.zhihu.com/p/267193995">this way</a></p>
+]]></content>
+  </entry>
+  <entry>
     <title>Server</title>
     <url>/2022/server/</url>
     <content><![CDATA[<h1 id="服务器和域名"><a href="#服务器和域名" class="headerlink" title="服务器和域名"></a>服务器和域名</h1><p>本次是在 <a href="https://www.namesilo.com/">NameSilo</a> 上购买的域名。</p>
