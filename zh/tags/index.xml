@@ -1,18 +1,39 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
-    <title>Tags on Wang&#39;s Blog</title>
+    <title>Tags on 汪子涛的博客</title>
     <link>https://wangzitao21.github.io/zh/tags/</link>
-    <description>Recent content in Tags on Wang&#39;s Blog</description>
+    <description>Recent content in Tags on 汪子涛的博客</description>
     <generator>Hugo -- 0.140.2</generator>
     <language>zh-CN</language>
-    <lastBuildDate>Fri, 10 Jan 2025 17:58:34 +0800</lastBuildDate>
+    <lastBuildDate>Sat, 11 Jan 2025 09:38:43 -0500</lastBuildDate>
     <atom:link href="https://wangzitao21.github.io/zh/tags/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>标签1</title>
-      <link>https://wangzitao21.github.io/zh/tags/%E6%A0%87%E7%AD%BE1/</link>
-      <pubDate>Fri, 10 Jan 2025 17:58:34 +0800</pubDate>
-      <guid>https://wangzitao21.github.io/zh/tags/%E6%A0%87%E7%AD%BE1/</guid>
+      <title>Tag 1</title>
+      <link>https://wangzitao21.github.io/zh/tags/tag-1/</link>
+      <pubDate>Sat, 11 Jan 2025 09:38:43 -0500</pubDate>
+      <guid>https://wangzitao21.github.io/zh/tags/tag-1/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Tag 2</title>
+      <link>https://wangzitao21.github.io/zh/tags/tag-2/</link>
+      <pubDate>Sat, 11 Jan 2025 09:38:43 -0500</pubDate>
+      <guid>https://wangzitao21.github.io/zh/tags/tag-2/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Algorithm</title>
+      <link>https://wangzitao21.github.io/zh/tags/algorithm/</link>
+      <pubDate>Sat, 11 Jan 2025 09:09:29 -0500</pubDate>
+      <guid>https://wangzitao21.github.io/zh/tags/algorithm/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Python</title>
+      <link>https://wangzitao21.github.io/zh/tags/python/</link>
+      <pubDate>Sat, 11 Jan 2025 09:09:29 -0500</pubDate>
+      <guid>https://wangzitao21.github.io/zh/tags/python/</guid>
       <description></description>
     </item>
   </channel>

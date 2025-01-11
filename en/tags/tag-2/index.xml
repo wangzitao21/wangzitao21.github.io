@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Tag 2 on Wang&#39;s Blog</title>
+    <link>https://wangzitao21.github.io/en/tags/tag-2/</link>
+    <description>Recent content in Tag 2 on Wang&#39;s Blog</description>
+    <generator>Hugo -- 0.140.2</generator>
+    <language>en-US</language>
+    <lastBuildDate>Sat, 11 Jan 2025 09:38:43 -0500</lastBuildDate>
+    <atom:link href="https://wangzitao21.github.io/en/tags/tag-2/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Creating Character Mashup Videos with Python&#43;AI</title>
+      <link>https://wangzitao21.github.io/en/2025/creating-character-mashup-videos-with-python-ai/</link>
+      <pubDate>Sat, 11 Jan 2025 09:38:43 -0500</pubDate>
+      <guid>https://wangzitao21.github.io/en/2025/creating-character-mashup-videos-with-python-ai/</guid>
+      <description>Article description, related to search engine optimization</description>
+    </item>
+    <item>
+      <title>How to Enable BBR Congestion Control Algorithm</title>
+      <link>https://wangzitao21.github.io/en/2025/how-to-enable-bbr-congestion-control-algorithm/</link>
+      <pubDate>Sat, 11 Jan 2025 09:34:30 -0500</pubDate>
+      <guid>https://wangzitao21.github.io/en/2025/how-to-enable-bbr-congestion-control-algorithm/</guid>
+      <description>Article description, related to search engine optimization</description>
+    </item>
+  </channel>
+</rss>
