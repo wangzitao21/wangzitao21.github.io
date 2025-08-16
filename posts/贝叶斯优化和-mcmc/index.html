@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="zh" dir="auto">
 
-<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset="utf-8">
+<head><meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta name="robots" content="noindex, nofollow">
-<title>贝叶斯优化和 MCMC | 汪子涛</title>
+<meta name="robots" content="index, follow">
+<title>贝叶斯优化和 MCMC | 汪子涛的个人网站</title>
 <meta name="keywords" content="">
 <meta name="description" content="贝叶斯优化是一种全局优化方法，用于优化黑盒函数。
 
@@ -120,7 +120,7 @@ pi_estimate = monte_carlo_pi(n=10000, s=0.1)
 pi_estimate = monte_carlo_pi(n=100000, s=0.1)
 结果见下图">
 <meta name="author" content="">
-<link rel="canonical" href="http://192.168.6.66:1313/%E8%B4%9D%E5%8F%B6%E6%96%AF%E4%BC%98%E5%8C%96%E5%92%8C-mcmc/">
+<link rel="canonical" href="https://blog.qarhan.xyz/posts/%E8%B4%9D%E5%8F%B6%E6%96%AF%E4%BC%98%E5%8C%96%E5%92%8C-mcmc/">
 
 
 <script type="text/javascript" async
@@ -155,14 +155,14 @@ pi_estimate = monte_carlo_pi(n=100000, s=0.1)
 
 
 <link crossorigin="anonymous" href="/assets/css/stylesheet.css" rel="preload stylesheet" as="style">
-<link rel="icon" href="http://192.168.6.66:1313/favicon.ico">
-<link rel="icon" type="image/png" sizes="16x16" href="http://192.168.6.66:1313/favicon-16x16.png">
-<link rel="icon" type="image/png" sizes="32x32" href="http://192.168.6.66:1313/favicon-32x32.png">
-<link rel="apple-touch-icon" href="http://192.168.6.66:1313/apple-touch-icon.png">
-<link rel="mask-icon" href="http://192.168.6.66:1313/safari-pinned-tab.svg">
+<link rel="icon" href="https://blog.qarhan.xyz/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="https://blog.qarhan.xyz/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://blog.qarhan.xyz/favicon-32x32.png">
+<link rel="apple-touch-icon" href="https://blog.qarhan.xyz/apple-touch-icon.png">
+<link rel="mask-icon" href="https://blog.qarhan.xyz/safari-pinned-tab.svg">
 <meta name="theme-color" content="#2e2e33">
 <meta name="msapplication-TileColor" content="#2e2e33">
-<link rel="alternate" hreflang="zh" href="http://192.168.6.66:1313/%E8%B4%9D%E5%8F%B6%E6%96%AF%E4%BC%98%E5%8C%96%E5%92%8C-mcmc/">
+<link rel="alternate" hreflang="zh" href="https://blog.qarhan.xyz/posts/%E8%B4%9D%E5%8F%B6%E6%96%AF%E4%BC%98%E5%8C%96%E5%92%8C-mcmc/">
 <noscript>
     <style>
         #theme-toggle,
@@ -199,7 +199,200 @@ pi_estimate = monte_carlo_pi(n=100000, s=0.1)
         }
 
     </style>
-</noscript>
+</noscript><meta property="og:url" content="https://blog.qarhan.xyz/posts/%E8%B4%9D%E5%8F%B6%E6%96%AF%E4%BC%98%E5%8C%96%E5%92%8C-mcmc/">
+  <meta property="og:site_name" content="汪子涛的个人网站">
+  <meta property="og:title" content="贝叶斯优化和 MCMC">
+  <meta property="og:description" content="贝叶斯优化是一种全局优化方法，用于优化黑盒函数。
+定义目标函数，如准确率或损失值。 使用先验模型，如高斯过程，用于对给定的数据点进行目标函数代理建模。 根据先验模型和已观察到的数据点，选择采集函数。常用的采集函数包括期望改进（Expected Improvement, EI）和最大概率改进（Probability of Improvement, PI）。例如，EI的公式如下： $$ EI(x) = E[max(f(x)-f(x^&#43;), 0)] $$
+其中，f(x) 是目标函数，f(x&#43;) 是目前找到的最佳函数值。
+迭代优化。在每次迭代中，我们会通过采集函数选择一个采样点，然后在这个采样点处评估目标函数，得到一个新的观测值。这个新的观测值会被加入到我们的数据集中。然后，我们会使用这个更新后的数据集来更新我们的代理模型（也就是高斯过程模型）。这样，我们的代理模型就能够更好地反映目标函数的形状。 重复上述步骤。 ![[贝叶斯优化和 MCMC_00.png]]
+“查询点&#34;就是我们在下一次迭代中要评估的点256。在每次迭代中，我们都会根据采集函数来选择一个新的查询点，并计算其对应的目标函数值256。然后，我们会使用这个新的数据点来更新我们的先验模型256。在下一次迭代中，我们会再次选择一个新的查询点，并重复这个过程
+2 先验代理模型 高斯过程在贝叶斯优化中被用作代理模型。
+在贝叶斯优化中，我们的目标是优化一个昂贵的、难以评估的目标函数。
+由于直接优化这个函数可能非常困难，我们使用高斯过程来建立这个函数的代理模型。
+这个代理模型可以帮助我们理解目标函数的行为，并预测我们还未观察到的点的函数值。
+因此，你可以把高斯过程看作是在这里代理了目标函数。
+3 采集函数 期望改进（Expected Improvement, EI）是一种常用的采集函数。
+EI的主要思想是，在每次迭代中，选择那些能够最大化期望改进量的点进行评估。
+EI的公式如下：
+EI(x)=E[max(f(x)−f(x&#43;),0)]
+其中，f(x) 是目标函数，f(x&#43;) 是当前找到的最佳函数值。
+在每次迭代中，我们都会计算所有候选点的 EI 值，并选择 EI 值最大的点作为下一个查询点。
+这样，我们就可以在探索（寻找尚未评估的区域）和利用（寻找已知信息）之间取得平衡，从而有效地找到全局最优解
+蒙特卡洛 蒙特卡洛方法是一种随机模拟方法，通过大量随机样本的统计结果来估计问题的解。 在这个例子中，我们随机生成点，并统计落在圆内的点的比例，从而估计圆的面积。
+在一边长为1的正方形内绘制半径为0.5的圆，圆心位于正方形中心。 正方形面积为1，圆面积为 π·r 2 = π/4。 落在圆内点m的数量与圆面积成正比。 模拟点总数 n 与正方形的面积成正比。 由3、4得到圆内点的比例 m/n 近似等于圆的面积与正方形面积的比值，即 m/n≈(π/4)/1=π/4
+直接上代码
+import random import matplotlib.pyplot as plt def monte_carlo_pi(n, s=10): &#34;&#34;&#34; 使用蒙特卡洛方法估算圆周率，并可选地进行可视化. Args: n: 模拟点的数量. visualize: 是否进行可视化. Returns: 圆周率的估计值. &#34;&#34;&#34; in_circle_count = 0 x_in, y_in = [], [] # 圆内的点 x_out, y_out = [], [] # 圆外的点 for _ in range(n): x = random.uniform(0, 1) y = random.uniform(0, 1) distance = (x - 0.5)**2 &#43; (y - 0.5)**2 if distance &lt;= 0.25: in_circle_count &#43;= 1 x_in.append(x) y_in.append(y) else: x_out.append(x) y_out.append(y) pi = 4 * in_circle_count / n # 创建图形 fig, ax = plt.subplots(figsize=(2,2)) # 绘制正方形 ax.set_aspect(&#39;equal&#39;) ax.plot([0, 1, 1, 0, 0], [0, 0, 1, 1, 0], color=&#39;black&#39;) # 绘制圆 circle = plt.Circle((0.5, 0.5), 0.5, color=&#39;blue&#39;, fill=False) ax.add_patch(circle) # 绘制点 ax.scatter(x_in, y_in, color=&#39;red&#39;, s=s, label=&#39;Inside&#39;) ax.scatter(x_out, y_out, color=&#39;green&#39;, s=s, label=&#39;Outside&#39;) ax.set_xticklabels([]) ax.set_yticklabels([]) ax.set_xticks([]) ax.set_yticks([]) for spine in ax.spines.values(): spine.set_visible(False) # ax.legend() plt.text(0.8, 1.05, f&#34;$\pi={pi}$&#34;) plt.title(&#34;Pi (n={})&#34;.format(n)) plt.show() return pi # 设置模拟点的数量 # n = 1000 # 计算圆周率的估计值并进行可视化 pi_estimate = monte_carlo_pi(n=10, s=10) pi_estimate = monte_carlo_pi(n=100, s=10) pi_estimate = monte_carlo_pi(n=1000, s=5) pi_estimate = monte_carlo_pi(n=10000, s=0.1) pi_estimate = monte_carlo_pi(n=100000, s=0.1) 结果见下图">
+  <meta property="og:locale" content="zh-CN">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2023-11-07T00:00:00+00:00">
+    <meta property="article:modified_time" content="2023-11-07T00:00:00+00:00">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="贝叶斯优化和 MCMC">
+<meta name="twitter:description" content="贝叶斯优化是一种全局优化方法，用于优化黑盒函数。
+
+定义目标函数，如准确率或损失值。
+使用先验模型，如高斯过程，用于对给定的数据点进行目标函数代理建模。
+根据先验模型和已观察到的数据点，选择采集函数。常用的采集函数包括期望改进（Expected Improvement, EI）和最大概率改进（Probability of Improvement, PI）。例如，EI的公式如下：
+
+$$
+EI(x) = E[max(f(x)-f(x^&#43;), 0)]
+$$
+其中，f(x) 是目标函数，f(x&#43;) 是目前找到的最佳函数值。
+
+迭代优化。在每次迭代中，我们会通过采集函数选择一个采样点，然后在这个采样点处评估目标函数，得到一个新的观测值。这个新的观测值会被加入到我们的数据集中。然后，我们会使用这个更新后的数据集来更新我们的代理模型（也就是高斯过程模型）。这样，我们的代理模型就能够更好地反映目标函数的形状。
+重复上述步骤。
+
+![[贝叶斯优化和 MCMC_00.png]]
+&ldquo;查询点&quot;就是我们在下一次迭代中要评估的点256。在每次迭代中，我们都会根据采集函数来选择一个新的查询点，并计算其对应的目标函数值256。然后，我们会使用这个新的数据点来更新我们的先验模型256。在下一次迭代中，我们会再次选择一个新的查询点，并重复这个过程
+2 先验代理模型
+高斯过程在贝叶斯优化中被用作代理模型。
+在贝叶斯优化中，我们的目标是优化一个昂贵的、难以评估的目标函数。
+由于直接优化这个函数可能非常困难，我们使用高斯过程来建立这个函数的代理模型。
+这个代理模型可以帮助我们理解目标函数的行为，并预测我们还未观察到的点的函数值。
+因此，你可以把高斯过程看作是在这里代理了目标函数。
+3 采集函数
+期望改进（Expected Improvement, EI）是一种常用的采集函数。
+EI的主要思想是，在每次迭代中，选择那些能够最大化期望改进量的点进行评估。
+EI的公式如下：
+EI(x)=E[max(f(x)−f(x&#43;),0)]
+其中，f(x) 是目标函数，f(x&#43;) 是当前找到的最佳函数值。
+在每次迭代中，我们都会计算所有候选点的 EI 值，并选择 EI 值最大的点作为下一个查询点。
+这样，我们就可以在探索（寻找尚未评估的区域）和利用（寻找已知信息）之间取得平衡，从而有效地找到全局最优解
+蒙特卡洛
+蒙特卡洛方法是一种随机模拟方法，通过大量随机样本的统计结果来估计问题的解。
+在这个例子中，我们随机生成点，并统计落在圆内的点的比例，从而估计圆的面积。
+
+在一边长为1的正方形内绘制半径为0.5的圆，圆心位于正方形中心。
+正方形面积为1，圆面积为 π·r 2 = π/4。
+落在圆内点m的数量与圆面积成正比。
+模拟点总数 n 与正方形的面积成正比。
+由3、4得到圆内点的比例 m/n 近似等于圆的面积与正方形面积的比值，即
+
+m/n≈(π/4)/1=π/4
+直接上代码
+import random
+import matplotlib.pyplot as plt
+
+def monte_carlo_pi(n, s=10):
+    &#34;&#34;&#34;
+    使用蒙特卡洛方法估算圆周率，并可选地进行可视化.
+
+    Args:
+        n: 模拟点的数量.
+        visualize: 是否进行可视化.
+
+    Returns:
+        圆周率的估计值.
+    &#34;&#34;&#34;
+    in_circle_count = 0
+    x_in, y_in = [], []  # 圆内的点
+    x_out, y_out = [], []  # 圆外的点
+
+    for _ in range(n):
+        x = random.uniform(0, 1)
+        y = random.uniform(0, 1) 
+        distance = (x - 0.5)**2 &#43; (y - 0.5)**2 
+        if distance &lt;= 0.25:
+            in_circle_count &#43;= 1
+            x_in.append(x)
+            y_in.append(y)
+        else:
+            x_out.append(x)
+            y_out.append(y)
+
+    pi = 4 * in_circle_count / n
+
+    # 创建图形
+    fig, ax = plt.subplots(figsize=(2,2))
+
+    # 绘制正方形
+    ax.set_aspect(&#39;equal&#39;)
+    ax.plot([0, 1, 1, 0, 0], [0, 0, 1, 1, 0], color=&#39;black&#39;)
+
+    # 绘制圆
+    circle = plt.Circle((0.5, 0.5), 0.5, color=&#39;blue&#39;, fill=False)
+    ax.add_patch(circle)
+
+    # 绘制点
+    ax.scatter(x_in, y_in, color=&#39;red&#39;, s=s, label=&#39;Inside&#39;)
+    ax.scatter(x_out, y_out, color=&#39;green&#39;, s=s, label=&#39;Outside&#39;)
+    ax.set_xticklabels([])
+    ax.set_yticklabels([])
+    ax.set_xticks([])
+    ax.set_yticks([])
+    for spine in ax.spines.values():
+        spine.set_visible(False)
+
+    # ax.legend()
+    plt.text(0.8, 1.05, f&#34;$\pi={pi}$&#34;)
+    plt.title(&#34;Pi (n={})&#34;.format(n))
+    plt.show()
+
+    return pi
+
+# 设置模拟点的数量
+# n = 1000
+
+# 计算圆周率的估计值并进行可视化
+pi_estimate = monte_carlo_pi(n=10, s=10)
+pi_estimate = monte_carlo_pi(n=100, s=10)
+pi_estimate = monte_carlo_pi(n=1000, s=5)
+pi_estimate = monte_carlo_pi(n=10000, s=0.1)
+pi_estimate = monte_carlo_pi(n=100000, s=0.1)
+结果见下图">
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Posts",
+      "item": "https://blog.qarhan.xyz/posts/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "贝叶斯优化和 MCMC",
+      "item": "https://blog.qarhan.xyz/posts/%E8%B4%9D%E5%8F%B6%E6%96%AF%E4%BC%98%E5%8C%96%E5%92%8C-mcmc/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "贝叶斯优化和 MCMC",
+  "name": "贝叶斯优化和 MCMC",
+  "description": "贝叶斯优化是一种全局优化方法，用于优化黑盒函数。\n定义目标函数，如准确率或损失值。 使用先验模型，如高斯过程，用于对给定的数据点进行目标函数代理建模。 根据先验模型和已观察到的数据点，选择采集函数。常用的采集函数包括期望改进（Expected Improvement, EI）和最大概率改进（Probability of Improvement, PI）。例如，EI的公式如下： $$ EI(x) = E[max(f(x)-f(x^+), 0)] $$\n其中，f(x) 是目标函数，f(x+) 是目前找到的最佳函数值。\n迭代优化。在每次迭代中，我们会通过采集函数选择一个采样点，然后在这个采样点处评估目标函数，得到一个新的观测值。这个新的观测值会被加入到我们的数据集中。然后，我们会使用这个更新后的数据集来更新我们的代理模型（也就是高斯过程模型）。这样，我们的代理模型就能够更好地反映目标函数的形状。 重复上述步骤。 ![[贝叶斯优化和 MCMC_00.png]]\n\u0026ldquo;查询点\u0026quot;就是我们在下一次迭代中要评估的点256。在每次迭代中，我们都会根据采集函数来选择一个新的查询点，并计算其对应的目标函数值256。然后，我们会使用这个新的数据点来更新我们的先验模型256。在下一次迭代中，我们会再次选择一个新的查询点，并重复这个过程\n2 先验代理模型 高斯过程在贝叶斯优化中被用作代理模型。\n在贝叶斯优化中，我们的目标是优化一个昂贵的、难以评估的目标函数。\n由于直接优化这个函数可能非常困难，我们使用高斯过程来建立这个函数的代理模型。\n这个代理模型可以帮助我们理解目标函数的行为，并预测我们还未观察到的点的函数值。\n因此，你可以把高斯过程看作是在这里代理了目标函数。\n3 采集函数 期望改进（Expected Improvement, EI）是一种常用的采集函数。\nEI的主要思想是，在每次迭代中，选择那些能够最大化期望改进量的点进行评估。\nEI的公式如下：\nEI(x)=E[max(f(x)−f(x+),0)]\n其中，f(x) 是目标函数，f(x+) 是当前找到的最佳函数值。\n在每次迭代中，我们都会计算所有候选点的 EI 值，并选择 EI 值最大的点作为下一个查询点。\n这样，我们就可以在探索（寻找尚未评估的区域）和利用（寻找已知信息）之间取得平衡，从而有效地找到全局最优解\n蒙特卡洛 蒙特卡洛方法是一种随机模拟方法，通过大量随机样本的统计结果来估计问题的解。 在这个例子中，我们随机生成点，并统计落在圆内的点的比例，从而估计圆的面积。\n在一边长为1的正方形内绘制半径为0.5的圆，圆心位于正方形中心。 正方形面积为1，圆面积为 π·r 2 = π/4。 落在圆内点m的数量与圆面积成正比。 模拟点总数 n 与正方形的面积成正比。 由3、4得到圆内点的比例 m/n 近似等于圆的面积与正方形面积的比值，即 m/n≈(π/4)/1=π/4\n直接上代码\nimport random import matplotlib.pyplot as plt def monte_carlo_pi(n, s=10): \u0026#34;\u0026#34;\u0026#34; 使用蒙特卡洛方法估算圆周率，并可选地进行可视化. Args: n: 模拟点的数量. visualize: 是否进行可视化. Returns: 圆周率的估计值. \u0026#34;\u0026#34;\u0026#34; in_circle_count = 0 x_in, y_in = [], [] # 圆内的点 x_out, y_out = [], [] # 圆外的点 for _ in range(n): x = random.uniform(0, 1) y = random.uniform(0, 1) distance = (x - 0.5)**2 + (y - 0.5)**2 if distance \u0026lt;= 0.25: in_circle_count += 1 x_in.append(x) y_in.append(y) else: x_out.append(x) y_out.append(y) pi = 4 * in_circle_count / n # 创建图形 fig, ax = plt.subplots(figsize=(2,2)) # 绘制正方形 ax.set_aspect(\u0026#39;equal\u0026#39;) ax.plot([0, 1, 1, 0, 0], [0, 0, 1, 1, 0], color=\u0026#39;black\u0026#39;) # 绘制圆 circle = plt.Circle((0.5, 0.5), 0.5, color=\u0026#39;blue\u0026#39;, fill=False) ax.add_patch(circle) # 绘制点 ax.scatter(x_in, y_in, color=\u0026#39;red\u0026#39;, s=s, label=\u0026#39;Inside\u0026#39;) ax.scatter(x_out, y_out, color=\u0026#39;green\u0026#39;, s=s, label=\u0026#39;Outside\u0026#39;) ax.set_xticklabels([]) ax.set_yticklabels([]) ax.set_xticks([]) ax.set_yticks([]) for spine in ax.spines.values(): spine.set_visible(False) # ax.legend() plt.text(0.8, 1.05, f\u0026#34;$\\pi={pi}$\u0026#34;) plt.title(\u0026#34;Pi (n={})\u0026#34;.format(n)) plt.show() return pi # 设置模拟点的数量 # n = 1000 # 计算圆周率的估计值并进行可视化 pi_estimate = monte_carlo_pi(n=10, s=10) pi_estimate = monte_carlo_pi(n=100, s=10) pi_estimate = monte_carlo_pi(n=1000, s=5) pi_estimate = monte_carlo_pi(n=10000, s=0.1) pi_estimate = monte_carlo_pi(n=100000, s=0.1) 结果见下图\n",
+  "keywords": [
+    
+  ],
+  "articleBody": "贝叶斯优化是一种全局优化方法，用于优化黑盒函数。\n定义目标函数，如准确率或损失值。 使用先验模型，如高斯过程，用于对给定的数据点进行目标函数代理建模。 根据先验模型和已观察到的数据点，选择采集函数。常用的采集函数包括期望改进（Expected Improvement, EI）和最大概率改进（Probability of Improvement, PI）。例如，EI的公式如下： $$ EI(x) = E[max(f(x)-f(x^+), 0)] $$\n其中，f(x) 是目标函数，f(x+) 是目前找到的最佳函数值。\n迭代优化。在每次迭代中，我们会通过采集函数选择一个采样点，然后在这个采样点处评估目标函数，得到一个新的观测值。这个新的观测值会被加入到我们的数据集中。然后，我们会使用这个更新后的数据集来更新我们的代理模型（也就是高斯过程模型）。这样，我们的代理模型就能够更好地反映目标函数的形状。 重复上述步骤。 ![[贝叶斯优化和 MCMC_00.png]]\n“查询点\"就是我们在下一次迭代中要评估的点256。在每次迭代中，我们都会根据采集函数来选择一个新的查询点，并计算其对应的目标函数值256。然后，我们会使用这个新的数据点来更新我们的先验模型256。在下一次迭代中，我们会再次选择一个新的查询点，并重复这个过程\n2 先验代理模型 高斯过程在贝叶斯优化中被用作代理模型。\n在贝叶斯优化中，我们的目标是优化一个昂贵的、难以评估的目标函数。\n由于直接优化这个函数可能非常困难，我们使用高斯过程来建立这个函数的代理模型。\n这个代理模型可以帮助我们理解目标函数的行为，并预测我们还未观察到的点的函数值。\n因此，你可以把高斯过程看作是在这里代理了目标函数。\n3 采集函数 期望改进（Expected Improvement, EI）是一种常用的采集函数。\nEI的主要思想是，在每次迭代中，选择那些能够最大化期望改进量的点进行评估。\nEI的公式如下：\nEI(x)=E[max(f(x)−f(x+),0)]\n其中，f(x) 是目标函数，f(x+) 是当前找到的最佳函数值。\n在每次迭代中，我们都会计算所有候选点的 EI 值，并选择 EI 值最大的点作为下一个查询点。\n这样，我们就可以在探索（寻找尚未评估的区域）和利用（寻找已知信息）之间取得平衡，从而有效地找到全局最优解\n蒙特卡洛 蒙特卡洛方法是一种随机模拟方法，通过大量随机样本的统计结果来估计问题的解。 在这个例子中，我们随机生成点，并统计落在圆内的点的比例，从而估计圆的面积。\n在一边长为1的正方形内绘制半径为0.5的圆，圆心位于正方形中心。 正方形面积为1，圆面积为 π·r 2 = π/4。 落在圆内点m的数量与圆面积成正比。 模拟点总数 n 与正方形的面积成正比。 由3、4得到圆内点的比例 m/n 近似等于圆的面积与正方形面积的比值，即 m/n≈(π/4)/1=π/4\n直接上代码\nimport random import matplotlib.pyplot as plt def monte_carlo_pi(n, s=10): \"\"\" 使用蒙特卡洛方法估算圆周率，并可选地进行可视化. Args: n: 模拟点的数量. visualize: 是否进行可视化. Returns: 圆周率的估计值. \"\"\" in_circle_count = 0 x_in, y_in = [], [] # 圆内的点 x_out, y_out = [], [] # 圆外的点 for _ in range(n): x = random.uniform(0, 1) y = random.uniform(0, 1) distance = (x - 0.5)**2 + (y - 0.5)**2 if distance \u003c= 0.25: in_circle_count += 1 x_in.append(x) y_in.append(y) else: x_out.append(x) y_out.append(y) pi = 4 * in_circle_count / n # 创建图形 fig, ax = plt.subplots(figsize=(2,2)) # 绘制正方形 ax.set_aspect('equal') ax.plot([0, 1, 1, 0, 0], [0, 0, 1, 1, 0], color='black') # 绘制圆 circle = plt.Circle((0.5, 0.5), 0.5, color='blue', fill=False) ax.add_patch(circle) # 绘制点 ax.scatter(x_in, y_in, color='red', s=s, label='Inside') ax.scatter(x_out, y_out, color='green', s=s, label='Outside') ax.set_xticklabels([]) ax.set_yticklabels([]) ax.set_xticks([]) ax.set_yticks([]) for spine in ax.spines.values(): spine.set_visible(False) # ax.legend() plt.text(0.8, 1.05, f\"$\\pi={pi}$\") plt.title(\"Pi (n={})\".format(n)) plt.show() return pi # 设置模拟点的数量 # n = 1000 # 计算圆周率的估计值并进行可视化 pi_estimate = monte_carlo_pi(n=10, s=10) pi_estimate = monte_carlo_pi(n=100, s=10) pi_estimate = monte_carlo_pi(n=1000, s=5) pi_estimate = monte_carlo_pi(n=10000, s=0.1) pi_estimate = monte_carlo_pi(n=100000, s=0.1) 结果见下图\n![[贝叶斯优化和 MCMC_01.png]]\n",
+  "wordCount" : "233",
+  "inLanguage": "zh",
+  "datePublished": "2023-11-07T00:00:00Z",
+  "dateModified": "2023-11-07T00:00:00Z",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://blog.qarhan.xyz/posts/%E8%B4%9D%E5%8F%B6%E6%96%AF%E4%BC%98%E5%8C%96%E5%92%8C-mcmc/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "汪子涛的个人网站",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://blog.qarhan.xyz/favicon.ico"
+    }
+  }
+}
+</script>
 </head>
 
 <body class="" id="top">
@@ -217,7 +410,7 @@ pi_estimate = monte_carlo_pi(n=100000, s=0.1)
 <header class="header">
     <nav class="nav">
         <div class="logo">
-            <a href="http://192.168.6.66:1313/" accesskey="h" title="汪子涛 (Alt + H)">汪子涛</a>
+            <a href="https://blog.qarhan.xyz/" accesskey="h" title="汪子涛的个人网站 (Alt + H)">汪子涛的个人网站</a>
             <div class="logo-switches">
                 <button id="theme-toggle" accesskey="t" title="(Alt + T)" aria-label="Toggle theme">
                     <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
@@ -253,10 +446,28 @@ pi_estimate = monte_carlo_pi(n=100000, s=0.1)
     <h1 class="post-title entry-hint-parent">
       贝叶斯优化和 MCMC
     </h1>
-    <div class="post-meta"><span title='2023-11-07 00:00:00 +0000 UTC'>十一月 7, 2023</span>
+    <div class="post-meta"><span title='2023-11-07 00:00:00 +0000 UTC'>2023/11/7</span>
 
 </div>
-  </header> 
+  </header> <div class="toc">
+    <details  open>
+        <summary accesskey="c" title="(Alt + C)">
+            <span class="details">目录</span>
+        </summary>
+
+        <div class="inner"><ul>
+                <li>
+                    <a href="#2-%e5%85%88%e9%aa%8c%e4%bb%a3%e7%90%86%e6%a8%a1%e5%9e%8b" aria-label="2 先验代理模型">2 先验代理模型</a></li>
+                <li>
+                    <a href="#3-%e9%87%87%e9%9b%86%e5%87%bd%e6%95%b0" aria-label="3 采集函数">3 采集函数</a></li>
+                <li>
+                    <a href="#%e8%92%99%e7%89%b9%e5%8d%a1%e6%b4%9b" aria-label="蒙特卡洛">蒙特卡洛</a>
+                </li>
+            </ul>
+        </div>
+    </details>
+</div>
+
   <div class="post-content"><p>贝叶斯优化是一种全局优化方法，用于优化黑盒函数。</p>
 <ol>
 <li>定义目标函数，如准确率或损失值。</li>
@@ -382,7 +593,7 @@ $$</p>
     </main>
     
 <footer class="footer">
-        <span>&copy; 2025 <a href="http://192.168.6.66:1313/">汪子涛</a></span> · 
+        <span>&copy; 2025 <a href="https://blog.qarhan.xyz/">汪子涛的个人网站</a></span> · 
 
     <span>
         Powered by

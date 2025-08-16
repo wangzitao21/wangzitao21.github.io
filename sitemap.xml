@@ -2,14 +2,33 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://blog.qarhan.xyz/%E8%B4%9D%E5%8F%B6%E6%96%AF%E4%BC%98%E5%8C%96%E5%92%8C-mcmc/</loc>
-    <lastmod>2023-11-07T00:00:00+00:00</lastmod>
+    <loc>https://blog.qarhan.xyz/about/</loc>
+    <lastmod>2025-08-16T22:43:44+08:00</lastmod>
   </url><url>
     <loc>https://blog.qarhan.xyz/</loc>
+    <lastmod>2025-08-16T22:43:44+08:00</lastmod>
+  </url><url>
+    <loc>https://blog.qarhan.xyz/posts/</loc>
     <lastmod>2023-11-07T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://blog.qarhan.xyz/categories/</loc>
+    <loc>https://blog.qarhan.xyz/posts/%E8%B4%9D%E5%8F%B6%E6%96%AF%E4%BC%98%E5%8C%96%E5%92%8C-mcmc/</loc>
+    <lastmod>2023-11-07T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://blog.qarhan.xyz/tags/algorithm/</loc>
+    <lastmod>2023-03-16T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://blog.qarhan.xyz/tags/published/</loc>
+    <lastmod>2023-03-16T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://blog.qarhan.xyz/tags/python/</loc>
+    <lastmod>2023-03-16T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://blog.qarhan.xyz/tags/</loc>
+    <lastmod>2023-03-16T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://blog.qarhan.xyz/posts/%E5%9C%B0%E7%BB%9F%E8%AE%A1%E5%AD%A6%E7%A1%AE%E5%AE%9A%E6%80%A7%E5%BB%BA%E6%A8%A1%E5%8F%8A%E9%9A%8F%E6%9C%BA%E5%BB%BA%E6%A8%A1/</loc>
+    <lastmod>2023-03-16T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://blog.qarhan.xyz/categories/</loc>
   </url>
 </urlset>

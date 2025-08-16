@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="zh" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>地统计学确定性建模及随机建模 | 汪子涛的个人网站</title>
+<meta name="keywords" content="algorithm, published, python">
+<meta name="description" content="地统计学建模中包括确定性建模和随机建模。
+确定性建模是利用已知点给出确定的预测结果，如 Kriging 插值。
+随机建模可以建模多个结果并刻画空间的不确定性，如序贯高斯模拟。
+半变异函数/协方差矩阵
+![[地统计学确定性建模及随机建模_00.png]]
+
+nugget 是块金值，通常表示为 $c_0$。块金值指的是当点距离足够近 (趋近于 0) 的时候还会存在的极限值，理论上这个值应该为 0。
+sill $(c_0&#43;c_1)$ 是基台值。它表示数据点差别最大 (也就是总方差) 时，能达到什么程度的值。去掉块金值后的 $c_1$ 称为偏基台值 (Partial Sill)，又称为结构化方差。
+range 是变程，指半变异函数达到基台值时的空间。超过这个距离，空间自相关性基本消失，超过这个距离，点与点就基本没关系了，变量之间可以视为相互独立。
+
+GSTools 的公式是：
+$$
+\gamma(r) = \sigma^2\cdot (1 - cor(s \cdot\frac{r}{l})) &#43; n
+$$
+
+$\gamma(r)$ 是半变异函数，这里的 $r$ 就是我们之前用的滞后距离 $h$。
+$\sigma^2$ 是方差 (Variance)。在 GSTools 公式中，$\sigma^2$ 指的是偏基台值 (Partial Sill)，即结构化方差部分，对应我们之前讨论的 $c_1$。它不是数据的总方差（基台值）。
+$n$ 是块金值，对应 $c_0$。
+cor(&hellip;) 归一化的相关函数 (Normalized Correlation Function)。这个函数的特点是 cor(0) = 1，并且随着距离的增加而减小（通常趋于0）。它描述了空间自相关的结构形式。
+l: 主要相关长度 (Main correlation length)，与我们之前讨论的变程 a 相关。它定义了相关性衰减的特征距离。
+s: 尺度因子 (Scaling factor)，用于单位转换或各向异性，使得 h = s * r / l 成为一个无量纲的距离。
+
+$$
+\rho(r) = \text{cor} \left(s \cdot \frac{r}{\ell}\right)
+$$">
+<meta name="author" content="">
+<link rel="canonical" href="https://blog.qarhan.xyz/posts/%E5%9C%B0%E7%BB%9F%E8%AE%A1%E5%AD%A6%E7%A1%AE%E5%AE%9A%E6%80%A7%E5%BB%BA%E6%A8%A1%E5%8F%8A%E9%9A%8F%E6%9C%BA%E5%BB%BA%E6%A8%A1/">
+
+
+<script type="text/javascript" async
+    src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+        MathJax.Hub.Config({
+            tex2jax: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$']],
+                processEscapes: true,
+                processEnvironments: true,
+                skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+                TeX: {
+                    equationNumbers: { autoNumber: "AMS" },
+                    extensions: ["AMSmath.js", "AMSsymbols.js"]
+                }
+            }
+        });
+        MathJax.Hub.Queue(function () {
+            
+            
+            
+            var all = MathJax.Hub.getAllJax(), i;
+            for (i = 0; i < all.length; i += 1) {
+                all[i].SourceElement().parentNode.className += ' has-jax';
+            }
+        });
+        MathJax.Hub.Config({
+            
+            TeX: { equationNumbers: { autoNumber: "AMS" } }
+        });
+    </script>
+
+
+<link crossorigin="anonymous" href="/assets/css/stylesheet.css" rel="preload stylesheet" as="style">
+<link rel="icon" href="https://blog.qarhan.xyz/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="https://blog.qarhan.xyz/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://blog.qarhan.xyz/favicon-32x32.png">
+<link rel="apple-touch-icon" href="https://blog.qarhan.xyz/apple-touch-icon.png">
+<link rel="mask-icon" href="https://blog.qarhan.xyz/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<link rel="alternate" hreflang="zh" href="https://blog.qarhan.xyz/posts/%E5%9C%B0%E7%BB%9F%E8%AE%A1%E5%AD%A6%E7%A1%AE%E5%AE%9A%E6%80%A7%E5%BB%BA%E6%A8%A1%E5%8F%8A%E9%9A%8F%E6%9C%BA%E5%BB%BA%E6%A8%A1/">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --code-block-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript><meta property="og:url" content="https://blog.qarhan.xyz/posts/%E5%9C%B0%E7%BB%9F%E8%AE%A1%E5%AD%A6%E7%A1%AE%E5%AE%9A%E6%80%A7%E5%BB%BA%E6%A8%A1%E5%8F%8A%E9%9A%8F%E6%9C%BA%E5%BB%BA%E6%A8%A1/">
+  <meta property="og:site_name" content="汪子涛的个人网站">
+  <meta property="og:title" content="地统计学确定性建模及随机建模">
+  <meta property="og:description" content="地统计学建模中包括确定性建模和随机建模。
+确定性建模是利用已知点给出确定的预测结果，如 Kriging 插值。
+随机建模可以建模多个结果并刻画空间的不确定性，如序贯高斯模拟。
+半变异函数/协方差矩阵 ![[地统计学确定性建模及随机建模_00.png]]
+nugget 是块金值，通常表示为 $c_0$。块金值指的是当点距离足够近 (趋近于 0) 的时候还会存在的极限值，理论上这个值应该为 0。 sill $(c_0&#43;c_1)$ 是基台值。它表示数据点差别最大 (也就是总方差) 时，能达到什么程度的值。去掉块金值后的 $c_1$ 称为偏基台值 (Partial Sill)，又称为结构化方差。 range 是变程，指半变异函数达到基台值时的空间。超过这个距离，空间自相关性基本消失，超过这个距离，点与点就基本没关系了，变量之间可以视为相互独立。 GSTools 的公式是：
+$$ \gamma(r) = \sigma^2\cdot (1 - cor(s \cdot\frac{r}{l})) &#43; n $$
+$\gamma(r)$ 是半变异函数，这里的 $r$ 就是我们之前用的滞后距离 $h$。 $\sigma^2$ 是方差 (Variance)。在 GSTools 公式中，$\sigma^2$ 指的是偏基台值 (Partial Sill)，即结构化方差部分，对应我们之前讨论的 $c_1$。它不是数据的总方差（基台值）。 $n$ 是块金值，对应 $c_0$。 cor(…) 归一化的相关函数 (Normalized Correlation Function)。这个函数的特点是 cor(0) = 1，并且随着距离的增加而减小（通常趋于0）。它描述了空间自相关的结构形式。 l: 主要相关长度 (Main correlation length)，与我们之前讨论的变程 a 相关。它定义了相关性衰减的特征距离。 s: 尺度因子 (Scaling factor)，用于单位转换或各向异性，使得 h = s * r / l 成为一个无量纲的距离。 $$ \rho(r) = \text{cor} \left(s \cdot \frac{r}{\ell}\right) $$">
+  <meta property="og:locale" content="zh-CN">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2023-03-16T00:00:00+00:00">
+    <meta property="article:modified_time" content="2023-03-16T00:00:00+00:00">
+    <meta property="article:tag" content="Algorithm">
+    <meta property="article:tag" content="Published">
+    <meta property="article:tag" content="Python">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="地统计学确定性建模及随机建模">
+<meta name="twitter:description" content="地统计学建模中包括确定性建模和随机建模。
+确定性建模是利用已知点给出确定的预测结果，如 Kriging 插值。
+随机建模可以建模多个结果并刻画空间的不确定性，如序贯高斯模拟。
+半变异函数/协方差矩阵
+![[地统计学确定性建模及随机建模_00.png]]
+
+nugget 是块金值，通常表示为 $c_0$。块金值指的是当点距离足够近 (趋近于 0) 的时候还会存在的极限值，理论上这个值应该为 0。
+sill $(c_0&#43;c_1)$ 是基台值。它表示数据点差别最大 (也就是总方差) 时，能达到什么程度的值。去掉块金值后的 $c_1$ 称为偏基台值 (Partial Sill)，又称为结构化方差。
+range 是变程，指半变异函数达到基台值时的空间。超过这个距离，空间自相关性基本消失，超过这个距离，点与点就基本没关系了，变量之间可以视为相互独立。
+
+GSTools 的公式是：
+$$
+\gamma(r) = \sigma^2\cdot (1 - cor(s \cdot\frac{r}{l})) &#43; n
+$$
+
+$\gamma(r)$ 是半变异函数，这里的 $r$ 就是我们之前用的滞后距离 $h$。
+$\sigma^2$ 是方差 (Variance)。在 GSTools 公式中，$\sigma^2$ 指的是偏基台值 (Partial Sill)，即结构化方差部分，对应我们之前讨论的 $c_1$。它不是数据的总方差（基台值）。
+$n$ 是块金值，对应 $c_0$。
+cor(&hellip;) 归一化的相关函数 (Normalized Correlation Function)。这个函数的特点是 cor(0) = 1，并且随着距离的增加而减小（通常趋于0）。它描述了空间自相关的结构形式。
+l: 主要相关长度 (Main correlation length)，与我们之前讨论的变程 a 相关。它定义了相关性衰减的特征距离。
+s: 尺度因子 (Scaling factor)，用于单位转换或各向异性，使得 h = s * r / l 成为一个无量纲的距离。
+
+$$
+\rho(r) = \text{cor} \left(s \cdot \frac{r}{\ell}\right)
+$$">
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Posts",
+      "item": "https://blog.qarhan.xyz/posts/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "地统计学确定性建模及随机建模",
+      "item": "https://blog.qarhan.xyz/posts/%E5%9C%B0%E7%BB%9F%E8%AE%A1%E5%AD%A6%E7%A1%AE%E5%AE%9A%E6%80%A7%E5%BB%BA%E6%A8%A1%E5%8F%8A%E9%9A%8F%E6%9C%BA%E5%BB%BA%E6%A8%A1/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "地统计学确定性建模及随机建模",
+  "name": "地统计学确定性建模及随机建模",
+  "description": "地统计学建模中包括确定性建模和随机建模。\n确定性建模是利用已知点给出确定的预测结果，如 Kriging 插值。\n随机建模可以建模多个结果并刻画空间的不确定性，如序贯高斯模拟。\n半变异函数/协方差矩阵 ![[地统计学确定性建模及随机建模_00.png]]\nnugget 是块金值，通常表示为 $c_0$。块金值指的是当点距离足够近 (趋近于 0) 的时候还会存在的极限值，理论上这个值应该为 0。 sill $(c_0+c_1)$ 是基台值。它表示数据点差别最大 (也就是总方差) 时，能达到什么程度的值。去掉块金值后的 $c_1$ 称为偏基台值 (Partial Sill)，又称为结构化方差。 range 是变程，指半变异函数达到基台值时的空间。超过这个距离，空间自相关性基本消失，超过这个距离，点与点就基本没关系了，变量之间可以视为相互独立。 GSTools 的公式是：\n$$ \\gamma(r) = \\sigma^2\\cdot (1 - cor(s \\cdot\\frac{r}{l})) + n $$\n$\\gamma(r)$ 是半变异函数，这里的 $r$ 就是我们之前用的滞后距离 $h$。 $\\sigma^2$ 是方差 (Variance)。在 GSTools 公式中，$\\sigma^2$ 指的是偏基台值 (Partial Sill)，即结构化方差部分，对应我们之前讨论的 $c_1$。它不是数据的总方差（基台值）。 $n$ 是块金值，对应 $c_0$。 cor(\u0026hellip;) 归一化的相关函数 (Normalized Correlation Function)。这个函数的特点是 cor(0) = 1，并且随着距离的增加而减小（通常趋于0）。它描述了空间自相关的结构形式。 l: 主要相关长度 (Main correlation length)，与我们之前讨论的变程 a 相关。它定义了相关性衰减的特征距离。 s: 尺度因子 (Scaling factor)，用于单位转换或各向异性，使得 h = s * r / l 成为一个无量纲的距离。 $$ \\rho(r) = \\text{cor} \\left(s \\cdot \\frac{r}{\\ell}\\right) $$\n",
+  "keywords": [
+    "algorithm", "published", "python"
+  ],
+  "articleBody": "地统计学建模中包括确定性建模和随机建模。\n确定性建模是利用已知点给出确定的预测结果，如 Kriging 插值。\n随机建模可以建模多个结果并刻画空间的不确定性，如序贯高斯模拟。\n半变异函数/协方差矩阵 ![[地统计学确定性建模及随机建模_00.png]]\nnugget 是块金值，通常表示为 $c_0$。块金值指的是当点距离足够近 (趋近于 0) 的时候还会存在的极限值，理论上这个值应该为 0。 sill $(c_0+c_1)$ 是基台值。它表示数据点差别最大 (也就是总方差) 时，能达到什么程度的值。去掉块金值后的 $c_1$ 称为偏基台值 (Partial Sill)，又称为结构化方差。 range 是变程，指半变异函数达到基台值时的空间。超过这个距离，空间自相关性基本消失，超过这个距离，点与点就基本没关系了，变量之间可以视为相互独立。 GSTools 的公式是：\n$$ \\gamma(r) = \\sigma^2\\cdot (1 - cor(s \\cdot\\frac{r}{l})) + n $$\n$\\gamma(r)$ 是半变异函数，这里的 $r$ 就是我们之前用的滞后距离 $h$。 $\\sigma^2$ 是方差 (Variance)。在 GSTools 公式中，$\\sigma^2$ 指的是偏基台值 (Partial Sill)，即结构化方差部分，对应我们之前讨论的 $c_1$。它不是数据的总方差（基台值）。 $n$ 是块金值，对应 $c_0$。 cor(…) 归一化的相关函数 (Normalized Correlation Function)。这个函数的特点是 cor(0) = 1，并且随着距离的增加而减小（通常趋于0）。它描述了空间自相关的结构形式。 l: 主要相关长度 (Main correlation length)，与我们之前讨论的变程 a 相关。它定义了相关性衰减的特征距离。 s: 尺度因子 (Scaling factor)，用于单位转换或各向异性，使得 h = s * r / l 成为一个无量纲的距离。 $$ \\rho(r) = \\text{cor} \\left(s \\cdot \\frac{r}{\\ell}\\right) $$\n$\\rho(r)$ 是相关函数。\n$C(r)=σ² \\rho(r)$ 是协方差函数。\n协方差模型可以通过 C(h) = (c₀ + c₁) - γ(h)\n在地统计学中，生成随机场的步骤是:\n用已知点数据 计算和绘制经验半变异函数。 观察经验半变异函数，选择一个合适的理论半变异函数模型（球状、指数、高斯等）。 通过拟合，确定该理论模型的参数：块金值 (c₀)、偏基台值 (c₁)（或直接是基台值 c₀+c₁）和变程 (a)。 利用公式 C(h) = (c₀ + c₁) - γ(h)，将拟合好的理论半变异函数 γ(h) 转换成对应的理论协方差函数 C(h)。 最后，使用这个理论协方差函数 C(h)（通常是通过构建协方差矩阵）输入到随机场生成算法中，生成符合该空间结构的一个或多个随机场实现。 反距离权重插值 Inverse distance weighting 根据地理学第一定律:\nAll attribute values on a geographic surface are related to each other, but closer values are more strongly related than are more distant ones.\n所有事物都与其他事物相关，但近处事物比远处事物更相关。即地理属性在空间上存在相关性，相近事物会更相似。\n因此，反距离权重 (Inverse Distance Weighting, IDW) 插值算法被提出，其公式为:\n$$ \\hat{z}=\\sum_{i=1}^n \\frac{1}{d^\\alpha} z_i $$\n式中，$\\alpha$ 取 1 或 2，$d$ 为任意已知点 $i$ 和待预测点的欧式距离。未知点值等于所有已知点的加权求和，而已知点的权重来自与未知点欧氏距离。\n也就是说，距离越近权重越大，反之亦然。因此，反距离权重法并不够准确。\n克里金插值 Kriging 克里金插值之前，需要数据满足以下几个条件，或者这几个假设是存在的:\n数据是具有高斯分布的。如果数据不是高斯分布，则需要转换成高斯分布。 将原始的数据先转换为正态分布，再转换为标准正态分布。使用的方法是 BOX-Cox 广义幂变换方法，通过数据本身估计该参数确定应采取的数据变换形式，可明显地改善数据的正态性、对称性和方差相等性。\n数据值是固定的，即在局部差距是恒定的。可以用 Voronoi 图来检查这一差异。 数据不存在某种趋势。 任意点属性值与其周围点属性值有关，且可以由其周围点属性值推导出。则克里金插值的基本假设为:\n$$ \\hat{z}=\\sum_{i=1}^n\\lambda_i z_i $$\n$\\lambda_i$ 为权重系数，它同样是空间是所有已知点的数据加权求和后估计的未知点值。但权重系数并非如反距离权重法一样是距离的倒数，而是在能够满足 $(x_i, y_i)$ 处，估计值 $\\hat z_i$ 和真实值 $z_i$ 的差最小的一套最优系数。\n关于上述公式最优系数的推理，见教程克里金插值的原理与公式推导。在此只考虑克里金算法的过程。其计算过程如下:\n计算所有已知点之间的欧式距离和半方差。点 $i$ 和点 $j$ 的半方差 $r_{ij}$ 的公式为： $$ r_{ij} = \\frac{1}{2}(z_i-z_j)^2 $$\n当已知点数量足够时，通常不会逐个计算所有已知点半方差，而是将距离划分为若干个区间，然后计算该距离区间内所有数据点之间的半方差并求均值。从而将距离区间的中心值视为横坐标，半方差均值为纵坐标。\n这样做的目的是为了减少噪声并提高估计的稳定性。因为每个数据点都可能受到噪声的影响，并可能会得到一个非常嘈杂的半变异函数估计。\n以欧式距离为横坐标，半方差为纵坐标，将第 1 步计算得出的所有值绘制到坐标系里。得到一个具有变化趋势散点图。 寻找一个半变异函数 (Semi-Variogram) 拟合距离与半方差，使得散点图拟合为一条曲线。 由于点与点之间的欧氏距离很容易得到，因此可以通过拟合的半变异函数得到半方差值。对于未知点 $z_o$, 可以计算它到所有已知点 $z_i$ 的距离，并借助半变异函数，用距离求得半方差值 $r_io$。 基于下式可计算出所有的 $\\lambda_i$ 的值: $$ \\left[\\begin{array}{ccccc} r_{11} \u0026 r_{12} \u0026 \\cdots \u0026 r_{1 n} \u0026 1 \\ r_{21} \u0026 r_{22} \u0026 \\cdots \u0026 r_{2 n} \u0026 1 \\ \\cdots \u0026 \\cdots \u0026 \\cdots \u0026 \\cdots \u0026 \\cdots \\ r_{n 1} \u0026 r_{n 2} \u0026 \\cdots \u0026 r_{n n} \u0026 1 \\ 1 \u0026 1 \u0026 \\cdots \u0026 1 \u0026 0 \\end{array}\\right]\\left[\\begin{array}{c} \\lambda_1 \\ \\lambda_2 \\ \\cdots \\ \\lambda_n \\ -\\phi \\end{array}\\right]=\\left[\\begin{array}{c} r_{1 o} \\ r_{2 o} \\ \\cdots \\ r_{n o} \\ 1 \\end{array}\\right] $$\n该式的推导和证明仍见克里金插值的原理与公式推导，简单来说，对于未知点 $o$，需要保证估计值 $\\hat z_o$ 和实际值 $z_o$ 之间的差最小，同时满足无偏估计。在这种情况下推导得到上式。\n根据 Kriging 插值公式，即可得出 $z_o$ 点的值。 克里金插值依赖于半变异函数。半变异函数是一种描述空间随机场或随机过程的空间相关性的函数。它定义为两个位置之间的平均平方差的一半。\n当两个位置之间的距离增加时，它们之间的差异也会增加，则半变异函数的值也会增加。半变异函数能量化自相关，即根据距离得到半方差。\n根据地理学第一定律，距离更近则相关性越强，半方差也越小。当达到一定的距离时，自相关变得独立，并逐渐趋于平稳。也就意味着不再自相关了。\n根据数据的不同，可以选择合适的变异函数，如球形、圆形、指数型和高斯型等。具体可参考 ArcGIS 文档。\n以下是一个克里金插值的案例代码，使用 GSTools 模块来实现。\nimport numpy as np import gstools as gs import matplotlib.pyplot as plt number = 128 gridX = gridY = np.arange(number) def exampleGenerator(seed=0, target=(1, 10)): model = gs.Gaussian(dim=2, var=1, len_scale=20) srf = gs.SRF(model=model, seed=seed) field = srf.structured([gridX, gridY]) # ! 映射到指定范围 target_min, target_max = target[0], target[1] field_scaled = np.interp(field, (field.min(), field.max()), (target_min, target_max)) return field_scaled # ! 生成一个空间分布, 在空间上随机采样并视其为已知点 example = exampleGenerator(seed=2023, target=(1, 10)) x = np.random.randint(0, high=number, size=300, dtype=int) y = np.random.randint(0, high=number, size=300, dtype=int) values = example[x, y] # ! 将已知点按照欧式距离划分为 50 个等份并求得距离的中心值 bin_center 和半方差值 gamma bins = np.arange(50) bin_center, gamma = gs.vario_estimate((x, y), values, bins) # ! 使用高斯模型拟合已知点 fit_model = gs.Gaussian(dim=2, var=1, len_scale=20) fit_model.fit_variogram(bin_center, gamma, nugget=False) # ! 绘制拟合曲线 ax = fit_model.plot(x_max=50) ax.scatter(bin_center, gamma) # ! 计算克里金插值结果 krige = gs.Krige(model=fit_model, cond_pos=[x, y], cond_val=values) field = krige.structured([gridX, gridY]) fig = plt.figure(figsize=(10, 4)) ax = fig.add_subplot(1, 2, 1) plt.imshow(example.T, cmap='rainbow', origin='lower') plt.colorbar(shrink=0.6) plt.scatter(x, y, s=1, color='black') ax = fig.add_subplot(1, 2, 2) plt.imshow(field[0].T, origin='lower', cmap='rainbow') plt.colorbar(shrink=0.6) 序贯高斯模拟 Sequential Gaussian Simualation 克里金插值结果追求最高的估值精度和最小的估值方差，因此只有一个结果。同时，克里金刻画的空间分布整体比较连续，具有明显的平滑效应。\n相反，序贯高斯模拟的结果整体分布较离散，突出原始数据的非均质性和不确定性。可产生多个结果。\n序贯高斯模拟 (Sequential Gaussian Simualation, SGS) 的建模步骤为:\n将原数据转为标准高斯分布。 建立一条随机路径，用于遍历模拟所有节点。 按照所选路径依次遍历每个节点，并用已知点的克里金插值估计该点的值和方差。 使用该点的值和方差构建条件分布，从中随机取一个点赋给当前点。 重复步骤 3 和 4，直到所有点完成模拟。 序贯高斯模拟的代码如下:\nimport numpy as np import gstools as gs import matplotlib.pyplot as plt number = 20 gridX = gridY = np.arange(number) def exampleGenerator(seed=0): model = gs.Gaussian(dim=2, var=1, len_scale=5) srf = gs.SRF(model=model, seed=seed) field = srf.structured([gridX, gridY]) return field example = exampleGenerator(seed=2023) x = np.random.randint(0, high=number, size=20, dtype=int) y = np.random.randint(0, high=number, size=20, dtype=int) values = example[x, y] bins = np.arange(20) bin_center, gamma = gs.vario_estimate((x, y), values, bins) # ! 拟合高斯模型 fit_model = gs.Gaussian(dim=2, var=1, len_scale=6) fit_model.fit_variogram(bin_center, gamma, nugget=False) ax = fit_model.plot(x_max=20) ax.scatter(bin_center, gamma) def SGS(x, y, values): # ! 生成一个随机模拟路径 sim_path = np.random.permutation(number * number) # 初始化模拟结果数组 sim_result = np.zeros((number * number)) krige = gs.Krige(model=fit_model, cond_pos=[x, y], cond_val=values) m = 0 mm = sim_path.shape[0] for path in sim_path: # 获取当前路径上的点的坐标 x_idx = path // number y_idx = path % number # 计算每个点的条件期望和条件方差 krige.set_condition(cond_pos=[x, y], cond_val=values) krig_result, var_result = krige.unstructured([x_idx, y_idx]) # 从正态分布中抽取随机数作为模拟值 sim_result[path] = np.random.normal(loc=krig_result, scale=var_result, size=1) # 更新已知数据 x = np.append(x, x_idx) y = np.append(y, y_idx) values = np.append(values, sim_result[path]) m += 1 if m % 100 == 0: print('已完成: ', (m / mm) * 100, '%') # ! 将模拟结果重新排列成二维数组 new_sim_result = sim_result.reshape((number ,number)) return new_sim_result field = SGS(x, y, values) fig = plt.figure(figsize=(10 ,4)) ax = fig.add_subplot(1, 2, 1) plt.imshow(example.T, cmap='rainbow', origin='lower') plt.colorbar(shrink=0.6) plt.scatter(x, y, s=1, color='black') ax = fig.add_subplot(1, 2, 2) plt.imshow(field.T, origin='lower', cmap='rainbow') plt.colorbar(shrink=0.6) 由于上述代码是在 GSTools 基础上创建的序贯高斯模拟，因此最大的缺陷是生成速度过慢。\n随机场 Random field GSTools 可以根据给定的半变异函数直接生成空间随机场。\n以下是一个使用高斯模型生成 128×128 的二维随机场代码。\nimport numpy as np import gstools as gs import matplotlib.pyplot as plt x = y = np.arange(128) model = gs.Gaussian(dim=2, var=1, len_scale=10) srf = gs.SRF(model=model, seed=2023) field = srf.structured([x, y]) plt.imshow(field.T, origin='lower') plt.colorbar() 如果需要生成多个随机场，则每次的种子应为不同。可以使用种子生成器 MasterRNG 生成多个种子。以下是生成 4 个随机场的代码。\nimport numpy as np import gstools as gs import matplotlib.pyplot as plt from gstools.random import MasterRNG x = y = np.arange(128) model = gs.Gaussian(dim=2, var=1, len_scale=10) srf = gs.SRF(model) srf.set_pos([x, y], \"structured\") number = 4 # 生成数量 seed = MasterRNG(2023) for i in range(number): srf(seed=seed(), store=f\"better_field{i}\") fig, ax = plt.subplots(2, 2, sharex=True, sharey=True) ax = ax.flatten() for i in range(number): ax[i].imshow(srf[i].T, origin=\"lower\") plt.show() 除了高斯模型场外，还可以使用其他半变异函数。以下是指数模型生成的随机场代码。\nimport numpy as np import gstools as gs import matplotlib.pyplot as plt x = y = np.arange(128) model = gs.Exponential(dim=2, var=1, len_scale=12, anis=0.25, angles=np.pi / 8) srf = gs.SRF(model, seed=20) field = srf.structured([x, y]) plt.imshow(field.T, origin='lower') plt.colorbar() 条件随机场 Conditioned field 很多情况下，随机场存在一些约束，如我们已有部分硬数据。因此需用到条件随机场。\n在 GSTools 中，提供了一个结合克里金和随机场生成的方法。作者认为这种方法比序贯高斯模拟要好，因为传统的序贯高斯模拟需要多次克里金插值。但使用条件随机场 只需要进行单次克里金插值。这是由于 GSTools 使用随机化方法来生成单个随机场，而不是顺序解决克里金问题。\nThis procedure is advantageous to classical sequential Gaussian simulation, as (i) we make use of the randomization method to generate a single random field, and (ii) we only need to solve the kriging problem once and not sequentially.\n以下为条件随机场的案例，是在克里金插值的案例基础上修改的。\nimport numpy as np import gstools as gs import matplotlib.pyplot as plt number = 128 gridX = gridY = np.arange(number) def exampleGenerator(seed=0, target=(1, 10)): model = gs.Gaussian(dim=2, var=1, len_scale=20) srf = gs.SRF(model=model, seed=seed) field = srf.structured([gridX, gridY]) # ! 映射到指定范围 target_min, target_max = target[0], target[1] field_scaled = np.interp(field, (field.min(), field.max()), (target_min, target_max)) return field_scaled example = exampleGenerator(seed=2023, target=(1, 10)) x = np.random.randint(0, high=number, size=300, dtype=int) y = np.random.randint(0, high=number, size=300, dtype=int) values = example[x, y] bins = np.arange(50) bin_center, gamma = gs.vario_estimate((x, y), values, bins) fit_model = gs.Gaussian(dim=2, var=1, len_scale=20) fit_model.fit_variogram(bin_center, gamma, nugget=False) ax = fit_model.plot(x_max=50) ax.scatter(bin_center, gamma) krige = gs.Krige(model=fit_model, cond_pos=[x, y], cond_val=values) condSrf = gs.CondSRF(krige) field = condSrf.structured([gridX, gridY]) fig = plt.figure(figsize=(10, 4)) ax = fig.add_subplot(1, 2, 1) plt.imshow(example.T, cmap='rainbow', origin='lower') plt.colorbar(shrink=0.6) plt.scatter(x, y, s=1, color='black') ax = fig.add_subplot(1, 2, 2) plt.imshow(field.T, origin='lower', cmap='rainbow') plt.colorbar(shrink=0.6) 随机场转换 Field transformations Gstools 生成是普通的随机场。在应用中，有几种转换可以通过不同的空间分布形式来描述现实世界的问题。\n二分类转换 (Binary transformation)，即把现有的随机场转为二分类。 import numpy as np import gstools as gs import matplotlib.pyplot as plt x = y = np.arange(100) x = y = range(100) model = gs.Gaussian(dim=2, var=1, len_scale=10) srf = gs.SRF(model, seed=2023) srf.structured([x, y]) field = srf.transform(\"binary\") plt.imshow(field) 离散型转换 (Discrete transformation)，把现有的随机场转为多分类。 import numpy as np import gstools as gs import matplotlib.pyplot as plt x = y = np.arange(100) model = gs.Gaussian(dim=2, var=1, len_scale=5) srf = gs.SRF(model, seed=2023) srf.structured([x, y]) values = np.linspace(np.min(srf.field), np.max(srf.field), 5) field = srf.transform(\"discrete\", store=\"f1\", values=values) plt.imshow(field) 反正弦分布转换。 import numpy as np import gstools as gs import matplotlib.pyplot as plt x = y = np.arange(100) model = gs.Gaussian(dim=2, var=1, len_scale=10) srf = gs.SRF(model, seed=20170519) srf.structured([x, y]) field = srf.transform(\"normal_to_arcsin\") plt.imshow(field) GSTools 官网包括更多类型随机场。\n",
+  "wordCount" : "1184",
+  "inLanguage": "zh",
+  "datePublished": "2023-03-16T00:00:00Z",
+  "dateModified": "2023-03-16T00:00:00Z",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://blog.qarhan.xyz/posts/%E5%9C%B0%E7%BB%9F%E8%AE%A1%E5%AD%A6%E7%A1%AE%E5%AE%9A%E6%80%A7%E5%BB%BA%E6%A8%A1%E5%8F%8A%E9%9A%8F%E6%9C%BA%E5%BB%BA%E6%A8%A1/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "汪子涛的个人网站",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://blog.qarhan.xyz/favicon.ico"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="https://blog.qarhan.xyz/" accesskey="h" title="汪子涛的个人网站 (Alt + H)">汪子涛的个人网站</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)" aria-label="Toggle theme">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    
+    <h1 class="post-title entry-hint-parent">
+      地统计学确定性建模及随机建模
+    </h1>
+    <div class="post-meta"><span title='2023-03-16 00:00:00 +0000 UTC'>2023/3/16</span>
+
+</div>
+  </header> <div class="toc">
+    <details  open>
+        <summary accesskey="c" title="(Alt + C)">
+            <span class="details">目录</span>
+        </summary>
+
+        <div class="inner"><ul>
+                <li>
+                    <a href="#%e5%8d%8a%e5%8f%98%e5%bc%82%e5%87%bd%e6%95%b0%e5%8d%8f%e6%96%b9%e5%b7%ae%e7%9f%a9%e9%98%b5" aria-label="半变异函数/协方差矩阵">半变异函数/协方差矩阵</a></li>
+                <li>
+                    <a href="#%e5%8f%8d%e8%b7%9d%e7%a6%bb%e6%9d%83%e9%87%8d%e6%8f%92%e5%80%bc-inverse-distance-weighting" aria-label="反距离权重插值 Inverse distance weighting">反距离权重插值 Inverse distance weighting</a></li>
+                <li>
+                    <a href="#%e5%85%8b%e9%87%8c%e9%87%91%e6%8f%92%e5%80%bc-kriging" aria-label="克里金插值 Kriging">克里金插值 Kriging</a></li>
+                <li>
+                    <a href="#%e5%ba%8f%e8%b4%af%e9%ab%98%e6%96%af%e6%a8%a1%e6%8b%9f-sequential-gaussian-simualation" aria-label="序贯高斯模拟 Sequential Gaussian Simualation">序贯高斯模拟 Sequential Gaussian Simualation</a></li>
+                <li>
+                    <a href="#%e9%9a%8f%e6%9c%ba%e5%9c%ba-random-field" aria-label="随机场 Random field">随机场 Random field</a></li>
+                <li>
+                    <a href="#%e6%9d%a1%e4%bb%b6%e9%9a%8f%e6%9c%ba%e5%9c%ba-conditioned-field" aria-label="条件随机场 Conditioned field">条件随机场 Conditioned field</a></li>
+                <li>
+                    <a href="#%e9%9a%8f%e6%9c%ba%e5%9c%ba%e8%bd%ac%e6%8d%a2-field-transformations" aria-label="随机场转换 Field transformations">随机场转换 Field transformations</a>
+                </li>
+            </ul>
+        </div>
+    </details>
+</div>
+
+  <div class="post-content"><p>地统计学建模中包括确定性建模和随机建模。</p>
+<p>确定性建模是利用已知点给出确定的预测结果，如 Kriging 插值。</p>
+<p>随机建模可以建模多个结果并刻画空间的不确定性，如序贯高斯模拟。</p>
+<h1 id="半变异函数协方差矩阵">半变异函数/协方差矩阵<a hidden class="anchor" aria-hidden="true" href="#半变异函数协方差矩阵">#</a></h1>
+<p>![[地统计学确定性建模及随机建模_00.png]]</p>
+<ul>
+<li>nugget 是块金值，通常表示为 $c_0$。块金值指的是当点距离足够近 (趋近于 0) 的时候还会存在的极限值，理论上这个值应该为 0。</li>
+<li>sill $(c_0+c_1)$ 是基台值。它表示数据点差别最大 (也就是总方差) 时，能达到什么程度的值。去掉块金值后的 $c_1$ 称为偏基台值 (Partial Sill)，又称为结构化方差。</li>
+<li>range 是变程，指半变异函数达到基台值时的空间。超过这个距离，空间自相关性基本消失，超过这个距离，点与点就基本没关系了，变量之间可以视为相互独立。</li>
+</ul>
+<p>GSTools 的公式是：</p>
+<p>$$
+\gamma(r) = \sigma^2\cdot (1 - cor(s \cdot\frac{r}{l})) + n
+$$</p>
+<ul>
+<li>$\gamma(r)$ 是半变异函数，这里的 $r$ 就是我们之前用的滞后距离 $h$。</li>
+<li>$\sigma^2$ 是方差 (Variance)。在 GSTools 公式中，$\sigma^2$ 指的是偏基台值 (Partial Sill)，即结构化方差部分，对应我们之前讨论的 $c_1$。它不是数据的总方差（基台值）。</li>
+<li>$n$ 是块金值，对应 $c_0$。</li>
+<li>cor(&hellip;) 归一化的相关函数 (Normalized Correlation Function)。这个函数的特点是 cor(0) = 1，并且随着距离的增加而减小（通常趋于0）。它描述了空间自相关的结构形式。</li>
+<li>l: 主要相关长度 (Main correlation length)，与我们之前讨论的变程 a 相关。它定义了相关性衰减的特征距离。</li>
+<li>s: 尺度因子 (Scaling factor)，用于单位转换或各向异性，使得 h = s * r / l 成为一个无量纲的距离。</li>
+</ul>
+<p>$$
+\rho(r) = \text{cor} \left(s \cdot \frac{r}{\ell}\right)
+$$</p>
+<p>$\rho(r)$ 是相关函数。</p>
+<p>$C(r)=σ² \rho(r)$ 是协方差函数。</p>
+<p>协方差模型可以通过 C(h) = (c₀ + c₁) - γ(h)</p>
+<p>在地统计学中，生成随机场的步骤是:</p>
+<ol>
+<li>用已知点数据 计算和绘制经验半变异函数。</li>
+<li>观察经验半变异函数，选择一个合适的理论半变异函数模型（球状、指数、高斯等）。</li>
+<li>通过拟合，确定该理论模型的参数：块金值 (c₀)、偏基台值 (c₁)（或直接是基台值 c₀+c₁）和变程 (a)。</li>
+<li>利用公式 C(h) = (c₀ + c₁) - γ(h)，将拟合好的理论半变异函数 γ(h) 转换成对应的理论协方差函数 C(h)。</li>
+<li>最后，使用这个理论协方差函数 C(h)（通常是通过构建协方差矩阵）输入到随机场生成算法中，生成符合该空间结构的一个或多个随机场实现。</li>
+</ol>
+<h1 id="反距离权重插值-inverse-distance-weighting">反距离权重插值 Inverse distance weighting<a hidden class="anchor" aria-hidden="true" href="#反距离权重插值-inverse-distance-weighting">#</a></h1>
+<p>根据地理学第一定律:</p>
+<blockquote>
+<p>All attribute values on a geographic surface are related to each other, but closer values are more strongly related than are more distant ones.</p></blockquote>
+<p>所有事物都与其他事物相关，但近处事物比远处事物更相关。即地理属性在空间上存在相关性，相近事物会更相似。</p>
+<p>因此，反距离权重 (Inverse Distance Weighting, IDW) 插值算法被提出，其公式为:</p>
+<p>$$
+\hat{z}=\sum_{i=1}^n \frac{1}{d^\alpha} z_i
+$$</p>
+<p>式中，$\alpha$ 取 1 或 2，$d$ 为任意已知点 $i$ 和待预测点的欧式距离。未知点值等于所有已知点的加权求和，而已知点的权重来自与未知点欧氏距离。</p>
+<p>也就是说，距离越近权重越大，反之亦然。因此，反距离权重法并不够准确。</p>
+<h1 id="克里金插值-kriging">克里金插值 Kriging<a hidden class="anchor" aria-hidden="true" href="#克里金插值-kriging">#</a></h1>
+<p>克里金插值之前，需要数据满足以下几个条件，或者这几个假设是存在的:</p>
+<ol>
+<li>数据是具有高斯分布的。如果数据不是高斯分布，则需要转换成高斯分布。</li>
+</ol>
+<blockquote>
+<p>将原始的数据先转换为正态分布，再转换为标准正态分布。使用的方法是 BOX-Cox 广义幂变换方法，通过数据本身估计该参数确定应采取的数据变换形式，可明显地改善数据的正态性、对称性和方差相等性。</p></blockquote>
+<ol start="2">
+<li>数据值是固定的，即在局部差距是恒定的。可以用 Voronoi 图来检查这一差异。</li>
+<li>数据不存在某种趋势。</li>
+</ol>
+<p>任意点属性值与其周围点属性值有关，且可以由其周围点属性值推导出。则克里金插值的<strong>基本假设</strong>为:</p>
+<p>$$
+\hat{z}=\sum_{i=1}^n\lambda_i z_i
+$$</p>
+<p>$\lambda_i$ 为权重系数，它同样是空间是所有已知点的数据加权求和后估计的未知点值。但权重系数并非如反距离权重法一样是距离的倒数，而是在能够满足 $(x_i, y_i)$ 处，估计值 $\hat z_i$ 和真实值 $z_i$ 的差最小的一套最优系数。</p>
+<p>关于上述公式最优系数的推理，见教程<a href="https://xg1990.com/blog/archives/222">克里金插值的原理与公式推导</a>。在此只考虑克里金算法的过程。其计算过程如下:</p>
+<ol>
+<li>计算所有已知点之间的欧式距离和半方差。点 $i$ 和点 $j$ 的半方差 $r_{ij}$ 的公式为：</li>
+</ol>
+<p>$$
+r_{ij} = \frac{1}{2}(z_i-z_j)^2
+$$</p>
+<blockquote>
+<p>当已知点数量足够时，通常不会逐个计算所有已知点半方差，而是将距离划分为若干个区间，然后计算该距离区间内所有数据点之间的半方差并求均值。从而将距离区间的中心值视为横坐标，半方差均值为纵坐标。</p>
+<p>这样做的目的是为了减少噪声并提高估计的稳定性。因为每个数据点都可能受到噪声的影响，并可能会得到一个非常嘈杂的半变异函数估计。</p></blockquote>
+<ol start="2">
+<li>以欧式距离为横坐标，半方差为纵坐标，将第 1 步计算得出的所有值绘制到坐标系里。得到一个具有变化趋势散点图。</li>
+<li>寻找一个半变异函数 (Semi-Variogram) 拟合距离与半方差，使得散点图拟合为一条曲线。</li>
+<li>由于点与点之间的欧氏距离很容易得到，因此可以通过拟合的半变异函数得到半方差值。对于未知点 $z_o$, 可以计算它到所有已知点 $z_i$ 的距离，并借助半变异函数，用距离求得半方差值 $r_io$。</li>
+<li>基于下式可计算出所有的 $\lambda_i$ 的值:</li>
+</ol>
+<p>$$
+\left[\begin{array}{ccccc}
+r_{11} &amp; r_{12} &amp; \cdots &amp; r_{1 n} &amp; 1 \
+r_{21} &amp; r_{22} &amp; \cdots &amp; r_{2 n} &amp; 1 \
+\cdots &amp; \cdots &amp; \cdots &amp; \cdots &amp; \cdots \
+r_{n 1} &amp; r_{n 2} &amp; \cdots &amp; r_{n n} &amp; 1 \
+1 &amp; 1 &amp; \cdots &amp; 1 &amp; 0
+\end{array}\right]\left[\begin{array}{c}
+\lambda_1 \
+\lambda_2 \
+\cdots \
+\lambda_n \
+-\phi
+\end{array}\right]=\left[\begin{array}{c}
+r_{1 o} \
+r_{2 o} \
+\cdots \
+r_{n o} \
+1
+\end{array}\right]
+$$</p>
+<blockquote>
+<p>该式的推导和证明仍见<a href="https://xg1990.com/blog/archives/222">克里金插值的原理与公式推导</a>，简单来说，对于未知点 $o$，需要保证估计值 $\hat z_o$ 和实际值 $z_o$ 之间的差最小，同时满足无偏估计。在这种情况下推导得到上式。</p></blockquote>
+<ol start="6">
+<li>根据 Kriging 插值公式，即可得出 $z_o$ 点的值。</li>
+</ol>
+<hr>
+<p>克里金插值依赖于半变异函数。半变异函数是一种描述空间随机场或随机过程的空间相关性的函数。它定义为两个位置之间的平均平方差的一半。</p>
+<p>当两个位置之间的距离增加时，它们之间的差异也会增加，则半变异函数的值也会增加。半变异函数能量化自相关，即根据距离得到半方差。</p>
+<blockquote>
+<p>根据地理学第一定律，距离更近则相关性越强，半方差也越小。当达到一定的距离时，自相关变得独立，并逐渐趋于平稳。也就意味着不再自相关了。</p></blockquote>
+<p>根据数据的不同，可以选择合适的变异函数，如球形、圆形、指数型和高斯型等。具体可参考 <a href="https://pro.arcgis.com/zh-cn/pro-app/latest/tool-reference/3d-analyst/how-kriging-works.htm">ArcGIS 文档</a>。</p>
+<p>以下是一个克里金插值的案例代码，使用 GSTools 模块来实现。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> numpy <span style="color:#66d9ef">as</span> np
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> gstools <span style="color:#66d9ef">as</span> gs
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> matplotlib.pyplot <span style="color:#66d9ef">as</span> plt
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>number <span style="color:#f92672">=</span> <span style="color:#ae81ff">128</span>
+</span></span><span style="display:flex;"><span>gridX <span style="color:#f92672">=</span> gridY <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>arange(number)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">exampleGenerator</span>(seed<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>, target<span style="color:#f92672">=</span>(<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">10</span>)):
+</span></span><span style="display:flex;"><span>    model <span style="color:#f92672">=</span> gs<span style="color:#f92672">.</span>Gaussian(dim<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span>, var<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>, len_scale<span style="color:#f92672">=</span><span style="color:#ae81ff">20</span>)
+</span></span><span style="display:flex;"><span>    srf <span style="color:#f92672">=</span> gs<span style="color:#f92672">.</span>SRF(model<span style="color:#f92672">=</span>model, seed<span style="color:#f92672">=</span>seed)
+</span></span><span style="display:flex;"><span>    field <span style="color:#f92672">=</span> srf<span style="color:#f92672">.</span>structured([gridX, gridY])
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># ! 映射到指定范围</span>
+</span></span><span style="display:flex;"><span>    target_min, target_max <span style="color:#f92672">=</span> target[<span style="color:#ae81ff">0</span>], target[<span style="color:#ae81ff">1</span>]
+</span></span><span style="display:flex;"><span>    field_scaled <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>interp(field, (field<span style="color:#f92672">.</span>min(), field<span style="color:#f92672">.</span>max()), (target_min, target_max))
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> field_scaled
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># ! 生成一个空间分布, 在空间上随机采样并视其为已知点</span>
+</span></span><span style="display:flex;"><span>example <span style="color:#f92672">=</span> exampleGenerator(seed<span style="color:#f92672">=</span><span style="color:#ae81ff">2023</span>, target<span style="color:#f92672">=</span>(<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">10</span>))
+</span></span><span style="display:flex;"><span>x <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>randint(<span style="color:#ae81ff">0</span>, high<span style="color:#f92672">=</span>number, size<span style="color:#f92672">=</span><span style="color:#ae81ff">300</span>, dtype<span style="color:#f92672">=</span>int)
+</span></span><span style="display:flex;"><span>y <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>randint(<span style="color:#ae81ff">0</span>, high<span style="color:#f92672">=</span>number, size<span style="color:#f92672">=</span><span style="color:#ae81ff">300</span>, dtype<span style="color:#f92672">=</span>int)
+</span></span><span style="display:flex;"><span>values <span style="color:#f92672">=</span> example[x, y]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># ! 将已知点按照欧式距离划分为 50 个等份并求得距离的中心值 bin_center 和半方差值 gamma</span>
+</span></span><span style="display:flex;"><span>bins <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>arange(<span style="color:#ae81ff">50</span>)
+</span></span><span style="display:flex;"><span>bin_center, gamma <span style="color:#f92672">=</span> gs<span style="color:#f92672">.</span>vario_estimate((x, y), values, bins)
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># ! 使用高斯模型拟合已知点</span>
+</span></span><span style="display:flex;"><span>fit_model <span style="color:#f92672">=</span> gs<span style="color:#f92672">.</span>Gaussian(dim<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span>, var<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>, len_scale<span style="color:#f92672">=</span><span style="color:#ae81ff">20</span>)
+</span></span><span style="display:flex;"><span>fit_model<span style="color:#f92672">.</span>fit_variogram(bin_center, gamma, nugget<span style="color:#f92672">=</span><span style="color:#66d9ef">False</span>)
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># ! 绘制拟合曲线</span>
+</span></span><span style="display:flex;"><span>ax <span style="color:#f92672">=</span> fit_model<span style="color:#f92672">.</span>plot(x_max<span style="color:#f92672">=</span><span style="color:#ae81ff">50</span>)
+</span></span><span style="display:flex;"><span>ax<span style="color:#f92672">.</span>scatter(bin_center, gamma)
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># ! 计算克里金插值结果</span>
+</span></span><span style="display:flex;"><span>krige <span style="color:#f92672">=</span> gs<span style="color:#f92672">.</span>Krige(model<span style="color:#f92672">=</span>fit_model, cond_pos<span style="color:#f92672">=</span>[x, y], cond_val<span style="color:#f92672">=</span>values)
+</span></span><span style="display:flex;"><span>field <span style="color:#f92672">=</span> krige<span style="color:#f92672">.</span>structured([gridX, gridY])
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>fig <span style="color:#f92672">=</span> plt<span style="color:#f92672">.</span>figure(figsize<span style="color:#f92672">=</span>(<span style="color:#ae81ff">10</span>, <span style="color:#ae81ff">4</span>))
+</span></span><span style="display:flex;"><span>ax <span style="color:#f92672">=</span> fig<span style="color:#f92672">.</span>add_subplot(<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>imshow(example<span style="color:#f92672">.</span>T, cmap<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;rainbow&#39;</span>, origin<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;lower&#39;</span>)
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>colorbar(shrink<span style="color:#f92672">=</span><span style="color:#ae81ff">0.6</span>)
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>scatter(x, y, s<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>, color<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;black&#39;</span>)
+</span></span><span style="display:flex;"><span>ax <span style="color:#f92672">=</span> fig<span style="color:#f92672">.</span>add_subplot(<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">2</span>)
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>imshow(field[<span style="color:#ae81ff">0</span>]<span style="color:#f92672">.</span>T, origin<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;lower&#39;</span>, cmap<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;rainbow&#39;</span>)
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>colorbar(shrink<span style="color:#f92672">=</span><span style="color:#ae81ff">0.6</span>)
+</span></span></code></pre></div><h1 id="序贯高斯模拟-sequential-gaussian-simualation">序贯高斯模拟 Sequential Gaussian Simualation<a hidden class="anchor" aria-hidden="true" href="#序贯高斯模拟-sequential-gaussian-simualation">#</a></h1>
+<p>克里金插值结果追求最高的估值精度和最小的估值方差，因此只有一个结果。同时，克里金刻画的空间分布整体比较连续，具有明显的平滑效应。</p>
+<p>相反，序贯高斯模拟的结果整体分布较离散，突出原始数据的非均质性和不确定性。可产生多个结果。</p>
+<p>序贯高斯模拟 (Sequential Gaussian Simualation, SGS) 的建模步骤为:</p>
+<ol>
+<li>将原数据转为标准高斯分布。</li>
+<li>建立一条随机路径，用于遍历模拟所有节点。</li>
+<li>按照所选路径依次遍历每个节点，并用已知点的克里金插值估计该点的值和方差。</li>
+<li>使用该点的值和方差构建条件分布，从中随机取一个点赋给当前点。</li>
+<li>重复步骤 3 和 4，直到所有点完成模拟。</li>
+</ol>
+<p>序贯高斯模拟的代码如下:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> numpy <span style="color:#66d9ef">as</span> np
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> gstools <span style="color:#66d9ef">as</span> gs
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> matplotlib.pyplot <span style="color:#66d9ef">as</span> plt
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>number <span style="color:#f92672">=</span> <span style="color:#ae81ff">20</span>
+</span></span><span style="display:flex;"><span>gridX <span style="color:#f92672">=</span> gridY <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>arange(number)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">exampleGenerator</span>(seed<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>):
+</span></span><span style="display:flex;"><span>    model <span style="color:#f92672">=</span> gs<span style="color:#f92672">.</span>Gaussian(dim<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span>, var<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>, len_scale<span style="color:#f92672">=</span><span style="color:#ae81ff">5</span>)
+</span></span><span style="display:flex;"><span>    srf <span style="color:#f92672">=</span> gs<span style="color:#f92672">.</span>SRF(model<span style="color:#f92672">=</span>model, seed<span style="color:#f92672">=</span>seed)
+</span></span><span style="display:flex;"><span>    field <span style="color:#f92672">=</span> srf<span style="color:#f92672">.</span>structured([gridX, gridY])
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> field
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>example <span style="color:#f92672">=</span> exampleGenerator(seed<span style="color:#f92672">=</span><span style="color:#ae81ff">2023</span>)
+</span></span><span style="display:flex;"><span>x <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>randint(<span style="color:#ae81ff">0</span>, high<span style="color:#f92672">=</span>number, size<span style="color:#f92672">=</span><span style="color:#ae81ff">20</span>, dtype<span style="color:#f92672">=</span>int)
+</span></span><span style="display:flex;"><span>y <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>randint(<span style="color:#ae81ff">0</span>, high<span style="color:#f92672">=</span>number, size<span style="color:#f92672">=</span><span style="color:#ae81ff">20</span>, dtype<span style="color:#f92672">=</span>int)
+</span></span><span style="display:flex;"><span>values <span style="color:#f92672">=</span> example[x, y]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>bins <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>arange(<span style="color:#ae81ff">20</span>)
+</span></span><span style="display:flex;"><span>bin_center, gamma <span style="color:#f92672">=</span> gs<span style="color:#f92672">.</span>vario_estimate((x, y), values, bins)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># ! 拟合高斯模型</span>
+</span></span><span style="display:flex;"><span>fit_model <span style="color:#f92672">=</span> gs<span style="color:#f92672">.</span>Gaussian(dim<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span>, var<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>, len_scale<span style="color:#f92672">=</span><span style="color:#ae81ff">6</span>)
+</span></span><span style="display:flex;"><span>fit_model<span style="color:#f92672">.</span>fit_variogram(bin_center, gamma, nugget<span style="color:#f92672">=</span><span style="color:#66d9ef">False</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>ax <span style="color:#f92672">=</span> fit_model<span style="color:#f92672">.</span>plot(x_max<span style="color:#f92672">=</span><span style="color:#ae81ff">20</span>)
+</span></span><span style="display:flex;"><span>ax<span style="color:#f92672">.</span>scatter(bin_center, gamma)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">SGS</span>(x, y, values):
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># ! 生成一个随机模拟路径</span>
+</span></span><span style="display:flex;"><span>    sim_path <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>permutation(number <span style="color:#f92672">*</span> number)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># 初始化模拟结果数组</span>
+</span></span><span style="display:flex;"><span>    sim_result <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>zeros((number <span style="color:#f92672">*</span> number))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    krige <span style="color:#f92672">=</span> gs<span style="color:#f92672">.</span>Krige(model<span style="color:#f92672">=</span>fit_model, cond_pos<span style="color:#f92672">=</span>[x, y], cond_val<span style="color:#f92672">=</span>values)
+</span></span><span style="display:flex;"><span>    m <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>    mm <span style="color:#f92672">=</span> sim_path<span style="color:#f92672">.</span>shape[<span style="color:#ae81ff">0</span>]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> path <span style="color:#f92672">in</span> sim_path:
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># 获取当前路径上的点的坐标</span>
+</span></span><span style="display:flex;"><span>        x_idx <span style="color:#f92672">=</span> path <span style="color:#f92672">//</span> number
+</span></span><span style="display:flex;"><span>        y_idx <span style="color:#f92672">=</span> path <span style="color:#f92672">%</span> number
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># 计算每个点的条件期望和条件方差</span>
+</span></span><span style="display:flex;"><span>        krige<span style="color:#f92672">.</span>set_condition(cond_pos<span style="color:#f92672">=</span>[x, y], cond_val<span style="color:#f92672">=</span>values)
+</span></span><span style="display:flex;"><span>        krig_result, var_result <span style="color:#f92672">=</span> krige<span style="color:#f92672">.</span>unstructured([x_idx, y_idx])
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># 从正态分布中抽取随机数作为模拟值</span>
+</span></span><span style="display:flex;"><span>        sim_result[path] <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>normal(loc<span style="color:#f92672">=</span>krig_result, scale<span style="color:#f92672">=</span>var_result, size<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># 更新已知数据</span>
+</span></span><span style="display:flex;"><span>        x <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>append(x, x_idx)
+</span></span><span style="display:flex;"><span>        y <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>append(y, y_idx)
+</span></span><span style="display:flex;"><span>        values <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>append(values, sim_result[path])
+</span></span><span style="display:flex;"><span>        m <span style="color:#f92672">+=</span> <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> m <span style="color:#f92672">%</span> <span style="color:#ae81ff">100</span> <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span>:
+</span></span><span style="display:flex;"><span>            print(<span style="color:#e6db74">&#39;已完成: &#39;</span>, (m <span style="color:#f92672">/</span> mm) <span style="color:#f92672">*</span> <span style="color:#ae81ff">100</span>, <span style="color:#e6db74">&#39;%&#39;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># ! 将模拟结果重新排列成二维数组</span>
+</span></span><span style="display:flex;"><span>    new_sim_result <span style="color:#f92672">=</span> sim_result<span style="color:#f92672">.</span>reshape((number ,number))
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> new_sim_result
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>field <span style="color:#f92672">=</span> SGS(x, y, values)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>fig <span style="color:#f92672">=</span> plt<span style="color:#f92672">.</span>figure(figsize<span style="color:#f92672">=</span>(<span style="color:#ae81ff">10</span> ,<span style="color:#ae81ff">4</span>))
+</span></span><span style="display:flex;"><span>ax <span style="color:#f92672">=</span> fig<span style="color:#f92672">.</span>add_subplot(<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>imshow(example<span style="color:#f92672">.</span>T, cmap<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;rainbow&#39;</span>, origin<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;lower&#39;</span>)
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>colorbar(shrink<span style="color:#f92672">=</span><span style="color:#ae81ff">0.6</span>)
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>scatter(x, y, s<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>, color<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;black&#39;</span>)
+</span></span><span style="display:flex;"><span>ax <span style="color:#f92672">=</span> fig<span style="color:#f92672">.</span>add_subplot(<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">2</span>)
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>imshow(field<span style="color:#f92672">.</span>T, origin<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;lower&#39;</span>, cmap<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;rainbow&#39;</span>)
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>colorbar(shrink<span style="color:#f92672">=</span><span style="color:#ae81ff">0.6</span>)
+</span></span></code></pre></div><blockquote>
+<p>由于上述代码是在 GSTools 基础上创建的序贯高斯模拟，因此最大的缺陷是生成速度过慢。</p></blockquote>
+<h1 id="随机场-random-field">随机场 Random field<a hidden class="anchor" aria-hidden="true" href="#随机场-random-field">#</a></h1>
+<p>GSTools 可以根据给定的半变异函数直接生成空间随机场。</p>
+<p>以下是一个使用高斯模型生成 128×128 的二维随机场代码。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> numpy <span style="color:#66d9ef">as</span> np
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> gstools <span style="color:#66d9ef">as</span> gs
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> matplotlib.pyplot <span style="color:#66d9ef">as</span> plt
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>x <span style="color:#f92672">=</span> y <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>arange(<span style="color:#ae81ff">128</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>model <span style="color:#f92672">=</span> gs<span style="color:#f92672">.</span>Gaussian(dim<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span>, var<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>, len_scale<span style="color:#f92672">=</span><span style="color:#ae81ff">10</span>)
+</span></span><span style="display:flex;"><span>srf <span style="color:#f92672">=</span> gs<span style="color:#f92672">.</span>SRF(model<span style="color:#f92672">=</span>model, seed<span style="color:#f92672">=</span><span style="color:#ae81ff">2023</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>field <span style="color:#f92672">=</span> srf<span style="color:#f92672">.</span>structured([x, y])
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>imshow(field<span style="color:#f92672">.</span>T, origin<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;lower&#39;</span>)
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>colorbar()
+</span></span></code></pre></div><p>如果需要生成多个随机场，则每次的种子应为不同。可以使用种子生成器 <code>MasterRNG</code> 生成多个种子。以下是生成 4 个随机场的代码。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> numpy <span style="color:#66d9ef">as</span> np
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> gstools <span style="color:#66d9ef">as</span> gs
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> matplotlib.pyplot <span style="color:#66d9ef">as</span> plt
+</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> gstools.random <span style="color:#f92672">import</span> MasterRNG
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>x <span style="color:#f92672">=</span> y <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>arange(<span style="color:#ae81ff">128</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>model <span style="color:#f92672">=</span> gs<span style="color:#f92672">.</span>Gaussian(dim<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span>, var<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>, len_scale<span style="color:#f92672">=</span><span style="color:#ae81ff">10</span>)
+</span></span><span style="display:flex;"><span>srf <span style="color:#f92672">=</span> gs<span style="color:#f92672">.</span>SRF(model)
+</span></span><span style="display:flex;"><span>srf<span style="color:#f92672">.</span>set_pos([x, y], <span style="color:#e6db74">&#34;structured&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>number <span style="color:#f92672">=</span> <span style="color:#ae81ff">4</span> <span style="color:#75715e"># 生成数量</span>
+</span></span><span style="display:flex;"><span>seed <span style="color:#f92672">=</span> MasterRNG(<span style="color:#ae81ff">2023</span>)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(number):
+</span></span><span style="display:flex;"><span>    srf(seed<span style="color:#f92672">=</span>seed(), store<span style="color:#f92672">=</span><span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;better_field</span><span style="color:#e6db74">{</span>i<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>fig, ax <span style="color:#f92672">=</span> plt<span style="color:#f92672">.</span>subplots(<span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">2</span>, sharex<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>, sharey<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>)
+</span></span><span style="display:flex;"><span>ax <span style="color:#f92672">=</span> ax<span style="color:#f92672">.</span>flatten()
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(number):
+</span></span><span style="display:flex;"><span>    ax[i]<span style="color:#f92672">.</span>imshow(srf[i]<span style="color:#f92672">.</span>T, origin<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;lower&#34;</span>)
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>show()
+</span></span></code></pre></div><p>除了高斯模型场外，还可以使用其他半变异函数。以下是指数模型生成的随机场代码。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> numpy <span style="color:#66d9ef">as</span> np
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> gstools <span style="color:#66d9ef">as</span> gs
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> matplotlib.pyplot <span style="color:#66d9ef">as</span> plt
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>x <span style="color:#f92672">=</span> y <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>arange(<span style="color:#ae81ff">128</span>)
+</span></span><span style="display:flex;"><span>model <span style="color:#f92672">=</span> gs<span style="color:#f92672">.</span>Exponential(dim<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span>, var<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>, len_scale<span style="color:#f92672">=</span><span style="color:#ae81ff">12</span>, anis<span style="color:#f92672">=</span><span style="color:#ae81ff">0.25</span>, angles<span style="color:#f92672">=</span>np<span style="color:#f92672">.</span>pi <span style="color:#f92672">/</span> <span style="color:#ae81ff">8</span>)
+</span></span><span style="display:flex;"><span>srf <span style="color:#f92672">=</span> gs<span style="color:#f92672">.</span>SRF(model, seed<span style="color:#f92672">=</span><span style="color:#ae81ff">20</span>)
+</span></span><span style="display:flex;"><span>field <span style="color:#f92672">=</span> srf<span style="color:#f92672">.</span>structured([x, y])
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>imshow(field<span style="color:#f92672">.</span>T, origin<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;lower&#39;</span>)
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>colorbar()
+</span></span></code></pre></div><h1 id="条件随机场-conditioned-field">条件随机场 Conditioned field<a hidden class="anchor" aria-hidden="true" href="#条件随机场-conditioned-field">#</a></h1>
+<p>很多情况下，随机场存在一些约束，如我们已有部分硬数据。因此需用到条件随机场。</p>
+<p>在 GSTools 中，提供了一个结合克里金和随机场生成的方法。作者认为<a href="https://gmd.copernicus.org/articles/15/3161/2022/">这种方法</a>比序贯高斯模拟要好，因为传统的序贯高斯模拟需要多次克里金插值。但使用条件随机场 只需要进行单次克里金插值。这是由于 GSTools 使用随机化方法来生成单个随机场，而不是顺序解决克里金问题。</p>
+<blockquote>
+<p>This procedure is advantageous to classical <strong>sequential Gaussian simulation</strong>, as (i) we make use of the randomization method to generate a single random field, and (ii) we only need to solve the kriging problem once and not sequentially.</p></blockquote>
+<p>以下为条件随机场的案例，是在克里金插值的案例基础上修改的。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> numpy <span style="color:#66d9ef">as</span> np
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> gstools <span style="color:#66d9ef">as</span> gs
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> matplotlib.pyplot <span style="color:#66d9ef">as</span> plt
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>number <span style="color:#f92672">=</span> <span style="color:#ae81ff">128</span>
+</span></span><span style="display:flex;"><span>gridX <span style="color:#f92672">=</span> gridY <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>arange(number)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">exampleGenerator</span>(seed<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>, target<span style="color:#f92672">=</span>(<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">10</span>)):
+</span></span><span style="display:flex;"><span>    model <span style="color:#f92672">=</span> gs<span style="color:#f92672">.</span>Gaussian(dim<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span>, var<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>, len_scale<span style="color:#f92672">=</span><span style="color:#ae81ff">20</span>)
+</span></span><span style="display:flex;"><span>    srf <span style="color:#f92672">=</span> gs<span style="color:#f92672">.</span>SRF(model<span style="color:#f92672">=</span>model, seed<span style="color:#f92672">=</span>seed)
+</span></span><span style="display:flex;"><span>    field <span style="color:#f92672">=</span> srf<span style="color:#f92672">.</span>structured([gridX, gridY])
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># ! 映射到指定范围</span>
+</span></span><span style="display:flex;"><span>    target_min, target_max <span style="color:#f92672">=</span> target[<span style="color:#ae81ff">0</span>], target[<span style="color:#ae81ff">1</span>]
+</span></span><span style="display:flex;"><span>    field_scaled <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>interp(field, (field<span style="color:#f92672">.</span>min(), field<span style="color:#f92672">.</span>max()), (target_min, target_max))
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> field_scaled
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>example <span style="color:#f92672">=</span> exampleGenerator(seed<span style="color:#f92672">=</span><span style="color:#ae81ff">2023</span>, target<span style="color:#f92672">=</span>(<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">10</span>))
+</span></span><span style="display:flex;"><span>x <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>randint(<span style="color:#ae81ff">0</span>, high<span style="color:#f92672">=</span>number, size<span style="color:#f92672">=</span><span style="color:#ae81ff">300</span>, dtype<span style="color:#f92672">=</span>int)
+</span></span><span style="display:flex;"><span>y <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>randint(<span style="color:#ae81ff">0</span>, high<span style="color:#f92672">=</span>number, size<span style="color:#f92672">=</span><span style="color:#ae81ff">300</span>, dtype<span style="color:#f92672">=</span>int)
+</span></span><span style="display:flex;"><span>values <span style="color:#f92672">=</span> example[x, y]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>bins <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>arange(<span style="color:#ae81ff">50</span>)
+</span></span><span style="display:flex;"><span>bin_center, gamma <span style="color:#f92672">=</span> gs<span style="color:#f92672">.</span>vario_estimate((x, y), values, bins)
+</span></span><span style="display:flex;"><span>fit_model <span style="color:#f92672">=</span> gs<span style="color:#f92672">.</span>Gaussian(dim<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span>, var<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>, len_scale<span style="color:#f92672">=</span><span style="color:#ae81ff">20</span>)
+</span></span><span style="display:flex;"><span>fit_model<span style="color:#f92672">.</span>fit_variogram(bin_center, gamma, nugget<span style="color:#f92672">=</span><span style="color:#66d9ef">False</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>ax <span style="color:#f92672">=</span> fit_model<span style="color:#f92672">.</span>plot(x_max<span style="color:#f92672">=</span><span style="color:#ae81ff">50</span>)
+</span></span><span style="display:flex;"><span>ax<span style="color:#f92672">.</span>scatter(bin_center, gamma)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>krige <span style="color:#f92672">=</span> gs<span style="color:#f92672">.</span>Krige(model<span style="color:#f92672">=</span>fit_model, cond_pos<span style="color:#f92672">=</span>[x, y], cond_val<span style="color:#f92672">=</span>values)
+</span></span><span style="display:flex;"><span>condSrf <span style="color:#f92672">=</span> gs<span style="color:#f92672">.</span>CondSRF(krige)
+</span></span><span style="display:flex;"><span>field <span style="color:#f92672">=</span> condSrf<span style="color:#f92672">.</span>structured([gridX, gridY])
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>fig <span style="color:#f92672">=</span> plt<span style="color:#f92672">.</span>figure(figsize<span style="color:#f92672">=</span>(<span style="color:#ae81ff">10</span>, <span style="color:#ae81ff">4</span>))
+</span></span><span style="display:flex;"><span>ax <span style="color:#f92672">=</span> fig<span style="color:#f92672">.</span>add_subplot(<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>imshow(example<span style="color:#f92672">.</span>T, cmap<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;rainbow&#39;</span>, origin<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;lower&#39;</span>)
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>colorbar(shrink<span style="color:#f92672">=</span><span style="color:#ae81ff">0.6</span>)
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>scatter(x, y, s<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>, color<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;black&#39;</span>)
+</span></span><span style="display:flex;"><span>ax <span style="color:#f92672">=</span> fig<span style="color:#f92672">.</span>add_subplot(<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">2</span>)
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>imshow(field<span style="color:#f92672">.</span>T, origin<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;lower&#39;</span>, cmap<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;rainbow&#39;</span>)
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>colorbar(shrink<span style="color:#f92672">=</span><span style="color:#ae81ff">0.6</span>)
+</span></span></code></pre></div><h1 id="随机场转换-field-transformations">随机场转换 Field transformations<a hidden class="anchor" aria-hidden="true" href="#随机场转换-field-transformations">#</a></h1>
+<p>Gstools 生成是普通的随机场。在应用中，有几种转换可以通过不同的空间分布形式来描述现实世界的问题。</p>
+<ol>
+<li>二分类转换 (Binary transformation)，即把现有的随机场转为二分类。</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> numpy <span style="color:#66d9ef">as</span> np
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> gstools <span style="color:#66d9ef">as</span> gs
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> matplotlib.pyplot <span style="color:#66d9ef">as</span> plt
+</span></span><span style="display:flex;"><span>x <span style="color:#f92672">=</span> y <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>arange(<span style="color:#ae81ff">100</span>)
+</span></span><span style="display:flex;"><span>x <span style="color:#f92672">=</span> y <span style="color:#f92672">=</span> range(<span style="color:#ae81ff">100</span>)
+</span></span><span style="display:flex;"><span>model <span style="color:#f92672">=</span> gs<span style="color:#f92672">.</span>Gaussian(dim<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span>, var<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>, len_scale<span style="color:#f92672">=</span><span style="color:#ae81ff">10</span>)
+</span></span><span style="display:flex;"><span>srf <span style="color:#f92672">=</span> gs<span style="color:#f92672">.</span>SRF(model, seed<span style="color:#f92672">=</span><span style="color:#ae81ff">2023</span>)
+</span></span><span style="display:flex;"><span>srf<span style="color:#f92672">.</span>structured([x, y])
+</span></span><span style="display:flex;"><span>field <span style="color:#f92672">=</span> srf<span style="color:#f92672">.</span>transform(<span style="color:#e6db74">&#34;binary&#34;</span>)
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>imshow(field)
+</span></span></code></pre></div><ol start="2">
+<li>离散型转换 (Discrete transformation)，把现有的随机场转为多分类。</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> numpy <span style="color:#66d9ef">as</span> np
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> gstools <span style="color:#66d9ef">as</span> gs
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> matplotlib.pyplot <span style="color:#66d9ef">as</span> plt
+</span></span><span style="display:flex;"><span>x <span style="color:#f92672">=</span> y <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>arange(<span style="color:#ae81ff">100</span>)
+</span></span><span style="display:flex;"><span>model <span style="color:#f92672">=</span> gs<span style="color:#f92672">.</span>Gaussian(dim<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span>, var<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>, len_scale<span style="color:#f92672">=</span><span style="color:#ae81ff">5</span>)
+</span></span><span style="display:flex;"><span>srf <span style="color:#f92672">=</span> gs<span style="color:#f92672">.</span>SRF(model, seed<span style="color:#f92672">=</span><span style="color:#ae81ff">2023</span>)
+</span></span><span style="display:flex;"><span>srf<span style="color:#f92672">.</span>structured([x, y])
+</span></span><span style="display:flex;"><span>values <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>linspace(np<span style="color:#f92672">.</span>min(srf<span style="color:#f92672">.</span>field), np<span style="color:#f92672">.</span>max(srf<span style="color:#f92672">.</span>field), <span style="color:#ae81ff">5</span>)
+</span></span><span style="display:flex;"><span>field <span style="color:#f92672">=</span> srf<span style="color:#f92672">.</span>transform(<span style="color:#e6db74">&#34;discrete&#34;</span>, store<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;f1&#34;</span>, values<span style="color:#f92672">=</span>values)
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>imshow(field)
+</span></span></code></pre></div><ol start="3">
+<li>反正弦分布转换。</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> numpy <span style="color:#66d9ef">as</span> np
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> gstools <span style="color:#66d9ef">as</span> gs
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> matplotlib.pyplot <span style="color:#66d9ef">as</span> plt
+</span></span><span style="display:flex;"><span>x <span style="color:#f92672">=</span> y <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>arange(<span style="color:#ae81ff">100</span>)
+</span></span><span style="display:flex;"><span>model <span style="color:#f92672">=</span> gs<span style="color:#f92672">.</span>Gaussian(dim<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span>, var<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>, len_scale<span style="color:#f92672">=</span><span style="color:#ae81ff">10</span>)
+</span></span><span style="display:flex;"><span>srf <span style="color:#f92672">=</span> gs<span style="color:#f92672">.</span>SRF(model, seed<span style="color:#f92672">=</span><span style="color:#ae81ff">20170519</span>)
+</span></span><span style="display:flex;"><span>srf<span style="color:#f92672">.</span>structured([x, y])
+</span></span><span style="display:flex;"><span>field <span style="color:#f92672">=</span> srf<span style="color:#f92672">.</span>transform(<span style="color:#e6db74">&#34;normal_to_arcsin&#34;</span>)
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>imshow(field)
+</span></span></code></pre></div><p><a href="https://geostat-framework.readthedocs.io/projects/gstools/en/stable/">GSTools 官网</a>包括更多类型随机场。</p>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+      <li><a href="https://blog.qarhan.xyz/tags/algorithm/">Algorithm</a></li>
+      <li><a href="https://blog.qarhan.xyz/tags/published/">Published</a></li>
+      <li><a href="https://blog.qarhan.xyz/tags/python/">Python</a></li>
+    </ul>
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+        <span>&copy; 2025 <a href="https://blog.qarhan.xyz/">汪子涛的个人网站</a></span> · 
+
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+</body>
+
+</html>

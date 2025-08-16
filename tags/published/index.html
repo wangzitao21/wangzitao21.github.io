@@ -5,11 +5,11 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="robots" content="index, follow">
-<title>404 Page not found | 汪子涛的个人网站</title>
+<title>Published | 汪子涛的个人网站</title>
 <meta name="keywords" content="">
 <meta name="description" content="">
 <meta name="author" content="">
-<link rel="canonical" href="https://blog.qarhan.xyz/404.html">
+<link rel="canonical" href="https://blog.qarhan.xyz/tags/published/">
 
 
 <script type="text/javascript" async
@@ -51,7 +51,8 @@
 <link rel="mask-icon" href="https://blog.qarhan.xyz/safari-pinned-tab.svg">
 <meta name="theme-color" content="#2e2e33">
 <meta name="msapplication-TileColor" content="#2e2e33">
-<link rel="alternate" hreflang="zh" href="https://blog.qarhan.xyz/404.html">
+<link rel="alternate" type="application/rss+xml" href="https://blog.qarhan.xyz/tags/published/index.xml">
+<link rel="alternate" hreflang="zh" href="https://blog.qarhan.xyz/tags/published/">
 <noscript>
     <style>
         #theme-toggle,
@@ -88,13 +89,13 @@
         }
 
     </style>
-</noscript><meta property="og:url" content="https://blog.qarhan.xyz/404.html">
+</noscript><meta property="og:url" content="https://blog.qarhan.xyz/tags/published/">
   <meta property="og:site_name" content="汪子涛的个人网站">
-  <meta property="og:title" content="404 Page not found">
+  <meta property="og:title" content="Published">
   <meta property="og:locale" content="zh-CN">
   <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="404 Page not found">
+<meta name="twitter:title" content="Published">
 <meta name="twitter:description" content="">
 
 </head>
@@ -142,8 +143,31 @@
         </ul>
     </nav>
 </header>
-<main class="main">
-<div class="not-found">404</div>
+<main class="main"> 
+<header class="page-header">
+  <h1>
+    Published
+  </h1>
+</header>
+
+<article class="post-entry tag-entry"> 
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">地统计学确定性建模及随机建模
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>地统计学建模中包括确定性建模和随机建模。
+确定性建模是利用已知点给出确定的预测结果，如 Kriging 插值。
+随机建模可以建模多个结果并刻画空间的不确定性，如序贯高斯模拟。
+半变异函数/协方差矩阵 ![[地统计学确定性建模及随机建模_00.png]]
+nugget 是块金值，通常表示为 $c_0$。块金值指的是当点距离足够近 (趋近于 0) 的时候还会存在的极限值，理论上这个值应该为 0。 sill $(c_0&#43;c_1)$ 是基台值。它表示数据点差别最大 (也就是总方差) 时，能达到什么程度的值。去掉块金值后的 $c_1$ 称为偏基台值 (Partial Sill)，又称为结构化方差。 range 是变程，指半变异函数达到基台值时的空间。超过这个距离，空间自相关性基本消失，超过这个距离，点与点就基本没关系了，变量之间可以视为相互独立。 GSTools 的公式是：
+$$ \gamma(r) = \sigma^2\cdot (1 - cor(s \cdot\frac{r}{l})) &#43; n $$
+$\gamma(r)$ 是半变异函数，这里的 $r$ 就是我们之前用的滞后距离 $h$。 $\sigma^2$ 是方差 (Variance)。在 GSTools 公式中，$\sigma^2$ 指的是偏基台值 (Partial Sill)，即结构化方差部分，对应我们之前讨论的 $c_1$。它不是数据的总方差（基台值）。 $n$ 是块金值，对应 $c_0$。 cor(…) 归一化的相关函数 (Normalized Correlation Function)。这个函数的特点是 cor(0) = 1，并且随着距离的增加而减小（通常趋于0）。它描述了空间自相关的结构形式。 l: 主要相关长度 (Main correlation length)，与我们之前讨论的变程 a 相关。它定义了相关性衰减的特征距离。 s: 尺度因子 (Scaling factor)，用于单位转换或各向异性，使得 h = s * r / l 成为一个无量纲的距离。 $$ \rho(r) = \text{cor} \left(s \cdot \frac{r}{\ell}\right) $$
+...</p>
+  </div>
+  <footer class="entry-footer"><span title='2023-03-16 00:00:00 +0000 UTC'>2023/3/16</span></footer>
+  <a class="entry-link" aria-label="post link to 地统计学确定性建模及随机建模" href="https://blog.qarhan.xyz/posts/%E5%9C%B0%E7%BB%9F%E8%AE%A1%E5%AD%A6%E7%A1%AE%E5%AE%9A%E6%80%A7%E5%BB%BA%E6%A8%A1%E5%8F%8A%E9%9A%8F%E6%9C%BA%E5%BB%BA%E6%A8%A1/"></a>
+</article>
     </main>
     
 <footer class="footer">

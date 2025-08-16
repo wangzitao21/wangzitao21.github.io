@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Algorithm on 汪子涛的个人网站</title>
+    <link>https://blog.qarhan.xyz/tags/algorithm/</link>
+    <description>Recent content in Algorithm on 汪子涛的个人网站</description>
+    <generator>Hugo -- 0.148.2</generator>
+    <language>zh-CN</language>
+    <lastBuildDate>Thu, 16 Mar 2023 00:00:00 +0000</lastBuildDate>
+    <atom:link href="https://blog.qarhan.xyz/tags/algorithm/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>地统计学确定性建模及随机建模</title>
+      <link>https://blog.qarhan.xyz/posts/%E5%9C%B0%E7%BB%9F%E8%AE%A1%E5%AD%A6%E7%A1%AE%E5%AE%9A%E6%80%A7%E5%BB%BA%E6%A8%A1%E5%8F%8A%E9%9A%8F%E6%9C%BA%E5%BB%BA%E6%A8%A1/</link>
+      <pubDate>Thu, 16 Mar 2023 00:00:00 +0000</pubDate>
+      <guid>https://blog.qarhan.xyz/posts/%E5%9C%B0%E7%BB%9F%E8%AE%A1%E5%AD%A6%E7%A1%AE%E5%AE%9A%E6%80%A7%E5%BB%BA%E6%A8%A1%E5%8F%8A%E9%9A%8F%E6%9C%BA%E5%BB%BA%E6%A8%A1/</guid>
+      <description>&lt;p&gt;地统计学建模中包括确定性建模和随机建模。&lt;/p&gt;
+&lt;p&gt;确定性建模是利用已知点给出确定的预测结果，如 Kriging 插值。&lt;/p&gt;
+&lt;p&gt;随机建模可以建模多个结果并刻画空间的不确定性，如序贯高斯模拟。&lt;/p&gt;
+&lt;h1 id=&#34;半变异函数协方差矩阵&#34;&gt;半变异函数/协方差矩阵&lt;/h1&gt;
+&lt;p&gt;![[地统计学确定性建模及随机建模_00.png]]&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;nugget 是块金值，通常表示为 $c_0$。块金值指的是当点距离足够近 (趋近于 0) 的时候还会存在的极限值，理论上这个值应该为 0。&lt;/li&gt;
+&lt;li&gt;sill $(c_0+c_1)$ 是基台值。它表示数据点差别最大 (也就是总方差) 时，能达到什么程度的值。去掉块金值后的 $c_1$ 称为偏基台值 (Partial Sill)，又称为结构化方差。&lt;/li&gt;
+&lt;li&gt;range 是变程，指半变异函数达到基台值时的空间。超过这个距离，空间自相关性基本消失，超过这个距离，点与点就基本没关系了，变量之间可以视为相互独立。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;GSTools 的公式是：&lt;/p&gt;
+&lt;p&gt;$$
+\gamma(r) = \sigma^2\cdot (1 - cor(s \cdot\frac{r}{l})) + n
+$$&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;$\gamma(r)$ 是半变异函数，这里的 $r$ 就是我们之前用的滞后距离 $h$。&lt;/li&gt;
+&lt;li&gt;$\sigma^2$ 是方差 (Variance)。在 GSTools 公式中，$\sigma^2$ 指的是偏基台值 (Partial Sill)，即结构化方差部分，对应我们之前讨论的 $c_1$。它不是数据的总方差（基台值）。&lt;/li&gt;
+&lt;li&gt;$n$ 是块金值，对应 $c_0$。&lt;/li&gt;
+&lt;li&gt;cor(&amp;hellip;) 归一化的相关函数 (Normalized Correlation Function)。这个函数的特点是 cor(0) = 1，并且随着距离的增加而减小（通常趋于0）。它描述了空间自相关的结构形式。&lt;/li&gt;
+&lt;li&gt;l: 主要相关长度 (Main correlation length)，与我们之前讨论的变程 a 相关。它定义了相关性衰减的特征距离。&lt;/li&gt;
+&lt;li&gt;s: 尺度因子 (Scaling factor)，用于单位转换或各向异性，使得 h = s * r / l 成为一个无量纲的距离。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;$$
+\rho(r) = \text{cor} \left(s \cdot \frac{r}{\ell}\right)
+$$&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>
