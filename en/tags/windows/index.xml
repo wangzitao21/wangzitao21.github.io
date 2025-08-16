@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>Windows on Wang's Blog</title><link>https://wangzitao21.github.io/en/tags/windows/</link><description>Recent content in Windows on Wang's Blog</description><generator>Hugo -- 0.148.2</generator><language>en-US</language><lastBuildDate>Sun, 19 May 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://wangzitao21.github.io/en/tags/windows/index.xml" rel="self" type="application/rss+xml"/><item><title>How to Refresh Environment Variables Without Restarting Windows</title><link>https://wangzitao21.github.io/en/how-to-refresh-environment-variables-without-restarting-windows/</link><pubDate>Sun, 19 May 2024 00:00:00 +0000</pubDate><guid>https://wangzitao21.github.io/en/how-to-refresh-environment-variables-without-restarting-windows/</guid><description>&lt;p>In the Windows system, sometimes when adding environment variables for some executable files, such as ffmpeg, modflow, etc., it usually requires a system restart to take effect.&lt;/p>
+&lt;p>However, restarting often requires closing many ongoing tasks, which is very troublesome.&lt;/p>
+&lt;p>The following steps can refresh environment variables without restarting the system:&lt;/p>
+&lt;ol>
+&lt;li>Add the path of the program you need to add to the environment variables.&lt;/li>
+&lt;li>Open CMD and enter &lt;code>echo %Path%&lt;/code> to view the current environment variables.&lt;/li>
+&lt;li>Enter &lt;code>set PATH=C:&lt;/code>.&lt;/li>
+&lt;li>Close CMD and reopen it. Entering &lt;code>echo %Path%&lt;/code> again will show that the environment variables have been updated.&lt;/li>
+&lt;/ol></description></item></channel></rss>
