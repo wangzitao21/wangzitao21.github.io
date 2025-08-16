@@ -2,10 +2,14 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
+    <loc>https://blog.qarhan.xyz/%E8%B4%9D%E5%8F%B6%E6%96%AF%E4%BC%98%E5%8C%96%E5%92%8C-mcmc/</loc>
+    <lastmod>2023-11-07T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://blog.qarhan.xyz/</loc>
+    <lastmod>2023-11-07T00:00:00+00:00</lastmod>
+  </url><url>
     <loc>https://blog.qarhan.xyz/categories/</loc>
   </url><url>
     <loc>https://blog.qarhan.xyz/tags/</loc>
-  </url><url>
-    <loc>https://blog.qarhan.xyz/</loc>
   </url>
 </urlset>

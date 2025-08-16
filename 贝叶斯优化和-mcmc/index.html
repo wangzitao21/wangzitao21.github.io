@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="zh" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>test | 汪子涛</title>
+<meta name="keywords" content="">
+<meta name="description" content="贝叶斯优化是一种全局优化方法，用于优化黑盒函数。
+
+定义目标函数，如准确率或损失值。
+使用先验模型，如高斯过程，用于对给定的数据点进行目标函数代理建模。
+根据先验模型和已观察到的数据点，选择采集函数。常用的采集函数包括期望改进（Expected Improvement, EI）和最大概率改进（Probability of Improvement, PI）。例如，EI的公式如下：
+
+$$
+EI(x) = E[max(f(x)-f(x^&#43;), 0)]
+$$
+其中，f(x) 是目标函数，f(x&#43;) 是目前找到的最佳函数值。
+
+迭代优化。在每次迭代中，我们会通过采集函数选择一个采样点，然后在这个采样点处评估目标函数，得到一个新的观测值。这个新的观测值会被加入到我们的数据集中。然后，我们会使用这个更新后的数据集来更新我们的代理模型（也就是高斯过程模型）。这样，我们的代理模型就能够更好地反映目标函数的形状。
+重复上述步骤。
+
+![[贝叶斯优化和 MCMC_00.png]]
+&ldquo;查询点&quot;就是我们在下一次迭代中要评估的点256。在每次迭代中，我们都会根据采集函数来选择一个新的查询点，并计算其对应的目标函数值256。然后，我们会使用这个新的数据点来更新我们的先验模型256。在下一次迭代中，我们会再次选择一个新的查询点，并重复这个过程
+2 先验代理模型
+高斯过程在贝叶斯优化中被用作代理模型。
+在贝叶斯优化中，我们的目标是优化一个昂贵的、难以评估的目标函数。
+由于直接优化这个函数可能非常困难，我们使用高斯过程来建立这个函数的代理模型。
+这个代理模型可以帮助我们理解目标函数的行为，并预测我们还未观察到的点的函数值。
+因此，你可以把高斯过程看作是在这里代理了目标函数。
+3 采集函数
+期望改进（Expected Improvement, EI）是一种常用的采集函数。
+EI的主要思想是，在每次迭代中，选择那些能够最大化期望改进量的点进行评估。
+EI的公式如下：
+EI(x)=E[max(f(x)−f(x&#43;),0)]
+其中，f(x) 是目标函数，f(x&#43;) 是当前找到的最佳函数值。
+在每次迭代中，我们都会计算所有候选点的 EI 值，并选择 EI 值最大的点作为下一个查询点。
+这样，我们就可以在探索（寻找尚未评估的区域）和利用（寻找已知信息）之间取得平衡，从而有效地找到全局最优解
+蒙特卡洛
+蒙特卡洛方法是一种随机模拟方法，通过大量随机样本的统计结果来估计问题的解。
+在这个例子中，我们随机生成点，并统计落在圆内的点的比例，从而估计圆的面积。
+
+在一边长为1的正方形内绘制半径为0.5的圆，圆心位于正方形中心。
+正方形面积为1，圆面积为 π·r 2 = π/4。
+落在圆内点m的数量与圆面积成正比。
+模拟点总数 n 与正方形的面积成正比。
+由3、4得到圆内点的比例 m/n 近似等于圆的面积与正方形面积的比值，即
+
+m/n≈(π/4)/1=π/4
+直接上代码
+import random
+import matplotlib.pyplot as plt
+
+def monte_carlo_pi(n, s=10):
+    &#34;&#34;&#34;
+    使用蒙特卡洛方法估算圆周率，并可选地进行可视化.
+
+    Args:
+        n: 模拟点的数量.
+        visualize: 是否进行可视化.
+
+    Returns:
+        圆周率的估计值.
+    &#34;&#34;&#34;
+    in_circle_count = 0
+    x_in, y_in = [], []  # 圆内的点
+    x_out, y_out = [], []  # 圆外的点
+
+    for _ in range(n):
+        x = random.uniform(0, 1)
+        y = random.uniform(0, 1) 
+        distance = (x - 0.5)**2 &#43; (y - 0.5)**2 
+        if distance &lt;= 0.25:
+            in_circle_count &#43;= 1
+            x_in.append(x)
+            y_in.append(y)
+        else:
+            x_out.append(x)
+            y_out.append(y)
+
+    pi = 4 * in_circle_count / n
+
+    # 创建图形
+    fig, ax = plt.subplots(figsize=(2,2))
+
+    # 绘制正方形
+    ax.set_aspect(&#39;equal&#39;)
+    ax.plot([0, 1, 1, 0, 0], [0, 0, 1, 1, 0], color=&#39;black&#39;)
+
+    # 绘制圆
+    circle = plt.Circle((0.5, 0.5), 0.5, color=&#39;blue&#39;, fill=False)
+    ax.add_patch(circle)
+
+    # 绘制点
+    ax.scatter(x_in, y_in, color=&#39;red&#39;, s=s, label=&#39;Inside&#39;)
+    ax.scatter(x_out, y_out, color=&#39;green&#39;, s=s, label=&#39;Outside&#39;)
+    ax.set_xticklabels([])
+    ax.set_yticklabels([])
+    ax.set_xticks([])
+    ax.set_yticks([])
+    for spine in ax.spines.values():
+        spine.set_visible(False)
+
+    # ax.legend()
+    plt.text(0.8, 1.05, f&#34;$\pi={pi}$&#34;)
+    plt.title(&#34;Pi (n={})&#34;.format(n))
+    plt.show()
+
+    return pi
+
+# 设置模拟点的数量
+# n = 1000
+
+# 计算圆周率的估计值并进行可视化
+pi_estimate = monte_carlo_pi(n=10, s=10)
+pi_estimate = monte_carlo_pi(n=100, s=10)
+pi_estimate = monte_carlo_pi(n=1000, s=5)
+pi_estimate = monte_carlo_pi(n=10000, s=0.1)
+pi_estimate = monte_carlo_pi(n=100000, s=0.1)
+结果见下图">
+<meta name="author" content="">
+<link rel="canonical" href="https://blog.qarhan.xyz/%E8%B4%9D%E5%8F%B6%E6%96%AF%E4%BC%98%E5%8C%96%E5%92%8C-mcmc/">
+
+
+<script type="text/javascript" async
+    src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+        MathJax.Hub.Config({
+            tex2jax: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$']],
+                processEscapes: true,
+                processEnvironments: true,
+                skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+                TeX: {
+                    equationNumbers: { autoNumber: "AMS" },
+                    extensions: ["AMSmath.js", "AMSsymbols.js"]
+                }
+            }
+        });
+        MathJax.Hub.Queue(function () {
+            
+            
+            
+            var all = MathJax.Hub.getAllJax(), i;
+            for (i = 0; i < all.length; i += 1) {
+                all[i].SourceElement().parentNode.className += ' has-jax';
+            }
+        });
+        MathJax.Hub.Config({
+            
+            TeX: { equationNumbers: { autoNumber: "AMS" } }
+        });
+    </script>
+
+
+<link crossorigin="anonymous" href="/assets/css/stylesheet.css" rel="preload stylesheet" as="style">
+<link rel="icon" href="https://blog.qarhan.xyz/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="https://blog.qarhan.xyz/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://blog.qarhan.xyz/favicon-32x32.png">
+<link rel="apple-touch-icon" href="https://blog.qarhan.xyz/apple-touch-icon.png">
+<link rel="mask-icon" href="https://blog.qarhan.xyz/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<link rel="alternate" hreflang="zh" href="https://blog.qarhan.xyz/%E8%B4%9D%E5%8F%B6%E6%96%AF%E4%BC%98%E5%8C%96%E5%92%8C-mcmc/">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --code-block-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript><meta property="og:url" content="https://blog.qarhan.xyz/%E8%B4%9D%E5%8F%B6%E6%96%AF%E4%BC%98%E5%8C%96%E5%92%8C-mcmc/">
+  <meta property="og:site_name" content="汪子涛">
+  <meta property="og:title" content="test">
+  <meta property="og:description" content="贝叶斯优化是一种全局优化方法，用于优化黑盒函数。
+定义目标函数，如准确率或损失值。 使用先验模型，如高斯过程，用于对给定的数据点进行目标函数代理建模。 根据先验模型和已观察到的数据点，选择采集函数。常用的采集函数包括期望改进（Expected Improvement, EI）和最大概率改进（Probability of Improvement, PI）。例如，EI的公式如下： $$ EI(x) = E[max(f(x)-f(x^&#43;), 0)] $$
+其中，f(x) 是目标函数，f(x&#43;) 是目前找到的最佳函数值。
+迭代优化。在每次迭代中，我们会通过采集函数选择一个采样点，然后在这个采样点处评估目标函数，得到一个新的观测值。这个新的观测值会被加入到我们的数据集中。然后，我们会使用这个更新后的数据集来更新我们的代理模型（也就是高斯过程模型）。这样，我们的代理模型就能够更好地反映目标函数的形状。 重复上述步骤。 ![[贝叶斯优化和 MCMC_00.png]]
+“查询点&#34;就是我们在下一次迭代中要评估的点256。在每次迭代中，我们都会根据采集函数来选择一个新的查询点，并计算其对应的目标函数值256。然后，我们会使用这个新的数据点来更新我们的先验模型256。在下一次迭代中，我们会再次选择一个新的查询点，并重复这个过程
+2 先验代理模型 高斯过程在贝叶斯优化中被用作代理模型。
+在贝叶斯优化中，我们的目标是优化一个昂贵的、难以评估的目标函数。
+由于直接优化这个函数可能非常困难，我们使用高斯过程来建立这个函数的代理模型。
+这个代理模型可以帮助我们理解目标函数的行为，并预测我们还未观察到的点的函数值。
+因此，你可以把高斯过程看作是在这里代理了目标函数。
+3 采集函数 期望改进（Expected Improvement, EI）是一种常用的采集函数。
+EI的主要思想是，在每次迭代中，选择那些能够最大化期望改进量的点进行评估。
+EI的公式如下：
+EI(x)=E[max(f(x)−f(x&#43;),0)]
+其中，f(x) 是目标函数，f(x&#43;) 是当前找到的最佳函数值。
+在每次迭代中，我们都会计算所有候选点的 EI 值，并选择 EI 值最大的点作为下一个查询点。
+这样，我们就可以在探索（寻找尚未评估的区域）和利用（寻找已知信息）之间取得平衡，从而有效地找到全局最优解
+蒙特卡洛 蒙特卡洛方法是一种随机模拟方法，通过大量随机样本的统计结果来估计问题的解。 在这个例子中，我们随机生成点，并统计落在圆内的点的比例，从而估计圆的面积。
+在一边长为1的正方形内绘制半径为0.5的圆，圆心位于正方形中心。 正方形面积为1，圆面积为 π·r 2 = π/4。 落在圆内点m的数量与圆面积成正比。 模拟点总数 n 与正方形的面积成正比。 由3、4得到圆内点的比例 m/n 近似等于圆的面积与正方形面积的比值，即 m/n≈(π/4)/1=π/4
+直接上代码
+import random import matplotlib.pyplot as plt def monte_carlo_pi(n, s=10): &#34;&#34;&#34; 使用蒙特卡洛方法估算圆周率，并可选地进行可视化. Args: n: 模拟点的数量. visualize: 是否进行可视化. Returns: 圆周率的估计值. &#34;&#34;&#34; in_circle_count = 0 x_in, y_in = [], [] # 圆内的点 x_out, y_out = [], [] # 圆外的点 for _ in range(n): x = random.uniform(0, 1) y = random.uniform(0, 1) distance = (x - 0.5)**2 &#43; (y - 0.5)**2 if distance &lt;= 0.25: in_circle_count &#43;= 1 x_in.append(x) y_in.append(y) else: x_out.append(x) y_out.append(y) pi = 4 * in_circle_count / n # 创建图形 fig, ax = plt.subplots(figsize=(2,2)) # 绘制正方形 ax.set_aspect(&#39;equal&#39;) ax.plot([0, 1, 1, 0, 0], [0, 0, 1, 1, 0], color=&#39;black&#39;) # 绘制圆 circle = plt.Circle((0.5, 0.5), 0.5, color=&#39;blue&#39;, fill=False) ax.add_patch(circle) # 绘制点 ax.scatter(x_in, y_in, color=&#39;red&#39;, s=s, label=&#39;Inside&#39;) ax.scatter(x_out, y_out, color=&#39;green&#39;, s=s, label=&#39;Outside&#39;) ax.set_xticklabels([]) ax.set_yticklabels([]) ax.set_xticks([]) ax.set_yticks([]) for spine in ax.spines.values(): spine.set_visible(False) # ax.legend() plt.text(0.8, 1.05, f&#34;$\pi={pi}$&#34;) plt.title(&#34;Pi (n={})&#34;.format(n)) plt.show() return pi # 设置模拟点的数量 # n = 1000 # 计算圆周率的估计值并进行可视化 pi_estimate = monte_carlo_pi(n=10, s=10) pi_estimate = monte_carlo_pi(n=100, s=10) pi_estimate = monte_carlo_pi(n=1000, s=5) pi_estimate = monte_carlo_pi(n=10000, s=0.1) pi_estimate = monte_carlo_pi(n=100000, s=0.1) 结果见下图">
+  <meta property="og:locale" content="zh-CN">
+  <meta property="og:type" content="article">
+    <meta property="article:published_time" content="2023-11-07T00:00:00+00:00">
+    <meta property="article:modified_time" content="2023-11-07T00:00:00+00:00">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="test">
+<meta name="twitter:description" content="贝叶斯优化是一种全局优化方法，用于优化黑盒函数。
+
+定义目标函数，如准确率或损失值。
+使用先验模型，如高斯过程，用于对给定的数据点进行目标函数代理建模。
+根据先验模型和已观察到的数据点，选择采集函数。常用的采集函数包括期望改进（Expected Improvement, EI）和最大概率改进（Probability of Improvement, PI）。例如，EI的公式如下：
+
+$$
+EI(x) = E[max(f(x)-f(x^&#43;), 0)]
+$$
+其中，f(x) 是目标函数，f(x&#43;) 是目前找到的最佳函数值。
+
+迭代优化。在每次迭代中，我们会通过采集函数选择一个采样点，然后在这个采样点处评估目标函数，得到一个新的观测值。这个新的观测值会被加入到我们的数据集中。然后，我们会使用这个更新后的数据集来更新我们的代理模型（也就是高斯过程模型）。这样，我们的代理模型就能够更好地反映目标函数的形状。
+重复上述步骤。
+
+![[贝叶斯优化和 MCMC_00.png]]
+&ldquo;查询点&quot;就是我们在下一次迭代中要评估的点256。在每次迭代中，我们都会根据采集函数来选择一个新的查询点，并计算其对应的目标函数值256。然后，我们会使用这个新的数据点来更新我们的先验模型256。在下一次迭代中，我们会再次选择一个新的查询点，并重复这个过程
+2 先验代理模型
+高斯过程在贝叶斯优化中被用作代理模型。
+在贝叶斯优化中，我们的目标是优化一个昂贵的、难以评估的目标函数。
+由于直接优化这个函数可能非常困难，我们使用高斯过程来建立这个函数的代理模型。
+这个代理模型可以帮助我们理解目标函数的行为，并预测我们还未观察到的点的函数值。
+因此，你可以把高斯过程看作是在这里代理了目标函数。
+3 采集函数
+期望改进（Expected Improvement, EI）是一种常用的采集函数。
+EI的主要思想是，在每次迭代中，选择那些能够最大化期望改进量的点进行评估。
+EI的公式如下：
+EI(x)=E[max(f(x)−f(x&#43;),0)]
+其中，f(x) 是目标函数，f(x&#43;) 是当前找到的最佳函数值。
+在每次迭代中，我们都会计算所有候选点的 EI 值，并选择 EI 值最大的点作为下一个查询点。
+这样，我们就可以在探索（寻找尚未评估的区域）和利用（寻找已知信息）之间取得平衡，从而有效地找到全局最优解
+蒙特卡洛
+蒙特卡洛方法是一种随机模拟方法，通过大量随机样本的统计结果来估计问题的解。
+在这个例子中，我们随机生成点，并统计落在圆内的点的比例，从而估计圆的面积。
+
+在一边长为1的正方形内绘制半径为0.5的圆，圆心位于正方形中心。
+正方形面积为1，圆面积为 π·r 2 = π/4。
+落在圆内点m的数量与圆面积成正比。
+模拟点总数 n 与正方形的面积成正比。
+由3、4得到圆内点的比例 m/n 近似等于圆的面积与正方形面积的比值，即
+
+m/n≈(π/4)/1=π/4
+直接上代码
+import random
+import matplotlib.pyplot as plt
+
+def monte_carlo_pi(n, s=10):
+    &#34;&#34;&#34;
+    使用蒙特卡洛方法估算圆周率，并可选地进行可视化.
+
+    Args:
+        n: 模拟点的数量.
+        visualize: 是否进行可视化.
+
+    Returns:
+        圆周率的估计值.
+    &#34;&#34;&#34;
+    in_circle_count = 0
+    x_in, y_in = [], []  # 圆内的点
+    x_out, y_out = [], []  # 圆外的点
+
+    for _ in range(n):
+        x = random.uniform(0, 1)
+        y = random.uniform(0, 1) 
+        distance = (x - 0.5)**2 &#43; (y - 0.5)**2 
+        if distance &lt;= 0.25:
+            in_circle_count &#43;= 1
+            x_in.append(x)
+            y_in.append(y)
+        else:
+            x_out.append(x)
+            y_out.append(y)
+
+    pi = 4 * in_circle_count / n
+
+    # 创建图形
+    fig, ax = plt.subplots(figsize=(2,2))
+
+    # 绘制正方形
+    ax.set_aspect(&#39;equal&#39;)
+    ax.plot([0, 1, 1, 0, 0], [0, 0, 1, 1, 0], color=&#39;black&#39;)
+
+    # 绘制圆
+    circle = plt.Circle((0.5, 0.5), 0.5, color=&#39;blue&#39;, fill=False)
+    ax.add_patch(circle)
+
+    # 绘制点
+    ax.scatter(x_in, y_in, color=&#39;red&#39;, s=s, label=&#39;Inside&#39;)
+    ax.scatter(x_out, y_out, color=&#39;green&#39;, s=s, label=&#39;Outside&#39;)
+    ax.set_xticklabels([])
+    ax.set_yticklabels([])
+    ax.set_xticks([])
+    ax.set_yticks([])
+    for spine in ax.spines.values():
+        spine.set_visible(False)
+
+    # ax.legend()
+    plt.text(0.8, 1.05, f&#34;$\pi={pi}$&#34;)
+    plt.title(&#34;Pi (n={})&#34;.format(n))
+    plt.show()
+
+    return pi
+
+# 设置模拟点的数量
+# n = 1000
+
+# 计算圆周率的估计值并进行可视化
+pi_estimate = monte_carlo_pi(n=10, s=10)
+pi_estimate = monte_carlo_pi(n=100, s=10)
+pi_estimate = monte_carlo_pi(n=1000, s=5)
+pi_estimate = monte_carlo_pi(n=10000, s=0.1)
+pi_estimate = monte_carlo_pi(n=100000, s=0.1)
+结果见下图">
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "test",
+      "item": "https://blog.qarhan.xyz/%E8%B4%9D%E5%8F%B6%E6%96%AF%E4%BC%98%E5%8C%96%E5%92%8C-mcmc/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "test",
+  "name": "test",
+  "description": "贝叶斯优化是一种全局优化方法，用于优化黑盒函数。\n定义目标函数，如准确率或损失值。 使用先验模型，如高斯过程，用于对给定的数据点进行目标函数代理建模。 根据先验模型和已观察到的数据点，选择采集函数。常用的采集函数包括期望改进（Expected Improvement, EI）和最大概率改进（Probability of Improvement, PI）。例如，EI的公式如下： $$ EI(x) = E[max(f(x)-f(x^+), 0)] $$\n其中，f(x) 是目标函数，f(x+) 是目前找到的最佳函数值。\n迭代优化。在每次迭代中，我们会通过采集函数选择一个采样点，然后在这个采样点处评估目标函数，得到一个新的观测值。这个新的观测值会被加入到我们的数据集中。然后，我们会使用这个更新后的数据集来更新我们的代理模型（也就是高斯过程模型）。这样，我们的代理模型就能够更好地反映目标函数的形状。 重复上述步骤。 ![[贝叶斯优化和 MCMC_00.png]]\n\u0026ldquo;查询点\u0026quot;就是我们在下一次迭代中要评估的点256。在每次迭代中，我们都会根据采集函数来选择一个新的查询点，并计算其对应的目标函数值256。然后，我们会使用这个新的数据点来更新我们的先验模型256。在下一次迭代中，我们会再次选择一个新的查询点，并重复这个过程\n2 先验代理模型 高斯过程在贝叶斯优化中被用作代理模型。\n在贝叶斯优化中，我们的目标是优化一个昂贵的、难以评估的目标函数。\n由于直接优化这个函数可能非常困难，我们使用高斯过程来建立这个函数的代理模型。\n这个代理模型可以帮助我们理解目标函数的行为，并预测我们还未观察到的点的函数值。\n因此，你可以把高斯过程看作是在这里代理了目标函数。\n3 采集函数 期望改进（Expected Improvement, EI）是一种常用的采集函数。\nEI的主要思想是，在每次迭代中，选择那些能够最大化期望改进量的点进行评估。\nEI的公式如下：\nEI(x)=E[max(f(x)−f(x+),0)]\n其中，f(x) 是目标函数，f(x+) 是当前找到的最佳函数值。\n在每次迭代中，我们都会计算所有候选点的 EI 值，并选择 EI 值最大的点作为下一个查询点。\n这样，我们就可以在探索（寻找尚未评估的区域）和利用（寻找已知信息）之间取得平衡，从而有效地找到全局最优解\n蒙特卡洛 蒙特卡洛方法是一种随机模拟方法，通过大量随机样本的统计结果来估计问题的解。 在这个例子中，我们随机生成点，并统计落在圆内的点的比例，从而估计圆的面积。\n在一边长为1的正方形内绘制半径为0.5的圆，圆心位于正方形中心。 正方形面积为1，圆面积为 π·r 2 = π/4。 落在圆内点m的数量与圆面积成正比。 模拟点总数 n 与正方形的面积成正比。 由3、4得到圆内点的比例 m/n 近似等于圆的面积与正方形面积的比值，即 m/n≈(π/4)/1=π/4\n直接上代码\nimport random import matplotlib.pyplot as plt def monte_carlo_pi(n, s=10): \u0026#34;\u0026#34;\u0026#34; 使用蒙特卡洛方法估算圆周率，并可选地进行可视化. Args: n: 模拟点的数量. visualize: 是否进行可视化. Returns: 圆周率的估计值. \u0026#34;\u0026#34;\u0026#34; in_circle_count = 0 x_in, y_in = [], [] # 圆内的点 x_out, y_out = [], [] # 圆外的点 for _ in range(n): x = random.uniform(0, 1) y = random.uniform(0, 1) distance = (x - 0.5)**2 + (y - 0.5)**2 if distance \u0026lt;= 0.25: in_circle_count += 1 x_in.append(x) y_in.append(y) else: x_out.append(x) y_out.append(y) pi = 4 * in_circle_count / n # 创建图形 fig, ax = plt.subplots(figsize=(2,2)) # 绘制正方形 ax.set_aspect(\u0026#39;equal\u0026#39;) ax.plot([0, 1, 1, 0, 0], [0, 0, 1, 1, 0], color=\u0026#39;black\u0026#39;) # 绘制圆 circle = plt.Circle((0.5, 0.5), 0.5, color=\u0026#39;blue\u0026#39;, fill=False) ax.add_patch(circle) # 绘制点 ax.scatter(x_in, y_in, color=\u0026#39;red\u0026#39;, s=s, label=\u0026#39;Inside\u0026#39;) ax.scatter(x_out, y_out, color=\u0026#39;green\u0026#39;, s=s, label=\u0026#39;Outside\u0026#39;) ax.set_xticklabels([]) ax.set_yticklabels([]) ax.set_xticks([]) ax.set_yticks([]) for spine in ax.spines.values(): spine.set_visible(False) # ax.legend() plt.text(0.8, 1.05, f\u0026#34;$\\pi={pi}$\u0026#34;) plt.title(\u0026#34;Pi (n={})\u0026#34;.format(n)) plt.show() return pi # 设置模拟点的数量 # n = 1000 # 计算圆周率的估计值并进行可视化 pi_estimate = monte_carlo_pi(n=10, s=10) pi_estimate = monte_carlo_pi(n=100, s=10) pi_estimate = monte_carlo_pi(n=1000, s=5) pi_estimate = monte_carlo_pi(n=10000, s=0.1) pi_estimate = monte_carlo_pi(n=100000, s=0.1) 结果见下图\n",
+  "keywords": [
+    
+  ],
+  "articleBody": "贝叶斯优化是一种全局优化方法，用于优化黑盒函数。\n定义目标函数，如准确率或损失值。 使用先验模型，如高斯过程，用于对给定的数据点进行目标函数代理建模。 根据先验模型和已观察到的数据点，选择采集函数。常用的采集函数包括期望改进（Expected Improvement, EI）和最大概率改进（Probability of Improvement, PI）。例如，EI的公式如下： $$ EI(x) = E[max(f(x)-f(x^+), 0)] $$\n其中，f(x) 是目标函数，f(x+) 是目前找到的最佳函数值。\n迭代优化。在每次迭代中，我们会通过采集函数选择一个采样点，然后在这个采样点处评估目标函数，得到一个新的观测值。这个新的观测值会被加入到我们的数据集中。然后，我们会使用这个更新后的数据集来更新我们的代理模型（也就是高斯过程模型）。这样，我们的代理模型就能够更好地反映目标函数的形状。 重复上述步骤。 ![[贝叶斯优化和 MCMC_00.png]]\n“查询点\"就是我们在下一次迭代中要评估的点256。在每次迭代中，我们都会根据采集函数来选择一个新的查询点，并计算其对应的目标函数值256。然后，我们会使用这个新的数据点来更新我们的先验模型256。在下一次迭代中，我们会再次选择一个新的查询点，并重复这个过程\n2 先验代理模型 高斯过程在贝叶斯优化中被用作代理模型。\n在贝叶斯优化中，我们的目标是优化一个昂贵的、难以评估的目标函数。\n由于直接优化这个函数可能非常困难，我们使用高斯过程来建立这个函数的代理模型。\n这个代理模型可以帮助我们理解目标函数的行为，并预测我们还未观察到的点的函数值。\n因此，你可以把高斯过程看作是在这里代理了目标函数。\n3 采集函数 期望改进（Expected Improvement, EI）是一种常用的采集函数。\nEI的主要思想是，在每次迭代中，选择那些能够最大化期望改进量的点进行评估。\nEI的公式如下：\nEI(x)=E[max(f(x)−f(x+),0)]\n其中，f(x) 是目标函数，f(x+) 是当前找到的最佳函数值。\n在每次迭代中，我们都会计算所有候选点的 EI 值，并选择 EI 值最大的点作为下一个查询点。\n这样，我们就可以在探索（寻找尚未评估的区域）和利用（寻找已知信息）之间取得平衡，从而有效地找到全局最优解\n蒙特卡洛 蒙特卡洛方法是一种随机模拟方法，通过大量随机样本的统计结果来估计问题的解。 在这个例子中，我们随机生成点，并统计落在圆内的点的比例，从而估计圆的面积。\n在一边长为1的正方形内绘制半径为0.5的圆，圆心位于正方形中心。 正方形面积为1，圆面积为 π·r 2 = π/4。 落在圆内点m的数量与圆面积成正比。 模拟点总数 n 与正方形的面积成正比。 由3、4得到圆内点的比例 m/n 近似等于圆的面积与正方形面积的比值，即 m/n≈(π/4)/1=π/4\n直接上代码\nimport random import matplotlib.pyplot as plt def monte_carlo_pi(n, s=10): \"\"\" 使用蒙特卡洛方法估算圆周率，并可选地进行可视化. Args: n: 模拟点的数量. visualize: 是否进行可视化. Returns: 圆周率的估计值. \"\"\" in_circle_count = 0 x_in, y_in = [], [] # 圆内的点 x_out, y_out = [], [] # 圆外的点 for _ in range(n): x = random.uniform(0, 1) y = random.uniform(0, 1) distance = (x - 0.5)**2 + (y - 0.5)**2 if distance \u003c= 0.25: in_circle_count += 1 x_in.append(x) y_in.append(y) else: x_out.append(x) y_out.append(y) pi = 4 * in_circle_count / n # 创建图形 fig, ax = plt.subplots(figsize=(2,2)) # 绘制正方形 ax.set_aspect('equal') ax.plot([0, 1, 1, 0, 0], [0, 0, 1, 1, 0], color='black') # 绘制圆 circle = plt.Circle((0.5, 0.5), 0.5, color='blue', fill=False) ax.add_patch(circle) # 绘制点 ax.scatter(x_in, y_in, color='red', s=s, label='Inside') ax.scatter(x_out, y_out, color='green', s=s, label='Outside') ax.set_xticklabels([]) ax.set_yticklabels([]) ax.set_xticks([]) ax.set_yticks([]) for spine in ax.spines.values(): spine.set_visible(False) # ax.legend() plt.text(0.8, 1.05, f\"$\\pi={pi}$\") plt.title(\"Pi (n={})\".format(n)) plt.show() return pi # 设置模拟点的数量 # n = 1000 # 计算圆周率的估计值并进行可视化 pi_estimate = monte_carlo_pi(n=10, s=10) pi_estimate = monte_carlo_pi(n=100, s=10) pi_estimate = monte_carlo_pi(n=1000, s=5) pi_estimate = monte_carlo_pi(n=10000, s=0.1) pi_estimate = monte_carlo_pi(n=100000, s=0.1) 结果见下图\n![[贝叶斯优化和 MCMC_01.png]]\n",
+  "wordCount" : "233",
+  "inLanguage": "zh",
+  "datePublished": "2023-11-07T00:00:00Z",
+  "dateModified": "2023-11-07T00:00:00Z",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://blog.qarhan.xyz/%E8%B4%9D%E5%8F%B6%E6%96%AF%E4%BC%98%E5%8C%96%E5%92%8C-mcmc/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "汪子涛",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://blog.qarhan.xyz/favicon.ico"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="https://blog.qarhan.xyz/" accesskey="h" title="汪子涛 (Alt + H)">汪子涛</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)" aria-label="Toggle theme">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    
+    <h1 class="post-title entry-hint-parent">
+      test
+    </h1>
+    <div class="post-meta"><span title='2023-11-07 00:00:00 +0000 UTC'>十一月 7, 2023</span>
+
+</div>
+  </header> 
+  <div class="post-content"><p>贝叶斯优化是一种全局优化方法，用于优化黑盒函数。</p>
+<ol>
+<li>定义目标函数，如准确率或损失值。</li>
+<li>使用先验模型，如高斯过程，用于对给定的数据点进行目标函数代理建模。</li>
+<li>根据先验模型和已观察到的数据点，选择采集函数。常用的采集函数包括期望改进（Expected Improvement, EI）和最大概率改进（Probability of Improvement, PI）。例如，EI的公式如下：</li>
+</ol>
+<p>$$
+EI(x) = E[max(f(x)-f(x^+), 0)]
+$$</p>
+<p>其中，f(x) 是目标函数，f(x+) 是目前找到的最佳函数值。</p>
+<ol start="4">
+<li>迭代优化。在每次迭代中，我们会通过采集函数选择一个采样点，然后在这个采样点处评估目标函数，得到一个新的观测值。这个新的观测值会被加入到我们的数据集中。然后，我们会使用这个更新后的数据集来更新我们的代理模型（也就是高斯过程模型）。这样，我们的代理模型就能够更好地反映目标函数的形状。</li>
+<li>重复上述步骤。</li>
+</ol>
+<p>![[贝叶斯优化和 MCMC_00.png]]</p>
+<p>&ldquo;查询点&quot;就是我们在下一次迭代中要评估的点256。在每次迭代中，我们都会根据采集函数来选择一个新的查询点，并计算其对应的目标函数值256。然后，我们会使用这个新的数据点来更新我们的先验模型256。在下一次迭代中，我们会再次选择一个新的查询点，并重复这个过程</p>
+<h1 id="2-先验代理模型">2 先验代理模型<a hidden class="anchor" aria-hidden="true" href="#2-先验代理模型">#</a></h1>
+<p>高斯过程在贝叶斯优化中被用作代理模型。</p>
+<p>在贝叶斯优化中，我们的目标是优化一个昂贵的、难以评估的目标函数。</p>
+<p>由于直接优化这个函数可能非常困难，我们使用高斯过程来建立这个函数的代理模型。</p>
+<p>这个代理模型可以帮助我们理解目标函数的行为，并预测我们还未观察到的点的函数值。</p>
+<p>因此，你可以把高斯过程看作是在这里代理了目标函数。</p>
+<h1 id="3-采集函数">3 采集函数<a hidden class="anchor" aria-hidden="true" href="#3-采集函数">#</a></h1>
+<p>期望改进（Expected Improvement, EI）是一种常用的采集函数。</p>
+<p>EI的主要思想是，在每次迭代中，选择那些能够最大化期望改进量的点进行评估。</p>
+<p>EI的公式如下：</p>
+<p>EI(x)=E[max(f(x)−f(x+),0)]</p>
+<p>其中，f(x) 是目标函数，f(x+) 是当前找到的最佳函数值。</p>
+<p>在每次迭代中，我们都会计算所有候选点的 EI 值，并选择 EI 值最大的点作为下一个查询点。</p>
+<p>这样，我们就可以在探索（寻找尚未评估的区域）和利用（寻找已知信息）之间取得平衡，从而有效地找到全局最优解</p>
+<h1 id="蒙特卡洛">蒙特卡洛<a hidden class="anchor" aria-hidden="true" href="#蒙特卡洛">#</a></h1>
+<p>蒙特卡洛方法是一种随机模拟方法，通过大量随机样本的统计结果来估计问题的解。
+在这个例子中，我们随机生成点，并统计落在圆内的点的比例，从而估计圆的面积。</p>
+<ol>
+<li>在一边长为1的正方形内绘制半径为0.5的圆，圆心位于正方形中心。</li>
+<li>正方形面积为1，圆面积为 π·r 2 = π/4。</li>
+<li>落在圆内点m的数量与圆面积成正比。</li>
+<li>模拟点总数 n 与正方形的面积成正比。</li>
+<li>由3、4得到圆内点的比例 m/n 近似等于圆的面积与正方形面积的比值，即</li>
+</ol>
+<p>m/n≈(π/4)/1=π/4</p>
+<p>直接上代码</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> random
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> matplotlib.pyplot <span style="color:#66d9ef">as</span> plt
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">monte_carlo_pi</span>(n, s<span style="color:#f92672">=</span><span style="color:#ae81ff">10</span>):
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;&#34;&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    使用蒙特卡洛方法估算圆周率，并可选地进行可视化.
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    Args:
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        n: 模拟点的数量.
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        visualize: 是否进行可视化.
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    Returns:
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        圆周率的估计值.
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>    in_circle_count <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>    x_in, y_in <span style="color:#f92672">=</span> [], []  <span style="color:#75715e"># 圆内的点</span>
+</span></span><span style="display:flex;"><span>    x_out, y_out <span style="color:#f92672">=</span> [], []  <span style="color:#75715e"># 圆外的点</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> _ <span style="color:#f92672">in</span> range(n):
+</span></span><span style="display:flex;"><span>        x <span style="color:#f92672">=</span> random<span style="color:#f92672">.</span>uniform(<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>        y <span style="color:#f92672">=</span> random<span style="color:#f92672">.</span>uniform(<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">1</span>) 
+</span></span><span style="display:flex;"><span>        distance <span style="color:#f92672">=</span> (x <span style="color:#f92672">-</span> <span style="color:#ae81ff">0.5</span>)<span style="color:#f92672">**</span><span style="color:#ae81ff">2</span> <span style="color:#f92672">+</span> (y <span style="color:#f92672">-</span> <span style="color:#ae81ff">0.5</span>)<span style="color:#f92672">**</span><span style="color:#ae81ff">2</span> 
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> distance <span style="color:#f92672">&lt;=</span> <span style="color:#ae81ff">0.25</span>:
+</span></span><span style="display:flex;"><span>            in_circle_count <span style="color:#f92672">+=</span> <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>            x_in<span style="color:#f92672">.</span>append(x)
+</span></span><span style="display:flex;"><span>            y_in<span style="color:#f92672">.</span>append(y)
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">else</span>:
+</span></span><span style="display:flex;"><span>            x_out<span style="color:#f92672">.</span>append(x)
+</span></span><span style="display:flex;"><span>            y_out<span style="color:#f92672">.</span>append(y)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    pi <span style="color:#f92672">=</span> <span style="color:#ae81ff">4</span> <span style="color:#f92672">*</span> in_circle_count <span style="color:#f92672">/</span> n
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># 创建图形</span>
+</span></span><span style="display:flex;"><span>    fig, ax <span style="color:#f92672">=</span> plt<span style="color:#f92672">.</span>subplots(figsize<span style="color:#f92672">=</span>(<span style="color:#ae81ff">2</span>,<span style="color:#ae81ff">2</span>))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># 绘制正方形</span>
+</span></span><span style="display:flex;"><span>    ax<span style="color:#f92672">.</span>set_aspect(<span style="color:#e6db74">&#39;equal&#39;</span>)
+</span></span><span style="display:flex;"><span>    ax<span style="color:#f92672">.</span>plot([<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>], [<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">0</span>], color<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;black&#39;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># 绘制圆</span>
+</span></span><span style="display:flex;"><span>    circle <span style="color:#f92672">=</span> plt<span style="color:#f92672">.</span>Circle((<span style="color:#ae81ff">0.5</span>, <span style="color:#ae81ff">0.5</span>), <span style="color:#ae81ff">0.5</span>, color<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;blue&#39;</span>, fill<span style="color:#f92672">=</span><span style="color:#66d9ef">False</span>)
+</span></span><span style="display:flex;"><span>    ax<span style="color:#f92672">.</span>add_patch(circle)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># 绘制点</span>
+</span></span><span style="display:flex;"><span>    ax<span style="color:#f92672">.</span>scatter(x_in, y_in, color<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;red&#39;</span>, s<span style="color:#f92672">=</span>s, label<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;Inside&#39;</span>)
+</span></span><span style="display:flex;"><span>    ax<span style="color:#f92672">.</span>scatter(x_out, y_out, color<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;green&#39;</span>, s<span style="color:#f92672">=</span>s, label<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;Outside&#39;</span>)
+</span></span><span style="display:flex;"><span>    ax<span style="color:#f92672">.</span>set_xticklabels([])
+</span></span><span style="display:flex;"><span>    ax<span style="color:#f92672">.</span>set_yticklabels([])
+</span></span><span style="display:flex;"><span>    ax<span style="color:#f92672">.</span>set_xticks([])
+</span></span><span style="display:flex;"><span>    ax<span style="color:#f92672">.</span>set_yticks([])
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> spine <span style="color:#f92672">in</span> ax<span style="color:#f92672">.</span>spines<span style="color:#f92672">.</span>values():
+</span></span><span style="display:flex;"><span>        spine<span style="color:#f92672">.</span>set_visible(<span style="color:#66d9ef">False</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># ax.legend()</span>
+</span></span><span style="display:flex;"><span>    plt<span style="color:#f92672">.</span>text(<span style="color:#ae81ff">0.8</span>, <span style="color:#ae81ff">1.05</span>, <span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;$\pi=</span><span style="color:#e6db74">{</span>pi<span style="color:#e6db74">}</span><span style="color:#e6db74">$&#34;</span>)
+</span></span><span style="display:flex;"><span>    plt<span style="color:#f92672">.</span>title(<span style="color:#e6db74">&#34;Pi (n=</span><span style="color:#e6db74">{}</span><span style="color:#e6db74">)&#34;</span><span style="color:#f92672">.</span>format(n))
+</span></span><span style="display:flex;"><span>    plt<span style="color:#f92672">.</span>show()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> pi
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 设置模拟点的数量</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># n = 1000</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 计算圆周率的估计值并进行可视化</span>
+</span></span><span style="display:flex;"><span>pi_estimate <span style="color:#f92672">=</span> monte_carlo_pi(n<span style="color:#f92672">=</span><span style="color:#ae81ff">10</span>, s<span style="color:#f92672">=</span><span style="color:#ae81ff">10</span>)
+</span></span><span style="display:flex;"><span>pi_estimate <span style="color:#f92672">=</span> monte_carlo_pi(n<span style="color:#f92672">=</span><span style="color:#ae81ff">100</span>, s<span style="color:#f92672">=</span><span style="color:#ae81ff">10</span>)
+</span></span><span style="display:flex;"><span>pi_estimate <span style="color:#f92672">=</span> monte_carlo_pi(n<span style="color:#f92672">=</span><span style="color:#ae81ff">1000</span>, s<span style="color:#f92672">=</span><span style="color:#ae81ff">5</span>)
+</span></span><span style="display:flex;"><span>pi_estimate <span style="color:#f92672">=</span> monte_carlo_pi(n<span style="color:#f92672">=</span><span style="color:#ae81ff">10000</span>, s<span style="color:#f92672">=</span><span style="color:#ae81ff">0.1</span>)
+</span></span><span style="display:flex;"><span>pi_estimate <span style="color:#f92672">=</span> monte_carlo_pi(n<span style="color:#f92672">=</span><span style="color:#ae81ff">100000</span>, s<span style="color:#f92672">=</span><span style="color:#ae81ff">0.1</span>)
+</span></span></code></pre></div><p>结果见下图</p>
+<p>![[贝叶斯优化和 MCMC_01.png]]</p>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+    </ul>
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+        <span>&copy; 2025 <a href="https://blog.qarhan.xyz/">汪子涛</a></span> · 
+
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+</body>
+
+</html>
