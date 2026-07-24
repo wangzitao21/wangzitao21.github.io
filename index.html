@@ -1,299 +1,96 @@
-<!DOCTYPE html>
-<html lang="zh" dir="auto">
-
+<!doctype html>
+<html lang="zh-CN">
 <head>
-	<meta name="generator" content="Hugo 0.148.2"><meta charset="utf-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta name="robots" content="index, follow">
-<title>汪子涛的个人网站</title>
-
-<meta name="description" content="">
-<meta name="author" content="">
-<link rel="canonical" href="https://blog.qarhan.xyz/">
-
-
-<script type="text/javascript" async
-    src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
-        MathJax.Hub.Config({
-            tex2jax: {
-                inlineMath: [['$', '$'], ['\\(', '\\)']],
-                displayMath: [['$$', '$$']],
-                processEscapes: true,
-                processEnvironments: true,
-                skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
-                TeX: {
-                    equationNumbers: { autoNumber: "AMS" },
-                    extensions: ["AMSmath.js", "AMSsymbols.js"]
-                }
-            }
-        });
-        MathJax.Hub.Queue(function () {
-            
-            
-            
-            var all = MathJax.Hub.getAllJax(), i;
-            for (i = 0; i < all.length; i += 1) {
-                all[i].SourceElement().parentNode.className += ' has-jax';
-            }
-        });
-        MathJax.Hub.Config({
-            
-            TeX: { equationNumbers: { autoNumber: "AMS" } }
-        });
-    </script>
-
-
-<link crossorigin="anonymous" href="/assets/css/stylesheet.css" rel="preload stylesheet" as="style">
-<link rel="icon" href="https://blog.qarhan.xyz/favicon.ico">
-<link rel="icon" type="image/png" sizes="16x16" href="https://blog.qarhan.xyz/favicon-16x16.png">
-<link rel="icon" type="image/png" sizes="32x32" href="https://blog.qarhan.xyz/favicon-32x32.png">
-<link rel="apple-touch-icon" href="https://blog.qarhan.xyz/apple-touch-icon.png">
-<link rel="mask-icon" href="https://blog.qarhan.xyz/safari-pinned-tab.svg">
-<meta name="theme-color" content="#2e2e33">
-<meta name="msapplication-TileColor" content="#2e2e33">
-<link rel="alternate" type="application/rss+xml" href="https://blog.qarhan.xyz/index.xml">
-<link rel="alternate" hreflang="zh" href="https://blog.qarhan.xyz/">
-<noscript>
-    <style>
-        #theme-toggle,
-        .top-link {
-            display: none;
-        }
-
-    </style>
-    <style>
-        @media (prefers-color-scheme: dark) {
-            :root {
-                --theme: rgb(29, 30, 32);
-                --entry: rgb(46, 46, 51);
-                --primary: rgb(218, 218, 219);
-                --secondary: rgb(155, 156, 157);
-                --tertiary: rgb(65, 66, 68);
-                --content: rgb(196, 196, 197);
-                --code-block-bg: rgb(46, 46, 51);
-                --code-bg: rgb(55, 56, 62);
-                --border: rgb(51, 51, 51);
-            }
-
-            .list {
-                background: var(--theme);
-            }
-
-            .list:not(.dark)::-webkit-scrollbar-track {
-                background: 0 0;
-            }
-
-            .list:not(.dark)::-webkit-scrollbar-thumb {
-                border-color: var(--theme);
-            }
-        }
-
-    </style>
-</noscript><meta property="og:url" content="https://blog.qarhan.xyz/">
-  <meta property="og:site_name" content="汪子涛的个人网站">
-  <meta property="og:title" content="汪子涛的个人网站">
-  <meta property="og:locale" content="zh-CN">
-  <meta property="og:type" content="website">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="汪子涛的个人网站">
-<meta name="twitter:description" content="">
-
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "Organization",
-  "name": "汪子涛的个人网站",
-  "url": "https://blog.qarhan.xyz/",
-  "description": "",
-  "logo": "https://blog.qarhan.xyz/favicon.ico",
-  "sameAs": [
-      
-  ]
-}
-</script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="林知远的个人学术主页" />
+  <title>林知远 · Academic Homepage</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Playfair+Display:wght@600;700&family=Source+Han+Serif+SC:wght@500;600;700&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root { --ink:#172228; --muted:#607076; --paper:#f7f6f2; --white:#fffefa; --line:#dbe1dc; --accent:#08676b; --soft:#e7f1ef; --gold:#c99748; }
+    * { box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body { margin:0; color:var(--ink); background:var(--paper); font-family:"Source Sans 3","Microsoft YaHei",sans-serif; font-size:16px; line-height:1.65; }
+    a { color:inherit; text-decoration:none; }
+    .layout { max-width:1240px; margin:auto; min-height:100vh; display:grid; grid-template-columns:310px minmax(0,1fr); background:var(--white); }
+    aside { padding:54px 38px; border-right:1px solid var(--line); background:#fbfbf8; }
+    .monogram { width:52px; height:52px; display:grid; place-items:center; color:white; background:var(--accent); font-family:"Playfair Display",serif; font-size:24px; font-weight:700; margin-bottom:29px; }
+    .name { margin:0; font:700 34px/1.16 "Source Han Serif SC",serif; letter-spacing:.03em; }
+    .name-en { margin:7px 0 24px; color:var(--accent); font:500 12px/1.3 "DM Mono",monospace; letter-spacing:.09em; text-transform:uppercase; }
+    .title { margin:0 0 24px; color:var(--muted); font-size:15px; line-height:1.55; }
+    .contact { padding:20px 0; border-top:1px solid var(--line); border-bottom:1px solid var(--line); }
+    .contact a, .contact button { display:flex; align-items:center; gap:9px; padding:5px 0; color:#395057; font:inherit; font-size:14px; text-align:left; border:0; background:none; cursor:pointer; }
+    .contact a:hover, .contact button:hover { color:var(--accent); }
+    .icon { width:17px; color:var(--accent); flex:none; }
+    nav { display:grid; gap:5px; margin-top:30px; }
+    .language-switch { display:flex; align-items:center; gap:7px; margin-top:25px; color:var(--muted); font:500 12px "DM Mono",monospace; }
+    .language-switch button { padding:5px 8px; color:var(--accent); border:1px solid #b9d0cb; background:transparent; font:500 12px "DM Mono",monospace; cursor:pointer; }
+    .language-switch button:hover { color:white; background:var(--accent); }
+    nav a { padding:7px 0; color:var(--muted); font:500 14px "DM Mono",monospace; }
+    nav a::before { content:"/"; color:var(--gold); margin-right:8px; opacity:0; transition:opacity .2s; }
+    nav a:hover, nav a.active { color:var(--accent); } nav a:hover::before, nav a.active::before { opacity:1; }
+    .side-foot { margin-top:42px; color:#94a09e; font:12px "DM Mono",monospace; }
+    main { padding:0 70px 55px; overflow:hidden; }
+    .hero { min-height:385px; padding:72px 0 50px; display:flex; align-items:center; position:relative; border-bottom:1px solid var(--line); }
+    .hero::after { content:""; position:absolute; width:340px; height:340px; right:-125px; top:-112px; border:1px solid #bdd5d0; border-radius:50%; box-shadow:0 0 0 36px #f3f7f4,0 0 0 37px #d7e6e1; opacity:.85; }
+    .hero-content { max-width:660px; position:relative; z-index:1; }
+    .eyebrow { color:var(--accent); font:500 12px "DM Mono",monospace; letter-spacing:.12em; text-transform:uppercase; }
+    .hero h1 { margin:14px 0 18px; max-width:620px; font:700 clamp(35px,4.1vw,58px)/1.25 "Source Han Serif SC",serif; letter-spacing:.015em; }
+    .hero p { max-width:610px; margin:0; color:#4e6066; font-size:18px; }
+    .stats { display:flex; gap:28px; margin-top:29px; }
+    .stat { padding-left:13px; border-left:2px solid var(--gold); }
+    .stat b { display:block; color:var(--accent); font:600 23px/1 "DM Mono",monospace; }.stat span { color:var(--muted); font-size:12px; }
+    section { padding:55px 0 10px; scroll-margin-top:15px; }
+    .section-title { display:flex; align-items:center; gap:13px; margin:0 0 25px; font:600 13px "DM Mono",monospace; letter-spacing:.1em; color:var(--accent); text-transform:uppercase; }
+    .section-title::after { content:""; height:1px; background:var(--line); flex:1; }
+    .bio { max-width:760px; margin:0; font-size:18px; }.bio strong { color:var(--accent); font-weight:600; }
+    .interests { display:flex; flex-wrap:wrap; gap:9px; margin-top:24px; }.tag { padding:6px 12px; border:1px solid #c9dad6; color:#356468; background:#f7fbfa; font-size:14px; }
+    .publication { display:grid; grid-template-columns:65px 1fr; gap:17px; padding:23px 0; border-top:1px solid var(--line); }
+    .publication:first-of-type { border-top:0; padding-top:0; }.year { color:var(--gold); font:500 14px "DM Mono",monospace; padding-top:3px; }
+    .pub-title { margin:0 0 5px; font-size:18px; font-weight:600; line-height:1.4; }.pub-title a:hover { color:var(--accent); text-decoration:underline; text-underline-offset:4px; }
+    .authors,.venue { margin:0; color:var(--muted); font-size:15px; }.authors b { color:var(--accent); font-weight:600; }.venue { font-style:italic; }
+    .pub-links { display:flex; gap:12px; margin-top:9px; }.pub-links a { color:var(--accent); font:500 12px "DM Mono",monospace; }.pub-links a:hover { color:var(--gold); }
+    .timeline { position:relative; }.timeline::before { content:""; position:absolute; top:8px; bottom:12px; left:69px; border-left:1px solid var(--line); }.entry { display:grid; grid-template-columns:88px 1fr; gap:18px; position:relative; padding:0 0 25px; }.entry-year { color:var(--gold); font:500 13px "DM Mono",monospace; }.entry-content { position:relative; }.entry-content::before { content:""; position:absolute; width:7px; height:7px; border-radius:50%; left:-22px; top:8px; background:var(--accent); }.entry h3 { margin:0; font-size:17px; }.entry p { margin:2px 0 0; color:var(--muted); font-size:15px; }
+    .news { display:grid; gap:0; }.news-item { display:grid; grid-template-columns:95px 1fr; gap:17px; padding:13px 0; border-top:1px solid var(--line); }.news-date { color:var(--gold); font:12px "DM Mono",monospace; padding-top:4px; }.news-item p { margin:0; }
+    footer { margin-top:38px; padding-top:23px; border-top:1px solid var(--line); color:#899593; font:12px "DM Mono",monospace; display:flex; justify-content:space-between; gap:15px; }
+    #toast { position:fixed; left:50%; bottom:25px; transform:translate(-50%, 90px); padding:10px 17px; color:white; background:var(--ink); border-radius:2px; font-size:14px; transition:transform .25s; z-index:9; } #toast.show { transform:translate(-50%,0); }
+    @media (max-width:800px) { .layout { display:block; }.layout aside { padding:27px 24px 23px; border-right:0; border-bottom:1px solid var(--line); }.monogram { float:left; margin:0 16px 0 0; width:45px; height:45px; font-size:21px; }.name { font-size:26px; }.name-en { margin:2px 0 0; font-size:11px; }.title { clear:both; padding-top:17px; margin-bottom:14px; }.contact { display:flex; gap:16px; padding:12px 0; }.contact a,.contact button { font-size:0; padding:2px; }.contact .icon { width:19px; } nav { display:none; }.language-switch { position:absolute; top:26px; right:24px; margin:0; }.language-switch span { display:none; }.language-switch button { font-size:12px; padding:5px 7px; } .side-foot { display:none; } main { padding:0 24px 34px; }.hero { min-height:0; padding:52px 0 42px; }.hero::after { width:210px; height:210px; right:-105px; top:-105px; box-shadow:0 0 0 23px #f3f7f4,0 0 0 24px #d7e6e1; }.hero h1 { font-size:35px; }.hero p { font-size:16px; }.stats { gap:17px; }.stat b { font-size:19px; } section { padding-top:42px; }.bio { font-size:16px; }.publication { grid-template-columns:48px 1fr; gap:10px; }.pub-title { font-size:16px; }.timeline::before { left:56px; }.entry { grid-template-columns:70px 1fr; gap:14px; }.entry-content::before { left:-18px; }.news-item { grid-template-columns:76px 1fr; gap:11px; } footer { display:block; } footer span + span { display:block; margin-top:3px; } }
+  </style>
 </head>
-
-<body class="list" id="top">
-<script>
-    if (localStorage.getItem("pref-theme") === "dark") {
-        document.body.classList.add('dark');
-    } else if (localStorage.getItem("pref-theme") === "light") {
-        document.body.classList.remove('dark')
-    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-        document.body.classList.add('dark');
-    }
-
-</script>
-
-<header class="header">
-    <nav class="nav">
-        <div class="logo">
-            <a href="https://blog.qarhan.xyz/" accesskey="h" title="汪子涛的个人网站 (Alt + H)">汪子涛的个人网站</a>
-            <div class="logo-switches">
-                <button id="theme-toggle" accesskey="t" title="(Alt + T)" aria-label="Toggle theme">
-                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
-                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                        stroke-linejoin="round">
-                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-                    </svg>
-                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
-                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                        stroke-linejoin="round">
-                        <circle cx="12" cy="12" r="5"></circle>
-                        <line x1="12" y1="1" x2="12" y2="3"></line>
-                        <line x1="12" y1="21" x2="12" y2="23"></line>
-                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-                        <line x1="1" y1="12" x2="3" y2="12"></line>
-                        <line x1="21" y1="12" x2="23" y2="12"></line>
-                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-                    </svg>
-                </button>
-            </div>
-        </div>
-        <ul id="menu">
-        </ul>
-    </nav>
-</header>
-<main class="main"> 
-<article class="first-entry home-info">
-    <header class="entry-header">
-        <h1></h1>
-    </header>
-    <div class="entry-content">
-        这里是我的个人网站，有一些我的个人笔记。
-    </div>
-    <footer class="entry-footer">
-        <div class="social-icons" >
-</div>
-
-    </footer>
-</article>
-
-<article class="post-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">贝叶斯优化和 MCMC
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>贝叶斯优化是一种全局优化方法，用于优化黑盒函数。
-定义目标函数，如准确率或损失值。 使用先验模型，如高斯过程，用于对给定的数据点进行目标函数代理建模。 根据先验模型和已观察到的数据点，选择采集函数。常用的采集函数包括期望改进（Expected Improvement, EI）和最大概率改进（Probability of Improvement, PI）。例如，EI的公式如下： $$ EI(x) = E[max(f(x)-f(x^&#43;), 0)] $$
-其中，f(x) 是目标函数，f(x&#43;) 是目前找到的最佳函数值。
-迭代优化。在每次迭代中，我们会通过采集函数选择一个采样点，然后在这个采样点处评估目标函数，得到一个新的观测值。这个新的观测值会被加入到我们的数据集中。然后，我们会使用这个更新后的数据集来更新我们的代理模型（也就是高斯过程模型）。这样，我们的代理模型就能够更好地反映目标函数的形状。 重复上述步骤。 ![[贝叶斯优化和 MCMC_00.png]]
-“查询点&#34;就是我们在下一次迭代中要评估的点256。在每次迭代中，我们都会根据采集函数来选择一个新的查询点，并计算其对应的目标函数值256。然后，我们会使用这个新的数据点来更新我们的先验模型256。在下一次迭代中，我们会再次选择一个新的查询点，并重复这个过程
-2 先验代理模型 高斯过程在贝叶斯优化中被用作代理模型。
-在贝叶斯优化中，我们的目标是优化一个昂贵的、难以评估的目标函数。
-由于直接优化这个函数可能非常困难，我们使用高斯过程来建立这个函数的代理模型。
-这个代理模型可以帮助我们理解目标函数的行为，并预测我们还未观察到的点的函数值。
-因此，你可以把高斯过程看作是在这里代理了目标函数。
-3 采集函数 期望改进（Expected Improvement, EI）是一种常用的采集函数。
-EI的主要思想是，在每次迭代中，选择那些能够最大化期望改进量的点进行评估。
-EI的公式如下：
-EI(x)=E[max(f(x)−f(x&#43;),0)]
-其中，f(x) 是目标函数，f(x&#43;) 是当前找到的最佳函数值。
-在每次迭代中，我们都会计算所有候选点的 EI 值，并选择 EI 值最大的点作为下一个查询点。
-这样，我们就可以在探索（寻找尚未评估的区域）和利用（寻找已知信息）之间取得平衡，从而有效地找到全局最优解
-蒙特卡洛 蒙特卡洛方法是一种随机模拟方法，通过大量随机样本的统计结果来估计问题的解。 在这个例子中，我们随机生成点，并统计落在圆内的点的比例，从而估计圆的面积。
-在一边长为1的正方形内绘制半径为0.5的圆，圆心位于正方形中心。 正方形面积为1，圆面积为 π·r 2 = π/4。 落在圆内点m的数量与圆面积成正比。 模拟点总数 n 与正方形的面积成正比。 由3、4得到圆内点的比例 m/n 近似等于圆的面积与正方形面积的比值，即 m/n≈(π/4)/1=π/4
-直接上代码
-import random import matplotlib.pyplot as plt def monte_carlo_pi(n, s=10): &#34;&#34;&#34; 使用蒙特卡洛方法估算圆周率，并可选地进行可视化. Args: n: 模拟点的数量. visualize: 是否进行可视化. Returns: 圆周率的估计值. &#34;&#34;&#34; in_circle_count = 0 x_in, y_in = [], [] # 圆内的点 x_out, y_out = [], [] # 圆外的点 for _ in range(n): x = random.uniform(0, 1) y = random.uniform(0, 1) distance = (x - 0.5)**2 &#43; (y - 0.5)**2 if distance &lt;= 0.25: in_circle_count &#43;= 1 x_in.append(x) y_in.append(y) else: x_out.append(x) y_out.append(y) pi = 4 * in_circle_count / n # 创建图形 fig, ax = plt.subplots(figsize=(2,2)) # 绘制正方形 ax.set_aspect(&#39;equal&#39;) ax.plot([0, 1, 1, 0, 0], [0, 0, 1, 1, 0], color=&#39;black&#39;) # 绘制圆 circle = plt.Circle((0.5, 0.5), 0.5, color=&#39;blue&#39;, fill=False) ax.add_patch(circle) # 绘制点 ax.scatter(x_in, y_in, color=&#39;red&#39;, s=s, label=&#39;Inside&#39;) ax.scatter(x_out, y_out, color=&#39;green&#39;, s=s, label=&#39;Outside&#39;) ax.set_xticklabels([]) ax.set_yticklabels([]) ax.set_xticks([]) ax.set_yticks([]) for spine in ax.spines.values(): spine.set_visible(False) # ax.legend() plt.text(0.8, 1.05, f&#34;$\pi={pi}$&#34;) plt.title(&#34;Pi (n={})&#34;.format(n)) plt.show() return pi # 设置模拟点的数量 # n = 1000 # 计算圆周率的估计值并进行可视化 pi_estimate = monte_carlo_pi(n=10, s=10) pi_estimate = monte_carlo_pi(n=100, s=10) pi_estimate = monte_carlo_pi(n=1000, s=5) pi_estimate = monte_carlo_pi(n=10000, s=0.1) pi_estimate = monte_carlo_pi(n=100000, s=0.1) 结果见下图
-...</p>
-  </div>
-  <footer class="entry-footer"><span title='2023-11-07 00:00:00 +0000 UTC'>2023/11/7</span></footer>
-  <a class="entry-link" aria-label="post link to 贝叶斯优化和 MCMC" href="https://blog.qarhan.xyz/posts/%E8%B4%9D%E5%8F%B6%E6%96%AF%E4%BC%98%E5%8C%96%E5%92%8C-mcmc/"></a>
-</article>
-
-<article class="post-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">地统计学确定性建模及随机建模
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>地统计学建模中包括确定性建模和随机建模。
-确定性建模是利用已知点给出确定的预测结果，如 Kriging 插值。
-随机建模可以建模多个结果并刻画空间的不确定性，如序贯高斯模拟。
-半变异函数/协方差矩阵 ![[地统计学确定性建模及随机建模_00.png]]
-nugget 是块金值，通常表示为 $c_0$。块金值指的是当点距离足够近 (趋近于 0) 的时候还会存在的极限值，理论上这个值应该为 0。 sill $(c_0&#43;c_1)$ 是基台值。它表示数据点差别最大 (也就是总方差) 时，能达到什么程度的值。去掉块金值后的 $c_1$ 称为偏基台值 (Partial Sill)，又称为结构化方差。 range 是变程，指半变异函数达到基台值时的空间。超过这个距离，空间自相关性基本消失，超过这个距离，点与点就基本没关系了，变量之间可以视为相互独立。 GSTools 的公式是：
-$$ \gamma(r) = \sigma^2\cdot (1 - cor(s \cdot\frac{r}{l})) &#43; n $$
-$\gamma(r)$ 是半变异函数，这里的 $r$ 就是我们之前用的滞后距离 $h$。 $\sigma^2$ 是方差 (Variance)。在 GSTools 公式中，$\sigma^2$ 指的是偏基台值 (Partial Sill)，即结构化方差部分，对应我们之前讨论的 $c_1$。它不是数据的总方差（基台值）。 $n$ 是块金值，对应 $c_0$。 cor(…) 归一化的相关函数 (Normalized Correlation Function)。这个函数的特点是 cor(0) = 1，并且随着距离的增加而减小（通常趋于0）。它描述了空间自相关的结构形式。 l: 主要相关长度 (Main correlation length)，与我们之前讨论的变程 a 相关。它定义了相关性衰减的特征距离。 s: 尺度因子 (Scaling factor)，用于单位转换或各向异性，使得 h = s * r / l 成为一个无量纲的距离。 $$ \rho(r) = \text{cor} \left(s \cdot \frac{r}{\ell}\right) $$
-...</p>
-  </div>
-  <footer class="entry-footer"><span title='2023-03-16 00:00:00 +0000 UTC'>2023/3/16</span></footer>
-  <a class="entry-link" aria-label="post link to 地统计学确定性建模及随机建模" href="https://blog.qarhan.xyz/posts/%E5%9C%B0%E7%BB%9F%E8%AE%A1%E5%AD%A6%E7%A1%AE%E5%AE%9A%E6%80%A7%E5%BB%BA%E6%A8%A1%E5%8F%8A%E9%9A%8F%E6%9C%BA%E5%BB%BA%E6%A8%A1/"></a>
-</article>
+<body>
+  <div class="layout">
+    <aside>
+      <div class="monogram">L</div><h1 class="name">林知远</h1><p class="name-en">Zhiyuan Lin</p>
+      <p class="title" data-i18n="title">助理教授 · 计算机科学<br>东海大学</p>
+      <div class="contact">
+        <button id="copy-email" title="复制邮箱" aria-label="复制邮箱"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>zhiyuan.lin@univ.edu</button>
+        <a href="#" title="Google Scholar" aria-label="Google Scholar"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m12 3 10 5-10 5L2 8l10-5Z"/><path d="M6 10.2V15c3.4 2.5 8.6 2.5 12 0v-4.8"/></svg>Google Scholar</a>
+        <a href="#" title="GitHub" aria-label="GitHub"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2a10 10 0 0 0-3.2 19.5c.5.1.7-.2.7-.5v-1.9c-2.8.6-3.4-1.2-3.4-1.2-.5-1.2-1.1-1.5-1.1-1.5-.9-.6.1-.6.1-.6 1 .1 1.5 1 1.5 1 .9 1.5 2.3 1.1 2.9.8.1-.6.4-1.1.7-1.3-2.2-.3-4.5-1.1-4.5-4.9 0-1.1.4-2 1-2.7-.1-.2-.4-1.3.1-2.7 0 0 .8-.3 2.8 1.1A9.7 9.7 0 0 1 12 6.8c.9 0 1.7.1 2.5.3 2-1.4 2.8-1.1 2.8-1.1.5 1.4.2 2.5.1 2.7.6.7 1 1.6 1 2.7 0 3.8-2.3 4.6-4.5 4.9.4.3.7.9.7 1.8V21c0 .3.2.6.7.5A10 10 0 0 0 12 2Z"/></svg>GitHub</a>
+      </div>
+      <nav><a class="active" href="#about" data-i18n="navAbout">关于我</a><a href="#publications" data-i18n="navPubs">研究成果</a><a href="#education" data-i18n="navEducation">教育经历</a><a href="#news" data-i18n="navNews">近期动态</a></nav>
+      <div class="language-switch"><span>LANGUAGE</span><button id="language-toggle" type="button" aria-label="切换至英文">EN</button></div>
+      <p class="side-foot" data-i18n="updated">LAST UPDATED · JUL 2026</p>
+    </aside>
+    <main>
+      <header class="hero" id="about"><div class="hero-content"><div class="eyebrow">Human-centered AI · 2026</div><h1 data-i18n="hero">让智能技术更理解人，也更服务于人。</h1><p data-i18n="heroText">我研究人与人工智能如何自然协作，致力于构建兼具可靠性、可解释性与包容性的智能交互系统。</p><div class="stats"><div class="stat"><b>12</b><span data-i18n="papers">发表论文</span></div><div class="stat"><b>1.8k</b><span data-i18n="citations">引用次数</span></div><div class="stat"><b>5</b><span data-i18n="projects">开源项目</span></div></div></div></header>
+      <section><h2 class="section-title">01 / <span data-i18n="about">About</span></h2><p class="bio" data-i18n="bio">你好！我是<strong>林知远</strong>，东海大学计算机科学系助理教授、智能交互实验室成员。博士毕业于清华大学，曾在新加坡国立大学担任博士后研究员。我尤其关心人们如何信任、理解并有效地使用人工智能。</p><div class="interests"><span class="tag" data-i18n="tag1">人机交互</span><span class="tag" data-i18n="tag2">可解释人工智能</span><span class="tag">AI for Education</span><span class="tag" data-i18n="tag4">协作式智能</span></div></section>
+      <section id="publications"><h2 class="section-title">02 / <span data-i18n="publications">Selected Publications</span></h2>
+        <article class="publication"><div class="year">2025</div><div><h3 class="pub-title"><a href="#">Designing Calibrated Trust in Everyday AI Assistants</a></h3><p class="authors"><b>Zhiyuan Lin</b>, Mengyao Chen, Alex Wong</p><p class="venue">CHI Conference on Human Factors in Computing Systems (CHI)</p><div class="pub-links"><a href="#">[PDF]</a><a href="#">[PROJECT]</a><a href="#">[CODE]</a></div></div></article>
+        <article class="publication"><div class="year">2024</div><div><h3 class="pub-title"><a href="#">Learning Together: A Framework for Human-AI Co-creation in Classrooms</a></h3><p class="authors">Yuhan Zhang, <b>Zhiyuan Lin</b>, Jian Li</p><p class="venue">ACM Transactions on Computer-Human Interaction (TOCHI)</p><div class="pub-links"><a href="#">[PDF]</a><a href="#">[VIDEO]</a></div></div></article>
+        <article class="publication"><div class="year">2023</div><div><h3 class="pub-title"><a href="#">Beyond Accuracy: Making Machine Learning Models Legible to Everyone</a></h3><p class="authors"><b>Zhiyuan Lin</b>, Rui Sun</p><p class="venue">International Conference on Learning Representations (ICLR)</p><div class="pub-links"><a href="#">[PDF]</a><a href="#">[CODE]</a></div></div></article>
+      </section>
+      <section id="education"><h2 class="section-title">03 / <span data-i18n="education">Education & Experience</span></h2><div class="timeline"><div class="entry"><div class="entry-year">2024 — <span data-i18n="now">Now</span></div><div class="entry-content"><h3 data-i18n="exp1">东海大学 · 助理教授</h3><p data-i18n="exp1d">计算机科学系 · 智能交互实验室</p></div></div><div class="entry"><div class="entry-year">2022 — 2024</div><div class="entry-content"><h3 data-i18n="exp2">新加坡国立大学 · 博士后研究员</h3><p data-i18n="exp2d">人机协作与智能系统组</p></div></div><div class="entry"><div class="entry-year">2017 — 2022</div><div class="entry-content"><h3 data-i18n="exp3">清华大学 · 计算机科学博士</h3><p data-i18n="exp3d">导师：李明教授 · 获优秀博士学位论文</p></div></div></div></section>
+      <section id="news"><h2 class="section-title">04 / <span data-i18n="news">News</span></h2><div class="news"><div class="news-item"><time class="news-date">2026.06</time><p data-i18n="news1">我们关于 AI 辅助学习的工作被 <em>TOCHI</em> 接收！</p></div><div class="news-item"><time class="news-date">2026.04</time><p data-i18n="news2">很高兴将在 CHI 2026 举办专题工作坊：<em>Designing for Human-AI Partnership</em>。</p></div><div class="news-item"><time class="news-date">2026.01</time><p data-i18n="news3">正在招收对人机交互与 AI 感兴趣的硕士、博士生，欢迎邮件联系。</p></div></div></section>
+      <footer><span>© 2026 ZHIYUAN LIN</span><span>BUILT WITH CURIOSITY &amp; CARE</span></footer>
     </main>
-    
-<footer class="footer">
-        <span>&copy; 2025 <a href="https://blog.qarhan.xyz/">汪子涛的个人网站</a></span> · 
-
-    <span>
-        Powered by
-        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
-        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
-    </span>
-</footer>
-<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
-        <path d="M12 6H0l6-6z" />
-    </svg>
-</a>
-
-<script>
-    let menu = document.getElementById('menu')
-    if (menu) {
-        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
-        menu.onscroll = function () {
-            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
-        }
-    }
-
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener("click", function (e) {
-            e.preventDefault();
-            var id = this.getAttribute("href").substr(1);
-            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
-                    behavior: "smooth"
-                });
-            } else {
-                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
-            }
-            if (id === "top") {
-                history.replaceState(null, null, " ");
-            } else {
-                history.pushState(null, null, `#${id}`);
-            }
-        });
-    });
-
-</script>
-<script>
-    var mybutton = document.getElementById("top-link");
-    window.onscroll = function () {
-        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
-            mybutton.style.visibility = "visible";
-            mybutton.style.opacity = "1";
-        } else {
-            mybutton.style.visibility = "hidden";
-            mybutton.style.opacity = "0";
-        }
-    };
-
-</script>
-<script>
-    document.getElementById("theme-toggle").addEventListener("click", () => {
-        if (document.body.className.includes("dark")) {
-            document.body.classList.remove('dark');
-            localStorage.setItem("pref-theme", 'light');
-        } else {
-            document.body.classList.add('dark');
-            localStorage.setItem("pref-theme", 'dark');
-        }
-    })
-
-</script>
+  </div><div id="toast" role="status">邮箱已复制</div>
+  <script>
+    const translations={en:{title:'Assistant Professor · Computer Science<br>Eastlake University',navAbout:'About',navPubs:'Publications',navEducation:'Education',navNews:'News',updated:'LAST UPDATED · JUL 2026',hero:'Making intelligent technology more human—and more helpful.',heroText:'I study how people and artificial intelligence can collaborate naturally, building interactive systems that are reliable, interpretable, and inclusive.',papers:'Publications',citations:'Citations',projects:'Open-source projects',about:'About',bio:'Hello! I am <strong>Zhiyuan Lin</strong>, an Assistant Professor in the Department of Computer Science at Eastlake University and a member of the Intelligent Interaction Lab. I received my PhD from Tsinghua University and was a postdoctoral researcher at the National University of Singapore. I care deeply about how people can trust, understand, and use AI effectively.',tag1:'Human-Computer Interaction',tag2:'Explainable AI',tag4:'Collaborative Intelligence',publications:'Selected Publications',education:'Education & Experience',now:'Present',exp1:'Eastlake University · Assistant Professor',exp1d:'Department of Computer Science · Intelligent Interaction Lab',exp2:'National University of Singapore · Postdoctoral Researcher',exp2d:'Human-AI Collaboration & Intelligent Systems Group',exp3:'Tsinghua University · PhD in Computer Science',exp3d:'Advisor: Prof. Ming Li · Outstanding Doctoral Dissertation',news:'News',news1:'Our work on AI-assisted learning has been accepted to <em>TOCHI</em>!',news2:'Excited to organize a workshop at CHI 2026: <em>Designing for Human-AI Partnership</em>.',news3:'I am recruiting master’s and PhD students interested in HCI and AI. Please get in touch by email.'},zh:{title:'助理教授 · 计算机科学<br>东海大学',navAbout:'关于我',navPubs:'研究成果',navEducation:'教育经历',navNews:'近期动态',updated:'最后更新 · 2026年7月',hero:'让智能技术更理解人，也更服务于人。',heroText:'我研究人与人工智能如何自然协作，致力于构建兼具可靠性、可解释性与包容性的智能交互系统。',papers:'发表论文',citations:'引用次数',projects:'开源项目',about:'关于我',bio:'你好！我是<strong>林知远</strong>，东海大学计算机科学系助理教授、智能交互实验室成员。博士毕业于清华大学，曾在新加坡国立大学担任博士后研究员。我尤其关心人们如何信任、理解并有效地使用人工智能。',tag1:'人机交互',tag2:'可解释人工智能',tag4:'协作式智能',publications:'精选论文',education:'教育经历与工作经验',now:'至今',exp1:'东海大学 · 助理教授',exp1d:'计算机科学系 · 智能交互实验室',exp2:'新加坡国立大学 · 博士后研究员',exp2d:'人机协作与智能系统组',exp3:'清华大学 · 计算机科学博士',exp3d:'导师：李明教授 · 获优秀博士学位论文',news:'近期动态',news1:'我们关于 AI 辅助学习的工作被 <em>TOCHI</em> 接收！',news2:'很高兴将在 CHI 2026 举办专题工作坊：<em>Designing for Human-AI Partnership</em>。',news3:'正在招收对人机交互与 AI 感兴趣的硕士、博士生，欢迎邮件联系。'}};
+    let lang='zh'; const langButton=document.getElementById('language-toggle'); langButton.addEventListener('click',()=>{lang=lang==='zh'?'en':'zh'; document.documentElement.lang=lang==='zh'?'zh-CN':'en'; document.querySelectorAll('[data-i18n]').forEach(el=>el.innerHTML=translations[lang][el.dataset.i18n]); langButton.textContent=lang==='zh'?'EN':'中文'; langButton.setAttribute('aria-label',lang==='zh'?'切换至英文':'Switch to Chinese'); document.title=lang==='zh'?'林知远 · Academic Homepage':'Zhiyuan Lin · Academic Homepage';});
+    document.getElementById('copy-email').addEventListener('click', async () => { try { await navigator.clipboard.writeText('zhiyuan.lin@univ.edu'); } catch(e) {} const t=document.getElementById('toast'); t.textContent=lang==='zh'?'邮箱已复制':'Email copied'; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'), 1800); });
+    const links=[...document.querySelectorAll('nav a')]; const sections=links.map(a=>document.querySelector(a.getAttribute('href'))).filter(Boolean); new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting){links.forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+e.target.id))}}),{rootMargin:'-35% 0px -55% 0px'}).observe(sections[0]); sections.slice(1).forEach(s=>new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting)links.forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+e.target.id))}),{rootMargin:'-35% 0px -55% 0px'}).observe(s));
+  </script>
 </body>
-
 </html>
