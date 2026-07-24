@@ -278,33 +278,31 @@
         background: #f7fbfa;
         font-size: 14px;
       }
-      .publication {
+      .publication,
+      .project {
         display: grid;
-        grid-template-columns: 65px 1fr;
-        gap: 17px;
         padding: 23px 0;
         border-top: 1px solid var(--line);
       }
-      .publication:first-of-type {
+      .publication {
+        grid-template-columns: 65px 1fr;
+        gap: 17px;
+      }
+      .publication:first-of-type,
+      .project:first-of-type {
         border-top: 0;
         padding-top: 0;
       }
       .project {
-        display: grid;
         grid-template-columns: 115px 1fr;
         gap: 17px;
-        padding: 23px 0;
-        border-top: 1px solid var(--line);
-      }
-      .project:first-of-type {
-        border-top: 0;
-        padding-top: 0;
       }
       .project-meta {
         color: var(--gold);
         font: 500 13px/1.55 "DM Mono", monospace;
       }
-      .project-title {
+      .project-title,
+      .pub-title {
         margin: 0 0 5px;
         font-size: 18px;
         font-weight: 600;
@@ -319,12 +317,6 @@
         color: var(--gold);
         font: 500 14px "DM Mono", monospace;
         padding-top: 3px;
-      }
-      .pub-title {
-        margin: 0 0 5px;
-        font-size: 18px;
-        font-weight: 600;
-        line-height: 1.4;
       }
       .pub-title a:hover {
         color: var(--accent);
@@ -599,6 +591,22 @@
               <path d="m3 7 9 6 9-6" /></svg
             >zitao.wang@aust.edu.cn
           </button>
+          <button
+            id="copy-google-email"
+            title="Copy Google email"
+            aria-label="Copy Google email"
+          >
+            <svg
+              class="icon"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+            >
+              <rect x="3" y="5" width="18" height="14" rx="2" />
+              <path d="m3 7 9 6 9-6" /></svg
+            >zitao.waung@gmail.com
+          </button>
           <a
             href="https://scholar.google.com/citations?user=aIXhXM4AAAAJ"
             title="Google Scholar"
@@ -613,6 +621,24 @@
               <path d="m12 3 10 5-10 5L2 8l10-5Z" />
               <path d="M6 10.2V15c3.4 2.5 8.6 2.5 12 0v-4.8" /></svg
             >Google Scholar</a
+          >
+          <a
+            href="https://orcid.org/0000-0002-7776-4282"
+            title="ORCID"
+            aria-label="ORCID"
+            ><svg
+              class="icon"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+            >
+              <circle cx="12" cy="12" r="9" />
+              <circle cx="8" cy="8" r="1" fill="currentColor" stroke="none" />
+              <path
+                d="M8 11v5M11 11v5M11 11h2.2a2.5 2.5 0 0 0 0-5H11M15 11v5"
+              /></svg
+            >ORCID</a
           >
           <a
             href="https://github.com/wangzitao21"
@@ -654,7 +680,7 @@
               探索地下水系统过程，服务水资源的可持续利用。
             </h1>
             <p data-i18n="heroText">
-              我关注盐湖地下卤水的反应运移过程，并结合数值模拟与数据驱动方法开展水文地质研究。
+              我主要关注盐湖地下卤水的反应运移过程，并结合数值模拟与数据驱动方法开展水文地质研究。
             </p>
             <div class="stats">
               <div class="stat">
@@ -664,7 +690,7 @@
                 <b>0.2k</b><span data-i18n="citations">引用次数</span>
               </div>
               <div class="stat">
-                <b>1</b><span data-i18n="projects">科研项目</span>
+                <b>5</b><span data-i18n="projects">科研项目</span>
               </div>
             </div>
           </div>
@@ -718,7 +744,7 @@
             <div class="project-meta" data-i18n="project3Period">2025–2026</div>
             <div>
               <h3 class="project-title" data-i18n="project3Title">
-                国家资助博士后研究人员计划 C 档（No. GZC20250302）
+                国家资助博士后研究人员计划 C 档 (No. GZC20250302)
               </h3>
               <p class="project-detail" data-i18n="project3Detail">
                 主持 · 已结题
@@ -783,8 +809,7 @@
                 >
               </h3>
               <p class="authors">
-                Dongmei Yu, <b>Zitao Wang</b
-                ><a href="mailto:zitao.wang@aust.edu.cn" title="Email"></a>
+                Dongmei Yu, <b>Zitao Wang</b>, Yue Chao, Jianping Wang
               </p>
               <p class="venue">Journal of Hydrology: Regional Studies</p>
               <div class="pub-links">
@@ -887,7 +912,7 @@
           project1Detail: "Principal Investigator · Ongoing · RMB 300,000",
           project2Period: "2024.12–2026.06",
           project2Title:
-            "China Postdoctoral Science Foundation (No. 2024M760016): Solid–liquid transformation mechanisms and reactive transport of potash–lithium deposits under artificial solution mining",
+            "China Postdoctoral Science Foundation (No. 2024M760016): Solid-liquid transformation mechanisms and reactive transport of potash–lithium deposits under artificial solution mining",
           project2Detail: "Principal Investigator · Completed · RMB 80,000",
           project3Period: "2025–2026",
           project3Title:
@@ -932,14 +957,14 @@
           researchProjects: "主持科研项目",
           project1Period: "2026.01–2028.12",
           project1Title:
-            "国家自然科学基金青年项目：盐湖卤水含水层动态演化及优势渗流通道形成机制研究（42502241）",
+            "国家自然科学基金青年项目 (No. 42502241)：盐湖卤水含水层动态演化及优势渗流通道形成机制研究",
           project1Detail: "主持 · 在研 · 30 万元",
           project2Period: "2024.12–2026.06",
           project2Title:
-            "中国博士后科学基金面上项目：人工驱动溶采下盐湖钾锂矿床固液转换机理及反应运移规律研究（2024M760016）",
+            "中国博士后科学基金面上项目 (No. 2024M760016)：人工驱动溶采下盐湖钾锂矿床固液转换机理及反应运移规律研究",
           project2Detail: "主持 · 已结题 · 8 万元",
           project3Period: "2025–2026",
-          project3Title: "国家资助博士后研究人员计划 C 档（No. GZC20250302）",
+          project3Title: "国家资助博士后研究人员计划 C 档 (No. GZC20250302)",
           project3Detail: "主持 · 已结题",
           publications: "精选论文",
           education: "教育经历与工作经验",
@@ -1007,50 +1032,46 @@
       window.addEventListener("popstate", () =>
         applyLanguage(languageFromPath())
       );
-      document
-        .getElementById("copy-email")
-        .addEventListener("click", async () => {
+      const showToast = (message) => {
+        const toast = document.getElementById("toast");
+        toast.textContent = message;
+        toast.classList.add("show");
+        setTimeout(() => toast.classList.remove("show"), 1800);
+      };
+      const enableEmailCopy = (id, email, toastMessage) => {
+        document.getElementById(id).addEventListener("click", async () => {
           try {
-            await navigator.clipboard.writeText("zitao.wang@aust.edu.cn");
+            await navigator.clipboard.writeText(email);
           } catch (e) {}
-          const t = document.getElementById("toast");
-          t.textContent = lang === "zh" ? "邮箱已复制" : "Email copied";
-          t.classList.add("show");
-          setTimeout(() => t.classList.remove("show"), 1800);
+          showToast(toastMessage());
         });
+      };
+      enableEmailCopy("copy-email", "zitao.wang@aust.edu.cn", () =>
+        lang === "zh" ? "邮箱已复制" : "Email copied"
+      );
+      enableEmailCopy(
+        "copy-google-email",
+        "zitao.wang.research@gmail.com",
+        () => "Email copied"
+      );
       const links = [...document.querySelectorAll("nav a")];
       const sections = links
         .map((a) => document.querySelector(a.getAttribute("href")))
         .filter(Boolean);
-      new IntersectionObserver(
-        (entries) =>
-          entries.forEach((e) => {
-            if (e.isIntersecting) {
-              links.forEach((a) =>
-                a.classList.toggle(
-                  "active",
-                  a.getAttribute("href") === "#" + e.target.id
-                )
-              );
-            }
-          }),
-        { rootMargin: "-35% 0px -55% 0px" }
-      ).observe(sections[0]);
-      sections.slice(1).forEach((s) =>
-        new IntersectionObserver(
-          (entries) =>
-            entries.forEach((e) => {
-              if (e.isIntersecting)
-                links.forEach((a) =>
-                  a.classList.toggle(
-                    "active",
-                    a.getAttribute("href") === "#" + e.target.id
-                  )
-                );
-            }),
-          { rootMargin: "-35% 0px -55% 0px" }
-        ).observe(s)
-      );
+      const updateActiveLink = (entries) =>
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          links.forEach((link) =>
+            link.classList.toggle(
+              "active",
+              link.getAttribute("href") === `#${entry.target.id}`
+            )
+          );
+        });
+      const sectionObserver = new IntersectionObserver(updateActiveLink, {
+        rootMargin: "-35% 0px -55% 0px",
+      });
+      sections.forEach((section) => sectionObserver.observe(section));
     </script>
   </body>
 </html>
