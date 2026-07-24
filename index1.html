@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -88,26 +88,7 @@
   </div><div id="toast" role="status">邮箱已复制</div>
   <script>
     const translations={en:{title:'Assistant Professor · Computer Science<br>Eastlake University',navAbout:'About',navPubs:'Publications',navEducation:'Education',navNews:'News',updated:'LAST UPDATED · JUL 2026',hero:'Making intelligent technology more human—and more helpful.',heroText:'I study how people and artificial intelligence can collaborate naturally, building interactive systems that are reliable, interpretable, and inclusive.',papers:'Publications',citations:'Citations',projects:'Open-source projects',about:'About',bio:'Hello! I am <strong>Zhiyuan Lin</strong>, an Assistant Professor in the Department of Computer Science at Eastlake University and a member of the Intelligent Interaction Lab. I received my PhD from Tsinghua University and was a postdoctoral researcher at the National University of Singapore. I care deeply about how people can trust, understand, and use AI effectively.',tag1:'Human-Computer Interaction',tag2:'Explainable AI',tag4:'Collaborative Intelligence',publications:'Selected Publications',education:'Education & Experience',now:'Present',exp1:'Eastlake University · Assistant Professor',exp1d:'Department of Computer Science · Intelligent Interaction Lab',exp2:'National University of Singapore · Postdoctoral Researcher',exp2d:'Human-AI Collaboration & Intelligent Systems Group',exp3:'Tsinghua University · PhD in Computer Science',exp3d:'Advisor: Prof. Ming Li · Outstanding Doctoral Dissertation',news:'News',news1:'Our work on AI-assisted learning has been accepted to <em>TOCHI</em>!',news2:'Excited to organize a workshop at CHI 2026: <em>Designing for Human-AI Partnership</em>.',news3:'I am recruiting master’s and PhD students interested in HCI and AI. Please get in touch by email.'},zh:{title:'助理教授 · 计算机科学<br>东海大学',navAbout:'关于我',navPubs:'研究成果',navEducation:'教育经历',navNews:'近期动态',updated:'最后更新 · 2026年7月',hero:'让智能技术更理解人，也更服务于人。',heroText:'我研究人与人工智能如何自然协作，致力于构建兼具可靠性、可解释性与包容性的智能交互系统。',papers:'发表论文',citations:'引用次数',projects:'开源项目',about:'关于我',bio:'你好！我是<strong>林知远</strong>，东海大学计算机科学系助理教授、智能交互实验室成员。博士毕业于清华大学，曾在新加坡国立大学担任博士后研究员。我尤其关心人们如何信任、理解并有效地使用人工智能。',tag1:'人机交互',tag2:'可解释人工智能',tag4:'协作式智能',publications:'精选论文',education:'教育经历与工作经验',now:'至今',exp1:'东海大学 · 助理教授',exp1d:'计算机科学系 · 智能交互实验室',exp2:'新加坡国立大学 · 博士后研究员',exp2d:'人机协作与智能系统组',exp3:'清华大学 · 计算机科学博士',exp3d:'导师：李明教授 · 获优秀博士学位论文',news:'近期动态',news1:'我们关于 AI 辅助学习的工作被 <em>TOCHI</em> 接收！',news2:'很高兴将在 CHI 2026 举办专题工作坊：<em>Designing for Human-AI Partnership</em>。',news3:'正在招收对人机交互与 AI 感兴趣的硕士、博士生，欢迎邮件联系。'}};
-    let lang;
-    const langButton=document.getElementById('language-toggle');
-    const languageFromPath=()=>location.pathname.replace(/\/+$/, '').endsWith('/cn')?'zh':'en';
-    const languagePath=language=>{
-      const base=location.pathname.replace(/\/(?:en|cn)\/?$/, '') || '/';
-      return `${base}${base.endsWith('/')?'':'/'}${language==='zh'?'cn':'en'}`;
-    };
-    function applyLanguage(nextLanguage, updateUrl=false) {
-      lang=nextLanguage;
-      document.documentElement.lang=lang==='zh'?'zh-CN':'en';
-      document.querySelectorAll('[data-i18n]').forEach(el=>el.innerHTML=translations[lang][el.dataset.i18n]);
-      langButton.textContent=lang==='zh'?'EN':'中文';
-      langButton.setAttribute('aria-label',lang==='zh'?'Switch to English':'Switch to Chinese');
-      document.title=lang==='zh'?'林知远 · Academic Homepage':'Zhiyuan Lin · Academic Homepage';
-      if(updateUrl) history.pushState({lang}, '', languagePath(lang)+location.search+location.hash);
-    }
-    // The root URL is normalized to /en so the default language is shareable too.
-    applyLanguage(languageFromPath(), !/\/(?:en|cn)\/?$/.test(location.pathname));
-    langButton.addEventListener('click',()=>applyLanguage(lang==='zh'?'en':'zh', true));
-    window.addEventListener('popstate',()=>applyLanguage(languageFromPath()));
+    let lang='zh'; const langButton=document.getElementById('language-toggle'); langButton.addEventListener('click',()=>{lang=lang==='zh'?'en':'zh'; document.documentElement.lang=lang==='zh'?'zh-CN':'en'; document.querySelectorAll('[data-i18n]').forEach(el=>el.innerHTML=translations[lang][el.dataset.i18n]); langButton.textContent=lang==='zh'?'EN':'中文'; langButton.setAttribute('aria-label',lang==='zh'?'切换至英文':'Switch to Chinese'); document.title=lang==='zh'?'林知远 · Academic Homepage':'Zhiyuan Lin · Academic Homepage';});
     document.getElementById('copy-email').addEventListener('click', async () => { try { await navigator.clipboard.writeText('zhiyuan.lin@univ.edu'); } catch(e) {} const t=document.getElementById('toast'); t.textContent=lang==='zh'?'邮箱已复制':'Email copied'; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'), 1800); });
     const links=[...document.querySelectorAll('nav a')]; const sections=links.map(a=>document.querySelector(a.getAttribute('href'))).filter(Boolean); new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting){links.forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+e.target.id))}}),{rootMargin:'-35% 0px -55% 0px'}).observe(sections[0]); sections.slice(1).forEach(s=>new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting)links.forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+e.target.id))}),{rootMargin:'-35% 0px -55% 0px'}).observe(s));
   </script>
