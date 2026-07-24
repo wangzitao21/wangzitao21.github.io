@@ -1,119 +1,1056 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="林知远的个人学术主页" />
-  <title>林知远 · Academic Homepage</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Playfair+Display:wght@600;700&family=Source+Han+Serif+SC:wght@500;600;700&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet" />
-  <style>
-    :root { --ink:#172228; --muted:#607076; --paper:#f7f6f2; --white:#fffefa; --line:#dbe1dc; --accent:#08676b; --soft:#e7f1ef; --gold:#c99748; }
-    * { box-sizing:border-box; }
-    html { scroll-behavior:smooth; }
-    body { margin:0; color:var(--ink); background:var(--paper); font-family:"Source Sans 3","Microsoft YaHei",sans-serif; font-size:16px; line-height:1.65; }
-    a { color:inherit; text-decoration:none; }
-    .layout { max-width:1240px; margin:auto; min-height:100vh; display:grid; grid-template-columns:310px minmax(0,1fr); background:var(--white); }
-    aside { padding:54px 38px; border-right:1px solid var(--line); background:#fbfbf8; }
-    .monogram { width:52px; height:52px; display:grid; place-items:center; color:white; background:var(--accent); font-family:"Playfair Display",serif; font-size:24px; font-weight:700; margin-bottom:29px; }
-    .name { margin:0; font:700 34px/1.16 "Source Han Serif SC",serif; letter-spacing:.03em; }
-    .name-en { margin:7px 0 24px; color:var(--accent); font:500 12px/1.3 "DM Mono",monospace; letter-spacing:.09em; text-transform:uppercase; }
-    aside.is-en .identity { display:flex; flex-direction:column; }
-    aside.is-en .name-en { order:1; margin:0 0 7px; color:var(--ink); font:700 34px/1.16 "Playfair Display",serif; letter-spacing:.01em; text-transform:none; }
-    aside.is-en .name { order:2; margin:0 0 24px; color:var(--accent); font:500 16px/1.35 "Source Han Serif SC",serif; letter-spacing:.09em; }
-    .title { margin:0 0 24px; color:var(--muted); font-size:15px; line-height:1.55; }
-    .contact { padding:20px 0; border-top:1px solid var(--line); border-bottom:1px solid var(--line); }
-    .contact a, .contact button { display:flex; align-items:center; gap:9px; padding:5px 0; color:#395057; font:inherit; font-size:14px; text-align:left; border:0; background:none; cursor:pointer; }
-    .contact a:hover, .contact button:hover { color:var(--accent); }
-    .icon { width:17px; color:var(--accent); flex:none; }
-    nav { display:grid; gap:5px; margin-top:30px; }
-    .language-switch { display:flex; align-items:center; gap:7px; margin-top:25px; color:var(--muted); font:500 12px "DM Mono",monospace; }
-    .language-switch button { padding:5px 8px; color:var(--accent); border:1px solid #b9d0cb; background:transparent; font:500 12px "DM Mono",monospace; cursor:pointer; }
-    .language-switch button:hover { color:white; background:var(--accent); }
-    nav a { padding:7px 0; color:var(--muted); font:500 14px "DM Mono",monospace; }
-    nav a::before { content:"/"; color:var(--gold); margin-right:8px; opacity:0; transition:opacity .2s; }
-    nav a:hover, nav a.active { color:var(--accent); } nav a:hover::before, nav a.active::before { opacity:1; }
-    .side-foot { margin-top:42px; color:#94a09e; font:12px "DM Mono",monospace; }
-    main { padding:0 70px 55px; overflow:hidden; }
-    .hero { min-height:385px; padding:72px 0 50px; display:flex; align-items:center; position:relative; border-bottom:1px solid var(--line); }
-    .hero::after { content:""; position:absolute; width:340px; height:340px; right:-125px; top:-112px; border:1px solid #bdd5d0; border-radius:50%; box-shadow:0 0 0 36px #f3f7f4,0 0 0 37px #d7e6e1; opacity:.85; }
-    .hero-content { max-width:660px; position:relative; z-index:1; }
-    .eyebrow { color:var(--accent); font:500 12px "DM Mono",monospace; letter-spacing:.12em; text-transform:uppercase; }
-    .hero h1 { margin:14px 0 18px; max-width:620px; font:700 clamp(35px,4.1vw,58px)/1.25 "Source Han Serif SC",serif; letter-spacing:.015em; }
-    .hero p { max-width:610px; margin:0; color:#4e6066; font-size:18px; }
-    .stats { display:flex; gap:28px; margin-top:29px; }
-    .stat { padding-left:13px; border-left:2px solid var(--gold); }
-    .stat b { display:block; color:var(--accent); font:600 23px/1 "DM Mono",monospace; }.stat span { color:var(--muted); font-size:12px; }
-    section { padding:55px 0 10px; scroll-margin-top:15px; }
-    .section-title { display:flex; align-items:center; gap:13px; margin:0 0 25px; font:600 13px "DM Mono",monospace; letter-spacing:.1em; color:var(--accent); text-transform:uppercase; }
-    .section-title::after { content:""; height:1px; background:var(--line); flex:1; }
-    .bio { max-width:760px; margin:0; font-size:18px; }.bio strong { color:var(--accent); font-weight:600; }
-    .interests { display:flex; flex-wrap:wrap; gap:9px; margin-top:24px; }.tag { padding:6px 12px; border:1px solid #c9dad6; color:#356468; background:#f7fbfa; font-size:14px; }
-    .publication { display:grid; grid-template-columns:65px 1fr; gap:17px; padding:23px 0; border-top:1px solid var(--line); }
-    .publication:first-of-type { border-top:0; padding-top:0; }.year { color:var(--gold); font:500 14px "DM Mono",monospace; padding-top:3px; }
-    .pub-title { margin:0 0 5px; font-size:18px; font-weight:600; line-height:1.4; }.pub-title a:hover { color:var(--accent); text-decoration:underline; text-underline-offset:4px; }
-    .authors,.venue { margin:0; color:var(--muted); font-size:15px; }.authors b { color:var(--accent); font-weight:600; }.venue { font-style:italic; }
-    .pub-links { display:flex; gap:12px; margin-top:9px; }.pub-links a { color:var(--accent); font:500 12px "DM Mono",monospace; }.pub-links a:hover { color:var(--gold); }
-    .timeline { position:relative; }.timeline::before { content:""; position:absolute; top:8px; bottom:12px; left:69px; border-left:1px solid var(--line); }.entry { display:grid; grid-template-columns:88px 1fr; gap:18px; position:relative; padding:0 0 25px; }.entry-year { color:var(--gold); font:500 13px "DM Mono",monospace; }.entry-content { position:relative; }.entry-content::before { content:""; position:absolute; width:7px; height:7px; border-radius:50%; left:-22px; top:8px; background:var(--accent); }.entry h3 { margin:0; font-size:17px; }.entry p { margin:2px 0 0; color:var(--muted); font-size:15px; }
-    .news { display:grid; gap:0; }.news-item { display:grid; grid-template-columns:95px 1fr; gap:17px; padding:13px 0; border-top:1px solid var(--line); }.news-date { color:var(--gold); font:12px "DM Mono",monospace; padding-top:4px; }.news-item p { margin:0; }
-    footer { margin-top:38px; padding-top:23px; border-top:1px solid var(--line); color:#899593; font:12px "DM Mono",monospace; display:flex; justify-content:space-between; gap:15px; }
-    #toast { position:fixed; left:50%; bottom:25px; transform:translate(-50%, 90px); padding:10px 17px; color:white; background:var(--ink); border-radius:2px; font-size:14px; transition:transform .25s; z-index:9; } #toast.show { transform:translate(-50%,0); }
-    @media (max-width:800px) { .layout { display:block; }.layout aside { padding:27px 24px 23px; border-right:0; border-bottom:1px solid var(--line); }.monogram { float:left; margin:0 16px 0 0; width:45px; height:45px; font-size:21px; }.name { font-size:26px; }.name-en { margin:2px 0 0; font-size:11px; } aside.is-en .name-en { margin:0 0 2px; font-size:26px; } aside.is-en .name { margin:0; font-size:14px; }.title { clear:both; padding-top:17px; margin-bottom:14px; }.contact { display:flex; gap:16px; padding:12px 0; }.contact a,.contact button { font-size:0; padding:2px; }.contact .icon { width:19px; } nav { display:none; }.language-switch { position:absolute; top:26px; right:24px; margin:0; }.language-switch span { display:none; }.language-switch button { font-size:12px; padding:5px 7px; } .side-foot { display:none; } main { padding:0 24px 34px; }.hero { min-height:0; padding:52px 0 42px; }.hero::after { width:210px; height:210px; right:-105px; top:-105px; box-shadow:0 0 0 23px #f3f7f4,0 0 0 24px #d7e6e1; }.hero h1 { font-size:35px; }.hero p { font-size:16px; }.stats { gap:17px; }.stat b { font-size:19px; } section { padding-top:42px; }.bio { font-size:16px; }.publication { grid-template-columns:48px 1fr; gap:10px; }.pub-title { font-size:16px; }.timeline::before { left:56px; }.entry { grid-template-columns:70px 1fr; gap:14px; }.entry-content::before { left:-18px; }.news-item { grid-template-columns:76px 1fr; gap:11px; } footer { display:block; } footer span + span { display:block; margin-top:3px; } }
-  </style>
-</head>
-<body>
-  <div class="layout">
-    <aside>
-      <div class="monogram">L</div><div class="identity"><h1 class="name">林知远</h1><p class="name-en">Zhiyuan Lin</p></div>
-      <p class="title" data-i18n="title">助理教授 · 计算机科学<br>东海大学</p>
-      <div class="contact">
-        <button id="copy-email" title="复制邮箱" aria-label="复制邮箱"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>zhiyuan.lin@univ.edu</button>
-        <a href="#" title="Google Scholar" aria-label="Google Scholar"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m12 3 10 5-10 5L2 8l10-5Z"/><path d="M6 10.2V15c3.4 2.5 8.6 2.5 12 0v-4.8"/></svg>Google Scholar</a>
-        <a href="#" title="GitHub" aria-label="GitHub"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2a10 10 0 0 0-3.2 19.5c.5.1.7-.2.7-.5v-1.9c-2.8.6-3.4-1.2-3.4-1.2-.5-1.2-1.1-1.5-1.1-1.5-.9-.6.1-.6.1-.6 1 .1 1.5 1 1.5 1 .9 1.5 2.3 1.1 2.9.8.1-.6.4-1.1.7-1.3-2.2-.3-4.5-1.1-4.5-4.9 0-1.1.4-2 1-2.7-.1-.2-.4-1.3.1-2.7 0 0 .8-.3 2.8 1.1A9.7 9.7 0 0 1 12 6.8c.9 0 1.7.1 2.5.3 2-1.4 2.8-1.1 2.8-1.1.5 1.4.2 2.5.1 2.7.6.7 1 1.6 1 2.7 0 3.8-2.3 4.6-4.5 4.9.4.3.7.9.7 1.8V21c0 .3.2.6.7.5A10 10 0 0 0 12 2Z"/></svg>GitHub</a>
-      </div>
-      <nav><a class="active" href="#about" data-i18n="navAbout">关于我</a><a href="#publications" data-i18n="navPubs">研究成果</a><a href="#education" data-i18n="navEducation">教育经历</a><a href="#news" data-i18n="navNews">近期动态</a></nav>
-      <div class="language-switch"><span>LANGUAGE</span><button id="language-toggle" type="button" aria-label="切换至英文">EN</button></div>
-      <p class="side-foot" data-i18n="updated">LAST UPDATED · JUL 2026</p>
-    </aside>
-    <main>
-      <header class="hero" id="about"><div class="hero-content"><div class="eyebrow">Human-centered AI · 2026</div><h1 data-i18n="hero">让智能技术更理解人，也更服务于人。</h1><p data-i18n="heroText">我研究人与人工智能如何自然协作，致力于构建兼具可靠性、可解释性与包容性的智能交互系统。</p><div class="stats"><div class="stat"><b>12</b><span data-i18n="papers">发表论文</span></div><div class="stat"><b>1.8k</b><span data-i18n="citations">引用次数</span></div><div class="stat"><b>5</b><span data-i18n="projects">开源项目</span></div></div></div></header>
-      <section><h2 class="section-title">01 / <span data-i18n="about">About</span></h2><p class="bio" data-i18n="bio">你好！我是<strong>林知远</strong>，东海大学计算机科学系助理教授、智能交互实验室成员。博士毕业于清华大学，曾在新加坡国立大学担任博士后研究员。我尤其关心人们如何信任、理解并有效地使用人工智能。</p><div class="interests"><span class="tag" data-i18n="tag1">人机交互</span><span class="tag" data-i18n="tag2">可解释人工智能</span><span class="tag">AI for Education</span><span class="tag" data-i18n="tag4">协作式智能</span></div></section>
-      <section id="publications"><h2 class="section-title">02 / <span data-i18n="publications">Selected Publications</span></h2>
-        <article class="publication"><div class="year">2025</div><div><h3 class="pub-title"><a href="#">Designing Calibrated Trust in Everyday AI Assistants</a></h3><p class="authors"><b>Zhiyuan Lin</b>, Mengyao Chen, Alex Wong</p><p class="venue">CHI Conference on Human Factors in Computing Systems (CHI)</p><div class="pub-links"><a href="#">[PDF]</a><a href="#">[PROJECT]</a><a href="#">[CODE]</a></div></div></article>
-        <article class="publication"><div class="year">2024</div><div><h3 class="pub-title"><a href="#">Learning Together: A Framework for Human-AI Co-creation in Classrooms</a></h3><p class="authors">Yuhan Zhang, <b>Zhiyuan Lin</b>, Jian Li</p><p class="venue">ACM Transactions on Computer-Human Interaction (TOCHI)</p><div class="pub-links"><a href="#">[PDF]</a><a href="#">[VIDEO]</a></div></div></article>
-        <article class="publication"><div class="year">2023</div><div><h3 class="pub-title"><a href="#">Beyond Accuracy: Making Machine Learning Models Legible to Everyone</a></h3><p class="authors"><b>Zhiyuan Lin</b>, Rui Sun</p><p class="venue">International Conference on Learning Representations (ICLR)</p><div class="pub-links"><a href="#">[PDF]</a><a href="#">[CODE]</a></div></div></article>
-      </section>
-      <section id="education"><h2 class="section-title">03 / <span data-i18n="education">Education & Experience</span></h2><div class="timeline"><div class="entry"><div class="entry-year">2024 — <span data-i18n="now">Now</span></div><div class="entry-content"><h3 data-i18n="exp1">东海大学 · 助理教授</h3><p data-i18n="exp1d">计算机科学系 · 智能交互实验室</p></div></div><div class="entry"><div class="entry-year">2022 — 2024</div><div class="entry-content"><h3 data-i18n="exp2">新加坡国立大学 · 博士后研究员</h3><p data-i18n="exp2d">人机协作与智能系统组</p></div></div><div class="entry"><div class="entry-year">2017 — 2022</div><div class="entry-content"><h3 data-i18n="exp3">清华大学 · 计算机科学博士</h3><p data-i18n="exp3d">导师：李明教授 · 获优秀博士学位论文</p></div></div></div></section>
-      <section id="news"><h2 class="section-title">04 / <span data-i18n="news">News</span></h2><div class="news"><div class="news-item"><time class="news-date">2026.06</time><p data-i18n="news1">我们关于 AI 辅助学习的工作被 <em>TOCHI</em> 接收！</p></div><div class="news-item"><time class="news-date">2026.04</time><p data-i18n="news2">很高兴将在 CHI 2026 举办专题工作坊：<em>Designing for Human-AI Partnership</em>。</p></div><div class="news-item"><time class="news-date">2026.01</time><p data-i18n="news3">正在招收对人机交互与 AI 感兴趣的硕士、博士生，欢迎邮件联系。</p></div></div></section>
-      <footer><span>© 2026 ZHIYUAN LIN</span><span>BUILT WITH CURIOSITY &amp; CARE</span></footer>
-    </main>
-  </div><div id="toast" role="status">邮箱已复制</div>
-  <script>
-    const translations={en:{title:'Assistant Professor · Computer Science<br>Eastlake University',navAbout:'About',navPubs:'Publications',navEducation:'Education',navNews:'News',updated:'LAST UPDATED · JUL 2026',hero:'Making intelligent technology more human—and more helpful.',heroText:'I study how people and artificial intelligence can collaborate naturally, building interactive systems that are reliable, interpretable, and inclusive.',papers:'Publications',citations:'Citations',projects:'Open-source projects',about:'About',bio:'Hello! I am <strong>Zhiyuan Lin</strong>, an Assistant Professor in the Department of Computer Science at Eastlake University and a member of the Intelligent Interaction Lab. I received my PhD from Tsinghua University and was a postdoctoral researcher at the National University of Singapore. I care deeply about how people can trust, understand, and use AI effectively.',tag1:'Human-Computer Interaction',tag2:'Explainable AI',tag4:'Collaborative Intelligence',publications:'Selected Publications',education:'Education & Experience',now:'Present',exp1:'Eastlake University · Assistant Professor',exp1d:'Department of Computer Science · Intelligent Interaction Lab',exp2:'National University of Singapore · Postdoctoral Researcher',exp2d:'Human-AI Collaboration & Intelligent Systems Group',exp3:'Tsinghua University · PhD in Computer Science',exp3d:'Advisor: Prof. Ming Li · Outstanding Doctoral Dissertation',news:'News',news1:'Our work on AI-assisted learning has been accepted to <em>TOCHI</em>!',news2:'Excited to organize a workshop at CHI 2026: <em>Designing for Human-AI Partnership</em>.',news3:'I am recruiting master’s and PhD students interested in HCI and AI. Please get in touch by email.'},zh:{title:'助理教授 · 计算机科学<br>东海大学',navAbout:'关于我',navPubs:'研究成果',navEducation:'教育经历',navNews:'近期动态',updated:'最后更新 · 2026年7月',hero:'让智能技术更理解人，也更服务于人。',heroText:'我研究人与人工智能如何自然协作，致力于构建兼具可靠性、可解释性与包容性的智能交互系统。',papers:'发表论文',citations:'引用次数',projects:'开源项目',about:'关于我',bio:'你好！我是<strong>林知远</strong>，东海大学计算机科学系助理教授、智能交互实验室成员。博士毕业于清华大学，曾在新加坡国立大学担任博士后研究员。我尤其关心人们如何信任、理解并有效地使用人工智能。',tag1:'人机交互',tag2:'可解释人工智能',tag4:'协作式智能',publications:'精选论文',education:'教育经历与工作经验',now:'至今',exp1:'东海大学 · 助理教授',exp1d:'计算机科学系 · 智能交互实验室',exp2:'新加坡国立大学 · 博士后研究员',exp2d:'人机协作与智能系统组',exp3:'清华大学 · 计算机科学博士',exp3d:'导师：李明教授 · 获优秀博士学位论文',news:'近期动态',news1:'我们关于 AI 辅助学习的工作被 <em>TOCHI</em> 接收！',news2:'很高兴将在 CHI 2026 举办专题工作坊：<em>Designing for Human-AI Partnership</em>。',news3:'正在招收对人机交互与 AI 感兴趣的硕士、博士生，欢迎邮件联系。'}};
-    let lang;
-    const langButton=document.getElementById('language-toggle');
-    const languageFromPath=()=>location.pathname.replace(/\/+$/, '').endsWith('/cn')?'zh':'en';
-    const languagePath=language=>{
-      const base=location.pathname.replace(/\/(?:en|cn)\/?$/, '') || '/';
-      return `${base}${base.endsWith('/')?'':'/'}${language==='zh'?'cn':'en'}`;
-    };
-    function applyLanguage(nextLanguage, updateUrl=false) {
-      lang=nextLanguage;
-      document.documentElement.lang=lang==='zh'?'zh-CN':'en';
-      document.querySelector('aside').classList.toggle('is-en',lang==='en');
-      document.querySelectorAll('[data-i18n]').forEach(el=>el.innerHTML=translations[lang][el.dataset.i18n]);
-      langButton.textContent=lang==='zh'?'EN':'中文';
-      langButton.setAttribute('aria-label',lang==='zh'?'Switch to English':'Switch to Chinese');
-      document.title=lang==='zh'?'林知远 · Academic Homepage':'Zhiyuan Lin · Academic Homepage';
-      if(updateUrl) history.pushState({lang}, '', languagePath(lang)+location.search+location.hash);
-    }
-    // The root URL is normalized to /en so the default language is shareable too.
-    applyLanguage(languageFromPath(), !/\/(?:en|cn)\/?$/.test(location.pathname));
-    langButton.addEventListener('click',()=>applyLanguage(lang==='zh'?'en':'zh', true));
-    window.addEventListener('popstate',()=>applyLanguage(languageFromPath()));
-    document.getElementById('copy-email').addEventListener('click', async () => { try { await navigator.clipboard.writeText('zhiyuan.lin@univ.edu'); } catch(e) {} const t=document.getElementById('toast'); t.textContent=lang==='zh'?'邮箱已复制':'Email copied'; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'), 1800); });
-    const links=[...document.querySelectorAll('nav a')]; const sections=links.map(a=>document.querySelector(a.getAttribute('href'))).filter(Boolean); new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting){links.forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+e.target.id))}}),{rootMargin:'-35% 0px -55% 0px'}).observe(sections[0]); sections.slice(1).forEach(s=>new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting)links.forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+e.target.id))}),{rootMargin:'-35% 0px -55% 0px'}).observe(s));
-  </script>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Zitao Wang (汪子涛)'s personal academic homepage"
+    />
+    <title>Zitao Wang (汪子涛) · Academic Homepage</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Playfair+Display:wght@600;700&family=Source+Han+Serif+SC:wght@500;600;700&family=Source+Sans+3:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --ink: #172228;
+        --muted: #607076;
+        --paper: #f7f6f2;
+        --white: #fffefa;
+        --line: #dbe1dc;
+        --accent: #08676b;
+        --soft: #e7f1ef;
+        --gold: #c99748;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      body {
+        margin: 0;
+        color: var(--ink);
+        background: var(--paper);
+        font-family: "Source Sans 3", "Microsoft YaHei", sans-serif;
+        font-size: 16px;
+        line-height: 1.65;
+      }
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+      .layout {
+        max-width: 1240px;
+        margin: auto;
+        min-height: 100vh;
+        display: grid;
+        grid-template-columns: 310px minmax(0, 1fr);
+        background: var(--white);
+      }
+      aside {
+        padding: 54px 38px;
+        border-right: 1px solid var(--line);
+        background: #fbfbf8;
+      }
+      .name {
+        margin: 0;
+        font: 700 34px/1.16 "Source Han Serif SC", serif;
+        letter-spacing: 0.03em;
+      }
+      .name-en {
+        margin: 7px 0 24px;
+        color: var(--accent);
+        font: 500 12px/1.3 "DM Mono", monospace;
+        letter-spacing: 0.09em;
+        text-transform: uppercase;
+      }
+      aside.is-en .identity {
+        display: flex;
+        flex-direction: column;
+      }
+      aside.is-en .name-en {
+        order: 1;
+        margin: 0 0 7px;
+        color: var(--ink);
+        font: 700 34px/1.16 "Playfair Display", serif;
+        letter-spacing: 0.01em;
+        text-transform: none;
+      }
+      aside.is-en .name {
+        order: 2;
+        margin: 0 0 24px;
+        color: var(--accent);
+        font: 500 16px/1.35 "Source Han Serif SC", serif;
+        letter-spacing: 0.09em;
+      }
+      .title {
+        margin: 0 0 24px;
+        color: var(--muted);
+        font-size: 15px;
+        line-height: 1.55;
+      }
+      .contact {
+        padding: 20px 0;
+        border-top: 1px solid var(--line);
+        border-bottom: 1px solid var(--line);
+      }
+      .contact a,
+      .contact button {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        padding: 5px 0;
+        color: #395057;
+        font: inherit;
+        font-size: 14px;
+        text-align: left;
+        border: 0;
+        background: none;
+        cursor: pointer;
+      }
+      .contact a:hover,
+      .contact button:hover {
+        color: var(--accent);
+      }
+      .icon {
+        width: 17px;
+        color: var(--accent);
+        flex: none;
+      }
+      nav {
+        display: grid;
+        gap: 5px;
+        margin-top: 30px;
+      }
+      .language-switch {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        margin-top: 25px;
+        color: var(--muted);
+        font: 500 12px "DM Mono", monospace;
+      }
+      .language-switch button {
+        padding: 5px 8px;
+        color: var(--accent);
+        border: 1px solid #b9d0cb;
+        background: transparent;
+        font: 500 12px "DM Mono", monospace;
+        cursor: pointer;
+      }
+      .language-switch button:hover {
+        color: white;
+        background: var(--accent);
+      }
+      nav a {
+        padding: 7px 0;
+        color: var(--muted);
+        font: 500 14px "DM Mono", monospace;
+      }
+      nav a::before {
+        content: "/";
+        color: var(--gold);
+        margin-right: 8px;
+        opacity: 0;
+        transition: opacity 0.2s;
+      }
+      nav a:hover,
+      nav a.active {
+        color: var(--accent);
+      }
+      nav a:hover::before,
+      nav a.active::before {
+        opacity: 1;
+      }
+      .side-foot {
+        margin-top: 42px;
+        color: #94a09e;
+        font: 12px "DM Mono", monospace;
+      }
+      main {
+        padding: 0 70px 55px;
+        overflow: hidden;
+      }
+      .hero {
+        min-height: 385px;
+        padding: 72px 0 50px;
+        display: flex;
+        align-items: center;
+        position: relative;
+        border-bottom: 1px solid var(--line);
+      }
+      .hero::after {
+        content: "";
+        position: absolute;
+        width: 340px;
+        height: 340px;
+        right: -125px;
+        top: -112px;
+        border: 1px solid #bdd5d0;
+        border-radius: 50%;
+        box-shadow: 0 0 0 36px #f3f7f4, 0 0 0 37px #d7e6e1;
+        opacity: 0.85;
+      }
+      .hero-content {
+        max-width: 660px;
+        position: relative;
+        z-index: 1;
+      }
+      .eyebrow {
+        color: var(--accent);
+        font: 500 12px "DM Mono", monospace;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+      }
+      .hero h1 {
+        margin: 14px 0 18px;
+        max-width: 620px;
+        font: 700 clamp(35px, 4.1vw, 58px) / 1.25 "Source Han Serif SC", serif;
+        letter-spacing: 0.015em;
+      }
+      .hero p {
+        max-width: 610px;
+        margin: 0;
+        color: #4e6066;
+        font-size: 18px;
+      }
+      .stats {
+        display: flex;
+        gap: 28px;
+        margin-top: 29px;
+      }
+      .stat {
+        padding-left: 13px;
+        border-left: 2px solid var(--gold);
+      }
+      .stat b {
+        display: block;
+        color: var(--accent);
+        font: 600 23px/1 "DM Mono", monospace;
+      }
+      .stat span {
+        color: var(--muted);
+        font-size: 12px;
+      }
+      section {
+        padding: 55px 0 10px;
+        scroll-margin-top: 15px;
+      }
+      .section-title {
+        display: flex;
+        align-items: center;
+        gap: 13px;
+        margin: 0 0 25px;
+        font: 600 13px "DM Mono", monospace;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        text-transform: uppercase;
+      }
+      .section-title::after {
+        content: "";
+        height: 1px;
+        background: var(--line);
+        flex: 1;
+      }
+      .bio {
+        max-width: 760px;
+        margin: 0;
+        font-size: 18px;
+      }
+      .bio strong {
+        color: var(--accent);
+        font-weight: 600;
+      }
+      .interests {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 9px;
+        margin-top: 24px;
+      }
+      .tag {
+        padding: 6px 12px;
+        border: 1px solid #c9dad6;
+        color: #356468;
+        background: #f7fbfa;
+        font-size: 14px;
+      }
+      .publication {
+        display: grid;
+        grid-template-columns: 65px 1fr;
+        gap: 17px;
+        padding: 23px 0;
+        border-top: 1px solid var(--line);
+      }
+      .publication:first-of-type {
+        border-top: 0;
+        padding-top: 0;
+      }
+      .project {
+        display: grid;
+        grid-template-columns: 115px 1fr;
+        gap: 17px;
+        padding: 23px 0;
+        border-top: 1px solid var(--line);
+      }
+      .project:first-of-type {
+        border-top: 0;
+        padding-top: 0;
+      }
+      .project-meta {
+        color: var(--gold);
+        font: 500 13px/1.55 "DM Mono", monospace;
+      }
+      .project-title {
+        margin: 0 0 5px;
+        font-size: 18px;
+        font-weight: 600;
+        line-height: 1.4;
+      }
+      .project-detail {
+        margin: 0;
+        color: var(--muted);
+        font-size: 15px;
+      }
+      .year {
+        color: var(--gold);
+        font: 500 14px "DM Mono", monospace;
+        padding-top: 3px;
+      }
+      .pub-title {
+        margin: 0 0 5px;
+        font-size: 18px;
+        font-weight: 600;
+        line-height: 1.4;
+      }
+      .pub-title a:hover {
+        color: var(--accent);
+        text-decoration: underline;
+        text-underline-offset: 4px;
+      }
+      .authors,
+      .venue {
+        margin: 0;
+        color: var(--muted);
+        font-size: 15px;
+      }
+      .authors b {
+        color: var(--accent);
+        font-weight: 600;
+      }
+      .venue {
+        font-style: italic;
+      }
+      .pub-links {
+        display: flex;
+        gap: 12px;
+        margin-top: 9px;
+      }
+      .pub-links a {
+        color: var(--accent);
+        font: 500 12px "DM Mono", monospace;
+      }
+      .pub-links a:hover {
+        color: var(--gold);
+      }
+      .timeline {
+        position: relative;
+      }
+      .timeline::before {
+        content: "";
+        position: absolute;
+        top: 8px;
+        bottom: 12px;
+        left: 110.5px;
+        border-left: 1px solid var(--line);
+      }
+      .entry {
+        display: grid;
+        grid-template-columns: 110px 1fr;
+        gap: 19px;
+        position: relative;
+        padding: 0 0 25px;
+      }
+      .entry-year {
+        color: var(--gold);
+        font: 500 13px "DM Mono", monospace;
+      }
+      .entry-content {
+        position: relative;
+      }
+      .entry-content::before {
+        content: "";
+        position: absolute;
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        left: -22px;
+        top: 8px;
+        background: var(--accent);
+      }
+      .entry h3 {
+        margin: 0;
+        font-size: 17px;
+      }
+      .entry p {
+        margin: 2px 0 0;
+        color: var(--muted);
+        font-size: 15px;
+      }
+      .news {
+        display: grid;
+        gap: 0;
+      }
+      .news-item {
+        display: grid;
+        grid-template-columns: 95px 1fr;
+        gap: 17px;
+        padding: 13px 0;
+        border-top: 1px solid var(--line);
+      }
+      .news-date {
+        color: var(--gold);
+        font: 12px "DM Mono", monospace;
+        padding-top: 4px;
+      }
+      .news-item p {
+        margin: 0;
+      }
+      footer {
+        margin-top: 38px;
+        padding-top: 23px;
+        border-top: 1px solid var(--line);
+        color: #899593;
+        font: 12px "DM Mono", monospace;
+        display: flex;
+        justify-content: space-between;
+        gap: 15px;
+      }
+      #toast {
+        position: fixed;
+        left: 50%;
+        bottom: 25px;
+        transform: translate(-50%, 90px);
+        padding: 10px 17px;
+        color: white;
+        background: var(--ink);
+        border-radius: 2px;
+        font-size: 14px;
+        transition: transform 0.25s;
+        z-index: 9;
+      }
+      #toast.show {
+        transform: translate(-50%, 0);
+      }
+      @media (max-width: 800px) {
+        .layout {
+          display: block;
+        }
+        .layout aside {
+          padding: 27px 24px 23px;
+          border-right: 0;
+          border-bottom: 1px solid var(--line);
+        }
+        .name {
+          font-size: 26px;
+        }
+        .name-en {
+          margin: 2px 0 0;
+          font-size: 11px;
+        }
+        aside.is-en .name-en {
+          margin: 0 0 2px;
+          font-size: 26px;
+        }
+        aside.is-en .name {
+          margin: 0;
+          font-size: 14px;
+        }
+        .title {
+          clear: both;
+          padding-top: 17px;
+          margin-bottom: 14px;
+        }
+        .contact {
+          display: flex;
+          gap: 16px;
+          padding: 12px 0;
+        }
+        .contact a,
+        .contact button {
+          font-size: 0;
+          padding: 2px;
+        }
+        .contact .icon {
+          width: 19px;
+        }
+        nav {
+          display: none;
+        }
+        .language-switch {
+          position: absolute;
+          top: 26px;
+          right: 24px;
+          margin: 0;
+        }
+        .language-switch span {
+          display: none;
+        }
+        .language-switch button {
+          font-size: 12px;
+          padding: 5px 7px;
+        }
+        .side-foot {
+          display: none;
+        }
+        main {
+          padding: 0 24px 34px;
+        }
+        .hero {
+          min-height: 0;
+          padding: 52px 0 42px;
+        }
+        .hero::after {
+          width: 210px;
+          height: 210px;
+          right: -105px;
+          top: -105px;
+          box-shadow: 0 0 0 23px #f3f7f4, 0 0 0 24px #d7e6e1;
+        }
+        .hero h1 {
+          font-size: 35px;
+        }
+        .hero p {
+          font-size: 16px;
+        }
+        .stats {
+          gap: 17px;
+        }
+        .stat b {
+          font-size: 19px;
+        }
+        section {
+          padding-top: 42px;
+        }
+        .bio {
+          font-size: 16px;
+        }
+        .publication {
+          grid-template-columns: 48px 1fr;
+          gap: 10px;
+        }
+        .project {
+          grid-template-columns: 92px 1fr;
+          gap: 12px;
+        }
+        .project-title {
+          font-size: 16px;
+        }
+        .pub-title {
+          font-size: 16px;
+        }
+        .timeline::before {
+          left: 83.5px;
+        }
+        .entry {
+          grid-template-columns: 84px 1fr;
+          gap: 14px;
+        }
+        .entry-content::before {
+          left: -18px;
+        }
+        .news-item {
+          grid-template-columns: 76px 1fr;
+          gap: 11px;
+        }
+        footer {
+          display: block;
+        }
+        footer span + span {
+          display: block;
+          margin-top: 3px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="layout">
+      <aside>
+        <div class="identity">
+          <h1 class="name">汪子涛</h1>
+          <p class="name-en">Zitao Wang</p>
+        </div>
+        <p class="title" data-i18n="title">
+          助理教授 · 水文地质<br />安徽理工大学
+        </p>
+        <div class="contact">
+          <button id="copy-email" title="复制邮箱" aria-label="复制邮箱">
+            <svg
+              class="icon"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+            >
+              <rect x="3" y="5" width="18" height="14" rx="2" />
+              <path d="m3 7 9 6 9-6" /></svg
+            >zitao.wang@aust.edu.cn
+          </button>
+          <a
+            href="https://scholar.google.com/citations?user=aIXhXM4AAAAJ"
+            title="Google Scholar"
+            aria-label="Google Scholar"
+            ><svg
+              class="icon"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+            >
+              <path d="m12 3 10 5-10 5L2 8l10-5Z" />
+              <path d="M6 10.2V15c3.4 2.5 8.6 2.5 12 0v-4.8" /></svg
+            >Google Scholar</a
+          >
+          <a
+            href="https://github.com/wangzitao21"
+            title="GitHub"
+            aria-label="GitHub"
+            ><svg
+              class="icon"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+            >
+              <path
+                d="M12 2a10 10 0 0 0-3.2 19.5c.5.1.7-.2.7-.5v-1.9c-2.8.6-3.4-1.2-3.4-1.2-.5-1.2-1.1-1.5-1.1-1.5-.9-.6.1-.6.1-.6 1 .1 1.5 1 1.5 1 .9 1.5 2.3 1.1 2.9.8.1-.6.4-1.1.7-1.3-2.2-.3-4.5-1.1-4.5-4.9 0-1.1.4-2 1-2.7-.1-.2-.4-1.3.1-2.7 0 0 .8-.3 2.8 1.1A9.7 9.7 0 0 1 12 6.8c.9 0 1.7.1 2.5.3 2-1.4 2.8-1.1 2.8-1.1.5 1.4.2 2.5.1 2.7.6.7 1 1.6 1 2.7 0 3.8-2.3 4.6-4.5 4.9.4.3.7.9.7 1.8V21c0 .3.2.6.7.5A10 10 0 0 0 12 2Z"
+              /></svg
+            >GitHub</a
+          >
+        </div>
+        <nav>
+          <a class="active" href="#about" data-i18n="navAbout">关于我</a
+          ><a href="#projects" data-i18n="navProjects">科研项目</a
+          ><a href="#publications" data-i18n="navPubs">研究成果</a
+          ><a href="#education" data-i18n="navEducation">教育经历</a>
+          <!-- <a href="#news" data-i18n="navNews">近期动态</a> -->
+        </nav>
+        <div class="language-switch">
+          <span>LANGUAGE</span
+          ><button id="language-toggle" type="button" aria-label="切换至英文">
+            EN
+          </button>
+        </div>
+        <p class="side-foot" data-i18n="updated">LAST UPDATED · JUL 2026</p>
+      </aside>
+      <main>
+        <header class="hero" id="about">
+          <div class="hero-content">
+            <div class="eyebrow">Hydrogeology · Groundwater Science</div>
+            <h1 data-i18n="hero">
+              探索地下水系统过程，服务水资源的可持续利用。
+            </h1>
+            <p data-i18n="heroText">
+              我关注盐湖地下卤水的反应运移过程，并结合数值模拟与数据驱动方法开展水文地质研究。
+            </p>
+            <div class="stats">
+              <div class="stat">
+                <b>17</b><span data-i18n="papers">发表论文</span>
+              </div>
+              <div class="stat">
+                <b>0.2k</b><span data-i18n="citations">引用次数</span>
+              </div>
+              <div class="stat">
+                <b>1</b><span data-i18n="projects">科研项目</span>
+              </div>
+            </div>
+          </div>
+        </header>
+        <section>
+          <h2 class="section-title">
+            01 / <span data-i18n="about">About</span>
+          </h2>
+          <p class="bio" data-i18n="bio">
+            你好！我是<strong>汪子涛</strong>，安徽理工大学地球与环境学院助理教授。博士毕业于中国科学院大学。我尤其关心盐湖地下卤水的反应运移过程。
+          </p>
+          <div class="interests">
+            <span class="tag" data-i18n="tag1">地下卤水反应运移</span
+            ><span class="tag" data-i18n="tag2">数值模拟</span
+            ><span class="tag" data-i18n="tag4">盐湖资源</span>
+          </div>
+        </section>
+        <section id="projects">
+          <h2 class="section-title">
+            02 / <span data-i18n="researchProjects">Research Projects</span>
+          </h2>
+          <article class="project">
+            <div class="project-meta" data-i18n="project1Period">
+              2026.01–2028.12
+            </div>
+            <div>
+              <h3 class="project-title" data-i18n="project1Title">
+                国家自然科学基金青年C类项目（No.
+                42502241）：盐湖卤水含水层动态演化及优势渗流通道形成机制研究
+              </h3>
+              <p class="project-detail" data-i18n="project1Detail">
+                主持 · 在研 · 30 万元
+              </p>
+            </div>
+          </article>
+          <article class="project">
+            <div class="project-meta" data-i18n="project2Period">
+              2024.12–2026.06
+            </div>
+            <div>
+              <h3 class="project-title" data-i18n="project2Title">
+                中国博士后科学基金面上项目 (No.
+                2024M760016)：人工驱动溶采下盐湖钾锂矿床固液转换机理及反应运移规律研究
+              </h3>
+              <p class="project-detail" data-i18n="project2Detail">
+                主持 · 已结题 · 8 万元
+              </p>
+            </div>
+          </article>
+          <article class="project">
+            <div class="project-meta" data-i18n="project3Period">2025–2026</div>
+            <div>
+              <h3 class="project-title" data-i18n="project3Title">
+                国家资助博士后研究人员计划 C 档（No. GZC20250302）
+              </h3>
+              <p class="project-detail" data-i18n="project3Detail">
+                主持 · 已结题
+              </p>
+            </div>
+          </article>
+        </section>
+        <section id="publications">
+          <h2 class="section-title">
+            03 / <span data-i18n="publications">Selected Publications</span>
+          </h2>
+          <article class="publication">
+            <div class="year">2026</div>
+            <div>
+              <h3 class="pub-title">
+                <a
+                  href="https://www.sciencedirect.com/science/article/pii/S1364815225004396"
+                  >Enhancing surrogate assisted optimization with SHAP guided
+                  two-stage sampling</a
+                >
+              </h3>
+              <p class="authors"><b>Zitao Wang</b>, Kai Chen, Jianping Wang</p>
+              <p class="venue">Environmental Modelling & Software</p>
+              <div class="pub-links">
+                <!--
+              <a href="#">[PDF]</a>
+              <a href="#">[PROJECT]</a>
+              <a href="#">[CODE]</a>
+              --></div>
+            </div>
+          </article>
+          <article class="publication">
+            <div class="year">2024</div>
+            <div>
+              <h3 class="pub-title">
+                <a
+                  href="https://www.sciencedirect.com/science/article/pii/S1568494624007658"
+                  >An Optimization Framework with Dimensionality Reduction Using
+                  Markov Chain Monte Carlo and Genetic Algorithms for
+                  Groundwater Potential Assessment</a
+                >
+              </h3>
+              <p class="authors"><b>Zitao Wang</b>, Chao Yue, Jianping Wang</p>
+              <p class="venue">Applied Soft Computing</p>
+              <div class="pub-links">
+                <!--
+              <a href="#">[PDF]</a>
+              <a href="#">[PROJECT]</a>
+              <a href="#">[CODE]</a>
+              --></div>
+            </div>
+          </article>
+          <article class="publication">
+            <div class="year">2025</div>
+            <div>
+              <h3 class="pub-title">
+                <a
+                  href="https://www.sciencedirect.com/science/article/pii/S2214581825000199"
+                  >Spatial modeling of brine level and salinity in the Qarhan
+                  Salt Lake using GIS and automated machine learning
+                  algorithms</a
+                >
+              </h3>
+              <p class="authors">
+                Dongmei Yu, <b>Zitao Wang</b
+                ><a href="mailto:zitao.wang@aust.edu.cn" title="Email"></a>
+              </p>
+              <p class="venue">Journal of Hydrology: Regional Studies</p>
+              <div class="pub-links">
+                <!--
+              <a href="#">[PDF]</a>
+              <a href="#">[PROJECT]</a>
+              <a href="#">[CODE]</a>
+              --></div>
+            </div>
+          </article>
+        </section>
+        <section id="education">
+          <h2 class="section-title">
+            04 / <span data-i18n="education">Education & Experience</span>
+          </h2>
+          <div class="timeline">
+            <div class="entry">
+              <div class="entry-year">
+                2024-<span data-i18n="now">Now</span>
+              </div>
+              <div class="entry-content">
+                <h3 data-i18n="exp1">安徽理工大学 · 助理教授</h3>
+                <p data-i18n="exp1d">地球与环境学院</p>
+              </div>
+            </div>
+            <div class="entry">
+              <div class="entry-year">2024-2026</div>
+              <div class="entry-content">
+                <h3 data-i18n="exp2">安徽理工大学 · 博士后研究员</h3>
+                <p data-i18n="exp2d">地球与环境学院</p>
+              </div>
+            </div>
+            <div class="entry">
+              <div class="entry-year">2021-2024</div>
+              <div class="entry-content">
+                <h3 data-i18n="exp3">中国科学院大学 · 地质学博士</h3>
+                <p data-i18n="exp3d">导师：王建萍研究员</p>
+              </div>
+            </div>
+          </div>
+        </section>
+        <!-- <section id="news">
+          <h2 class="section-title">05 / <span data-i18n="news">News</span></h2>
+          <div class="news">
+            <div class="news-item">
+              <time class="news-date">2026.06</time>
+              <p data-i18n="news1">
+                关于 SHAP 引导的代理辅助优化研究发表于
+                <em>Environmental Modelling &amp; Software</em>。
+              </p>
+            </div>
+            <div class="news-item">
+              <time class="news-date">2025.01</time>
+              <p data-i18n="news2">
+                盐湖卤水水位与盐度空间建模研究发表于
+                <em>Journal of Hydrology: Regional Studies</em>。
+              </p>
+            </div>
+            <div class="news-item">
+              <time class="news-date">2024.10</time>
+              <p data-i18n="news3">
+                欢迎对地下水数值模拟、盐湖资源与水文地球化学感兴趣的同学通过邮件联系。
+              </p>
+            </div>
+          </div>
+        </section> -->
+        <footer>
+          <span>© 2026 Zitao Wang</span
+          ><span>GROUNDWATER · MODELING · ENVIRONMENT</span>
+        </footer>
+      </main>
+    </div>
+    <div id="toast" role="status">邮箱已复制</div>
+    <script>
+      const translations = {
+        en: {
+          title:
+            "Assistant Professor · Hydrogeology<br>Anhui University of Science and Technology",
+          navAbout: "About",
+          navProjects: "Projects",
+          navPubs: "Publications",
+          navEducation: "Education",
+          navNews: "News",
+          updated: "LAST UPDATED · JUL 2026",
+          hero: "Exploring groundwater systems for sustainable water-resource use.",
+          heroText:
+            "My research focuses on reactive transport in saline-lake groundwater and develops numerical and data-driven methods for hydrogeological problems.",
+          papers: "Publications",
+          citations: "Citations",
+          projects: "Research projects",
+          about: "About",
+          bio: "Hello! I am <strong>Zitao Wang</strong>, an Assistant Professor in the School of Earth and Environment at Anhui University of Science and Technology. I received my PhD in Geology from the University of Chinese Academy of Sciences. My research interests include reactive transport in saline-lake brines, groundwater modelling, and salt-lake resources.",
+          tag1: "Reactive Transport in Groundwater",
+          tag2: "Numerical Modelling",
+          tag4: "Salt-lake Resources",
+          researchProjects: "Research Projects",
+          project1Period: "2026.01–2028.12",
+          project1Title:
+            "National Natural Science Foundation of China (No. 42502241): Dynamic evolution of saline-lake brine aquifers and mechanisms of preferential flow-path formation",
+          project1Detail: "Principal Investigator · Ongoing · RMB 300,000",
+          project2Period: "2024.12–2026.06",
+          project2Title:
+            "China Postdoctoral Science Foundation (No. 2024M760016): Solid–liquid transformation mechanisms and reactive transport of potash–lithium deposits under artificial solution mining",
+          project2Detail: "Principal Investigator · Completed · RMB 80,000",
+          project3Period: "2025–2026",
+          project3Title:
+            "Postdoctoral Fellowship Program of China Postdoctoral Science Foundation (No. GZC20250302)",
+          project3Detail: "Principal Investigator · Completed",
+          publications: "Selected Publications",
+          education: "Education & Experience",
+          now: "Present",
+          exp1: "Anhui University of Science and Technology · Assistant Professor",
+          exp1d: "School of Earth and Environment",
+          exp2: "Anhui University of Science and Technology · Postdoctoral Researcher",
+          exp2d: "School of Earth and Environment",
+          exp3: "University of Chinese Academy of Sciences · PhD in Geology",
+          exp3d: "Advisor: Prof. Jianping Wang",
+          news: "News",
+          news1:
+            "Our work on SHAP-guided surrogate-assisted optimization was published in <em>Environmental Modelling &amp; Software</em>.",
+          news2:
+            "Our research on spatial modelling of brine level and salinity was published in <em>Journal of Hydrology: Regional Studies</em>.",
+          news3:
+            "Students interested in groundwater modelling, salt-lake resources, and hydrogeochemistry are welcome to get in touch by email.",
+        },
+        zh: {
+          title: "助理教授 · 水文地质<br>安徽理工大学",
+          navAbout: "关于我",
+          navProjects: "科研项目",
+          navPubs: "研究成果",
+          navEducation: "教育经历",
+          navNews: "近期动态",
+          updated: "最后更新 · 2026年7月",
+          hero: "探索地下水系统过程，服务水资源的可持续利用。",
+          heroText:
+            "我关注盐湖地下卤水的反应运移过程，并结合数值模拟与数据驱动方法开展水文地质研究。",
+          papers: "发表论文",
+          citations: "引用次数",
+          projects: "科研项目",
+          about: "关于我",
+          bio: "你好！我是<strong>汪子涛</strong>，安徽理工大学地球与环境学院助理教授。博士毕业于中国科学院大学地质学专业。我主要研究盐湖地下卤水反应运移、地下水数值模拟与盐湖资源开发利用。",
+          tag1: "地下卤水反应运移",
+          tag2: "数值模拟",
+          tag4: "盐湖资源",
+          researchProjects: "主持科研项目",
+          project1Period: "2026.01–2028.12",
+          project1Title:
+            "国家自然科学基金青年项目：盐湖卤水含水层动态演化及优势渗流通道形成机制研究（42502241）",
+          project1Detail: "主持 · 在研 · 30 万元",
+          project2Period: "2024.12–2026.06",
+          project2Title:
+            "中国博士后科学基金面上项目：人工驱动溶采下盐湖钾锂矿床固液转换机理及反应运移规律研究（2024M760016）",
+          project2Detail: "主持 · 已结题 · 8 万元",
+          project3Period: "2025–2026",
+          project3Title: "国家资助博士后研究人员计划 C 档（No. GZC20250302）",
+          project3Detail: "主持 · 已结题",
+          publications: "精选论文",
+          education: "教育经历与工作经验",
+          now: "至今",
+          exp1: "安徽理工大学 · 助理教授",
+          exp1d: "地球与环境学院",
+          exp2: "安徽理工大学 · 博士后研究员",
+          exp2d: "地球与环境学院",
+          exp3: "中国科学院大学 · 地质学博士",
+          exp3d: "导师：王建萍研究员",
+          news: "近期动态",
+          news1:
+            "关于 SHAP 引导的代理辅助优化研究发表于 <em>Environmental Modelling &amp; Software</em>。",
+          news2:
+            "盐湖卤水水位与盐度空间建模研究发表于 <em>Journal of Hydrology: Regional Studies</em>。",
+          news3:
+            "欢迎对地下水数值模拟、盐湖资源与水文地球化学感兴趣的同学通过邮件联系。",
+        },
+      };
+      let lang;
+      const langButton = document.getElementById("language-toggle");
+      const languageFromPath = () =>
+        location.pathname.replace(/\/+$/, "").endsWith("/cn") ? "zh" : "en";
+      const languagePath = (language) => {
+        const base = location.pathname.replace(/\/(?:en|cn)\/?$/, "") || "/";
+        return `${base}${base.endsWith("/") ? "" : "/"}${
+          language === "zh" ? "cn" : "en"
+        }`;
+      };
+      function applyLanguage(nextLanguage, updateUrl = false) {
+        lang = nextLanguage;
+        document.documentElement.lang = lang === "zh" ? "zh-CN" : "en";
+        document
+          .querySelector("aside")
+          .classList.toggle("is-en", lang === "en");
+        document
+          .querySelectorAll("[data-i18n]")
+          .forEach(
+            (el) => (el.innerHTML = translations[lang][el.dataset.i18n])
+          );
+        langButton.textContent = lang === "zh" ? "EN" : "中文";
+        langButton.setAttribute(
+          "aria-label",
+          lang === "zh" ? "Switch to English" : "Switch to Chinese"
+        );
+        document.title =
+          lang === "zh"
+            ? "汪子涛 · Academic Homepage"
+            : "Zitao Wang · Academic Homepage";
+        if (updateUrl)
+          history.pushState(
+            { lang },
+            "",
+            languagePath(lang) + location.search + location.hash
+          );
+      }
+      // The root URL is normalized to /en so the default language is shareable too.
+      applyLanguage(
+        languageFromPath(),
+        !/\/(?:en|cn)\/?$/.test(location.pathname)
+      );
+      langButton.addEventListener("click", () =>
+        applyLanguage(lang === "zh" ? "en" : "zh", true)
+      );
+      window.addEventListener("popstate", () =>
+        applyLanguage(languageFromPath())
+      );
+      document
+        .getElementById("copy-email")
+        .addEventListener("click", async () => {
+          try {
+            await navigator.clipboard.writeText("zitao.wang@aust.edu.cn");
+          } catch (e) {}
+          const t = document.getElementById("toast");
+          t.textContent = lang === "zh" ? "邮箱已复制" : "Email copied";
+          t.classList.add("show");
+          setTimeout(() => t.classList.remove("show"), 1800);
+        });
+      const links = [...document.querySelectorAll("nav a")];
+      const sections = links
+        .map((a) => document.querySelector(a.getAttribute("href")))
+        .filter(Boolean);
+      new IntersectionObserver(
+        (entries) =>
+          entries.forEach((e) => {
+            if (e.isIntersecting) {
+              links.forEach((a) =>
+                a.classList.toggle(
+                  "active",
+                  a.getAttribute("href") === "#" + e.target.id
+                )
+              );
+            }
+          }),
+        { rootMargin: "-35% 0px -55% 0px" }
+      ).observe(sections[0]);
+      sections.slice(1).forEach((s) =>
+        new IntersectionObserver(
+          (entries) =>
+            entries.forEach((e) => {
+              if (e.isIntersecting)
+                links.forEach((a) =>
+                  a.classList.toggle(
+                    "active",
+                    a.getAttribute("href") === "#" + e.target.id
+                  )
+                );
+            }),
+          { rootMargin: "-35% 0px -55% 0px" }
+        ).observe(s)
+      );
+    </script>
+  </body>
 </html>
