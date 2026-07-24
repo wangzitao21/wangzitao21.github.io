@@ -1,0 +1,13 @@
+<!doctype html>
+<html lang="en">
+  <head><meta charset="utf-8"><title>Loading…</title></head>
+  <body>
+    <script>
+      fetch('../index.html').then(response => response.text()).then(html => {
+        document.open();
+        document.write(html);
+        document.close();
+      });
+    </script>
+  </body>
+</html>
