@@ -19,6 +19,9 @@
     .monogram { width:52px; height:52px; display:grid; place-items:center; color:white; background:var(--accent); font-family:"Playfair Display",serif; font-size:24px; font-weight:700; margin-bottom:29px; }
     .name { margin:0; font:700 34px/1.16 "Source Han Serif SC",serif; letter-spacing:.03em; }
     .name-en { margin:7px 0 24px; color:var(--accent); font:500 12px/1.3 "DM Mono",monospace; letter-spacing:.09em; text-transform:uppercase; }
+    aside.is-en .identity { display:flex; flex-direction:column; }
+    aside.is-en .name-en { order:1; margin:0 0 7px; color:var(--ink); font:700 34px/1.16 "Playfair Display",serif; letter-spacing:.01em; text-transform:none; }
+    aside.is-en .name { order:2; margin:0 0 24px; color:var(--accent); font:500 16px/1.35 "Source Han Serif SC",serif; letter-spacing:.09em; }
     .title { margin:0 0 24px; color:var(--muted); font-size:15px; line-height:1.55; }
     .contact { padding:20px 0; border-top:1px solid var(--line); border-bottom:1px solid var(--line); }
     .contact a, .contact button { display:flex; align-items:center; gap:9px; padding:5px 0; color:#395057; font:inherit; font-size:14px; text-align:left; border:0; background:none; cursor:pointer; }
@@ -56,13 +59,13 @@
     .news { display:grid; gap:0; }.news-item { display:grid; grid-template-columns:95px 1fr; gap:17px; padding:13px 0; border-top:1px solid var(--line); }.news-date { color:var(--gold); font:12px "DM Mono",monospace; padding-top:4px; }.news-item p { margin:0; }
     footer { margin-top:38px; padding-top:23px; border-top:1px solid var(--line); color:#899593; font:12px "DM Mono",monospace; display:flex; justify-content:space-between; gap:15px; }
     #toast { position:fixed; left:50%; bottom:25px; transform:translate(-50%, 90px); padding:10px 17px; color:white; background:var(--ink); border-radius:2px; font-size:14px; transition:transform .25s; z-index:9; } #toast.show { transform:translate(-50%,0); }
-    @media (max-width:800px) { .layout { display:block; }.layout aside { padding:27px 24px 23px; border-right:0; border-bottom:1px solid var(--line); }.monogram { float:left; margin:0 16px 0 0; width:45px; height:45px; font-size:21px; }.name { font-size:26px; }.name-en { margin:2px 0 0; font-size:11px; }.title { clear:both; padding-top:17px; margin-bottom:14px; }.contact { display:flex; gap:16px; padding:12px 0; }.contact a,.contact button { font-size:0; padding:2px; }.contact .icon { width:19px; } nav { display:none; }.language-switch { position:absolute; top:26px; right:24px; margin:0; }.language-switch span { display:none; }.language-switch button { font-size:12px; padding:5px 7px; } .side-foot { display:none; } main { padding:0 24px 34px; }.hero { min-height:0; padding:52px 0 42px; }.hero::after { width:210px; height:210px; right:-105px; top:-105px; box-shadow:0 0 0 23px #f3f7f4,0 0 0 24px #d7e6e1; }.hero h1 { font-size:35px; }.hero p { font-size:16px; }.stats { gap:17px; }.stat b { font-size:19px; } section { padding-top:42px; }.bio { font-size:16px; }.publication { grid-template-columns:48px 1fr; gap:10px; }.pub-title { font-size:16px; }.timeline::before { left:56px; }.entry { grid-template-columns:70px 1fr; gap:14px; }.entry-content::before { left:-18px; }.news-item { grid-template-columns:76px 1fr; gap:11px; } footer { display:block; } footer span + span { display:block; margin-top:3px; } }
+    @media (max-width:800px) { .layout { display:block; }.layout aside { padding:27px 24px 23px; border-right:0; border-bottom:1px solid var(--line); }.monogram { float:left; margin:0 16px 0 0; width:45px; height:45px; font-size:21px; }.name { font-size:26px; }.name-en { margin:2px 0 0; font-size:11px; } aside.is-en .name-en { margin:0 0 2px; font-size:26px; } aside.is-en .name { margin:0; font-size:14px; }.title { clear:both; padding-top:17px; margin-bottom:14px; }.contact { display:flex; gap:16px; padding:12px 0; }.contact a,.contact button { font-size:0; padding:2px; }.contact .icon { width:19px; } nav { display:none; }.language-switch { position:absolute; top:26px; right:24px; margin:0; }.language-switch span { display:none; }.language-switch button { font-size:12px; padding:5px 7px; } .side-foot { display:none; } main { padding:0 24px 34px; }.hero { min-height:0; padding:52px 0 42px; }.hero::after { width:210px; height:210px; right:-105px; top:-105px; box-shadow:0 0 0 23px #f3f7f4,0 0 0 24px #d7e6e1; }.hero h1 { font-size:35px; }.hero p { font-size:16px; }.stats { gap:17px; }.stat b { font-size:19px; } section { padding-top:42px; }.bio { font-size:16px; }.publication { grid-template-columns:48px 1fr; gap:10px; }.pub-title { font-size:16px; }.timeline::before { left:56px; }.entry { grid-template-columns:70px 1fr; gap:14px; }.entry-content::before { left:-18px; }.news-item { grid-template-columns:76px 1fr; gap:11px; } footer { display:block; } footer span + span { display:block; margin-top:3px; } }
   </style>
 </head>
 <body>
   <div class="layout">
     <aside>
-      <div class="monogram">L</div><h1 class="name">林知远</h1><p class="name-en">Zhiyuan Lin</p>
+      <div class="monogram">L</div><div class="identity"><h1 class="name">林知远</h1><p class="name-en">Zhiyuan Lin</p></div>
       <p class="title" data-i18n="title">助理教授 · 计算机科学<br>东海大学</p>
       <div class="contact">
         <button id="copy-email" title="复制邮箱" aria-label="复制邮箱"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>zhiyuan.lin@univ.edu</button>
@@ -98,6 +101,7 @@
     function applyLanguage(nextLanguage, updateUrl=false) {
       lang=nextLanguage;
       document.documentElement.lang=lang==='zh'?'zh-CN':'en';
+      document.querySelector('aside').classList.toggle('is-en',lang==='en');
       document.querySelectorAll('[data-i18n]').forEach(el=>el.innerHTML=translations[lang][el.dataset.i18n]);
       langButton.textContent=lang==='zh'?'EN':'中文';
       langButton.setAttribute('aria-label',lang==='zh'?'Switch to English':'Switch to Chinese');
