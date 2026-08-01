@@ -1,0 +1,1353 @@
+<!DOCTYPE html>
+<!--
+  ═══════════════════════════════════════════════════════════════
+  THEME 07 — NEWSPAPER 复古报纸 / 印刷风
+  ═══════════════════════════════════════════════════════════════
+  设计要点：
+  - 米黄纸张 #f4ecd8 + 油墨黑 #22201c + 朱红 #c0341e 印章点缀
+  - 顶部报头：巨型刊头 THE HYDROGEOLOGIST + 旋转印章「盐湖 SEAL」
+  - 头条 hero：大号衬线标题 + Byline + 数据快报小方框
+  - 版面：About/Education 左右分栏、Publications CSS 双栏、双线分隔
+  - 质感：SVG 噪点纹理、首字下沉、日期章 [2026]、hover 红下划线
+  ═══════════════════════════════════════════════════════════════
+-->
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Zitao Wang (汪子涛) · Academic Homepage"
+    />
+    <title>Zitao Wang · Newspaper Theme</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Noto+Serif+SC:wght@600;700;900&family=Playfair+Display:ital,wght@0,700;0,900;1,600&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --paper: #f4ecd8;
+        --paper-deep: #ece1c6;
+        --ink: #22201c;
+        --ink-soft: #38322a;
+        --muted: #5b554a;
+        --red: #c0341e;
+        --blue: #234a8c;
+        --serif: "Source Serif 4", "Noto Serif SC", "SimSun", Georgia, serif;
+        --display: "Playfair Display", "Noto Serif SC", "SimSun", serif;
+        --mono: "DM Mono", "Courier New", monospace;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      ::selection {
+        background: var(--red);
+        color: var(--paper);
+      }
+      body {
+        margin: 0;
+        background-color: var(--paper);
+        background-image: radial-gradient(
+            ellipse at 18% 6%,
+            rgba(34, 32, 28, 0.05),
+            transparent 55%
+          ),
+          radial-gradient(
+            ellipse at 82% 96%,
+            rgba(192, 52, 30, 0.045),
+            transparent 60%
+          );
+        color: var(--ink);
+        font: 400 16px/1.7 var(--serif);
+      }
+      /* 纸面微噪点纹理 */
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        z-index: 60;
+        pointer-events: none;
+        opacity: 0.05;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+      }
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+      .layout {
+        max-width: 1180px;
+        margin: 0 auto;
+      }
+
+      /* ────────────── 报头 MASTHEAD ────────────── */
+      .masthead {
+        position: relative;
+        padding: 16px 46px 0;
+        border-bottom: 1px solid var(--ink);
+      }
+      .masthead::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: -4px;
+        border-top: 3px double var(--ink);
+      }
+      .masthead-top {
+        border-bottom: 1px solid rgba(34, 32, 28, 0.4);
+      }
+      .edition {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 14px;
+        padding: 0 0 8px;
+        font: 500 10.5px var(--mono);
+        letter-spacing: 0.3em;
+        text-transform: uppercase;
+        color: var(--ink);
+      }
+      .masthead-main {
+        display: grid;
+        grid-template-columns: 1fr auto 1fr;
+        align-items: center;
+        padding: 6px 0 2px;
+      }
+      .masthead-title {
+        grid-column: 2;
+        margin: 0;
+        font: 900 clamp(30px, 5.4vw, 74px) / 1.08 var(--display);
+        letter-spacing: 0.07em;
+        text-align: center;
+        white-space: nowrap;
+      }
+      /* 印章 */
+      .seal {
+        grid-column: 3;
+        justify-self: end;
+        width: 94px;
+        height: 94px;
+        border: 3px solid var(--red);
+        border-radius: 16px;
+        box-shadow: inset 0 0 0 1px var(--red);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        color: var(--red);
+        font: 900 25px/1.1 var(--display);
+        letter-spacing: 0.1em;
+        transform: rotate(-6deg);
+      }
+      .seal span {
+        line-height: 1.15;
+      }
+      .seal small {
+        margin-top: 4px;
+        font: 500 7.5px var(--mono);
+        letter-spacing: 0.34em;
+        text-indent: 0.34em;
+      }
+      .masthead-meta {
+        display: flex;
+        justify-content: space-between;
+        gap: 10px 22px;
+        padding: 7px 0 12px;
+        font: 500 10.5px var(--mono);
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: var(--muted);
+      }
+      .masthead-body {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: center;
+        gap: 10px 24px;
+        padding: 13px 0 11px;
+      }
+      .identity {
+        display: flex;
+        align-items: baseline;
+        gap: 13px;
+        white-space: nowrap;
+      }
+      .name {
+        margin: 0;
+        font: 900 23px/1.15 var(--display);
+        letter-spacing: 0.06em;
+      }
+      .name-en {
+        margin: 0;
+        font: 500 11.5px var(--mono);
+        letter-spacing: 0.3em;
+        text-transform: uppercase;
+        color: var(--muted);
+      }
+      aside.is-en .name-en {
+        font: 900 23px/1.15 var(--display);
+        letter-spacing: 0.04em;
+        text-transform: none;
+        color: var(--ink);
+      }
+      aside.is-en .name {
+        font: 500 13px/1.3 var(--serif);
+        letter-spacing: 0.16em;
+        color: var(--red);
+      }
+      .title {
+        margin: 0;
+        font: 600 13px/1.5 var(--serif);
+        color: var(--muted);
+      }
+      .contact {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 3px 17px;
+        padding: 1px 20px;
+        border-left: 1px solid var(--ink);
+        border-right: 1px solid var(--ink);
+      }
+      .contact a,
+      .contact button {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        padding: 3px 0;
+        border: 0;
+        background: none;
+        color: var(--ink);
+        font: inherit;
+        font-size: 13px;
+        cursor: pointer;
+      }
+      .contact a:hover,
+      .contact button:hover {
+        color: var(--red);
+        text-decoration: underline;
+        text-underline-offset: 4px;
+      }
+      .icon {
+        width: 15px;
+        height: 15px;
+        color: var(--red);
+        flex: none;
+      }
+      /* 栏目条 */
+      nav {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        width: 100%;
+        border-top: 1px solid var(--ink);
+        border-bottom: 3px double var(--ink);
+      }
+      nav a {
+        padding: 7px 21px;
+        font: 700 13px var(--display);
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        color: var(--ink);
+        border-right: 1px solid rgba(34, 32, 28, 0.45);
+      }
+      nav a:last-child {
+        border-right: 0;
+      }
+      nav a:hover,
+      nav a.active {
+        color: var(--red);
+        text-decoration: underline;
+        text-decoration-color: var(--red);
+        text-decoration-thickness: 2px;
+        text-underline-offset: 5px;
+      }
+      /* 印刷按钮 */
+      .language-switch {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        color: var(--muted);
+        font: 500 10px var(--mono);
+        letter-spacing: 0.28em;
+      }
+      .language-switch button {
+        padding: 5px 11px;
+        border: 2px solid var(--ink);
+        background: var(--paper);
+        color: var(--ink);
+        font: 700 10.5px var(--mono);
+        letter-spacing: 0.22em;
+        cursor: pointer;
+        box-shadow: 2px 2px 0 rgba(34, 32, 28, 0.8);
+      }
+      .language-switch button:hover {
+        background: var(--red);
+        border-color: var(--red);
+        color: var(--paper);
+      }
+      .side-foot {
+        margin: 0;
+      }
+
+      /* ────────────── 正文版心 ────────────── */
+      main {
+        max-width: 1060px;
+        margin: 0 auto;
+        padding: 0 46px 46px;
+      }
+
+      /* 头条 */
+      .hero {
+        position: relative;
+        padding: 30px 0 26px;
+        scroll-margin-top: 14px;
+      }
+      .hero-content {
+        max-width: 900px;
+      }
+      .hero::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        border-top: 1px solid var(--ink);
+      }
+      .eyebrow {
+        font: 500 10.5px var(--mono);
+        letter-spacing: 0.34em;
+        text-transform: uppercase;
+        color: var(--red);
+      }
+      .hero h1 {
+        max-width: 900px;
+        margin: 13px 0 0;
+        font: 900 clamp(27px, 3.6vw, 46px) / 1.24 var(--display);
+        letter-spacing: 0.015em;
+      }
+      .byline {
+        margin-top: 15px;
+        padding: 6px 0;
+        border-top: 1px solid var(--ink);
+        border-bottom: 1px solid var(--ink);
+        font: 500 11px var(--mono);
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: var(--muted);
+      }
+      .byline b {
+        color: var(--red);
+        font-weight: 500;
+      }
+      .hero p {
+        max-width: 820px;
+        margin: 16px 0 0;
+        font: 400 17px/1.8 var(--serif);
+        color: var(--ink-soft);
+      }
+      /* 数据快报 */
+      .snapshot-label {
+        margin-top: 22px;
+        font: 500 10px var(--mono);
+        letter-spacing: 0.3em;
+        text-transform: uppercase;
+        color: var(--red);
+      }
+      .stats {
+        display: flex;
+        max-width: 760px;
+        margin-top: 8px;
+        border: 2px solid var(--ink);
+        background: var(--paper-deep);
+      }
+      .stat {
+        flex: 1;
+        padding: 9px 18px 8px;
+        border-right: 1px solid rgba(34, 32, 28, 0.4);
+        text-align: center;
+      }
+      .stat:last-child {
+        border-right: 0;
+      }
+      .stat b {
+        display: block;
+        font: 500 25px/1.1 var(--mono);
+        color: var(--red);
+      }
+      .stat span {
+        display: block;
+        margin-top: 3px;
+        font: 700 10.5px var(--display);
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+      }
+
+      /* ────────────── 版面区块 ────────────── */
+      section {
+        padding: 28px 0 6px;
+        scroll-margin-top: 16px;
+      }
+      .news-grid {
+        display: grid;
+        grid-template-columns: 1.32fr 1fr;
+        gap: 0 48px;
+        margin-top: 4px;
+        border-top: 3px double var(--ink);
+      }
+      .news-grid section {
+        padding-top: 24px;
+      }
+      #projects {
+        margin-top: 30px;
+        border-top: 3px double var(--ink);
+        padding-top: 22px;
+      }
+      #publications {
+        margin-top: 30px;
+        border-top: 3px double var(--ink);
+        padding-top: 22px;
+        columns: 2;
+        column-gap: 50px;
+      }
+      #publications .section-title {
+        column-span: all;
+      }
+      .section-title {
+        margin: 0 0 18px;
+        padding: 7px 0 8px;
+        border-top: 3px double var(--ink);
+        border-bottom: 1px solid var(--ink);
+        font: 900 15px var(--display);
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: var(--red);
+      }
+      .section-title::before {
+        content: "◆ ";
+        font-size: 0.72em;
+      }
+
+      /* 关于我：报纸正文双栏 + 首字下沉 */
+      .bio {
+        margin: 0;
+        columns: 2;
+        column-gap: 34px;
+        font: 400 15px/1.9 var(--serif);
+        color: var(--ink-soft);
+        text-align: justify;
+        hyphens: auto;
+      }
+      .bio::first-letter {
+        float: left;
+        margin: 3px 9px 0 0;
+        font: 900 56px/0.82 var(--display);
+        color: var(--red);
+      }
+      .bio strong {
+        color: var(--red);
+        font-weight: 600;
+      }
+      .interests {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 20px;
+      }
+      .tag {
+        padding: 4px 11px;
+        border: 1.5px solid var(--ink);
+        background: var(--paper);
+        font: 700 12px var(--display);
+        letter-spacing: 0.1em;
+        color: var(--ink);
+      }
+      .tag::before {
+        content: "✦ ";
+        color: var(--red);
+      }
+      .tag:hover {
+        background: var(--ink);
+        color: var(--paper);
+      }
+
+      /* 科研项目 */
+      .project {
+        display: grid;
+        grid-template-columns: 138px 1fr;
+        gap: 16px;
+        padding: 16px 0;
+        border-top: 1px solid rgba(34, 32, 28, 0.45);
+      }
+      .project:first-of-type {
+        border-top: 0;
+        padding-top: 2px;
+      }
+      .project-meta {
+        padding-top: 3px;
+        font: 500 11px/1.5 var(--mono);
+        letter-spacing: 0.06em;
+        color: var(--red);
+      }
+      .project-meta::before {
+        content: "[";
+      }
+      .project-meta::after {
+        content: "]";
+      }
+      .project-title {
+        margin: 0 0 5px;
+        font: 700 16.5px/1.55 var(--serif);
+      }
+      .project-detail {
+        margin: 0;
+        font: 400 13px/1.6 var(--serif);
+        color: var(--muted);
+      }
+      .project-detail::before {
+        content: "— ";
+        color: var(--red);
+      }
+
+      /* 论文列表：日期章 [2026] */
+      .publication {
+        display: grid;
+        grid-template-columns: 52px 1fr;
+        gap: 12px;
+        padding: 15px 0;
+        border-top: 1px solid rgba(34, 32, 28, 0.45);
+        break-inside: avoid;
+      }
+      .publication:first-of-type {
+        border-top: 0;
+        padding-top: 0;
+      }
+      .year {
+        padding-top: 2px;
+        font: 500 12.5px var(--mono);
+        color: var(--red);
+        white-space: nowrap;
+      }
+      .year::before {
+        content: "[";
+      }
+      .year::after {
+        content: "]";
+      }
+      .pub-title {
+        margin: 0 0 5px;
+        font: 700 15.5px/1.55 var(--serif);
+      }
+      .pub-title a {
+        color: var(--ink);
+      }
+      .pub-title a:hover {
+        color: var(--red);
+        text-decoration: underline;
+        text-decoration-color: var(--red);
+        text-decoration-thickness: 2px;
+        text-underline-offset: 4px;
+      }
+      .authors,
+      .venue {
+        margin: 0;
+        font: 400 13px/1.6 var(--serif);
+        color: var(--muted);
+      }
+      .authors b {
+        color: var(--ink);
+        font-weight: 700;
+      }
+      .venue {
+        font-style: italic;
+      }
+      .venue::before {
+        content: "— ";
+        color: var(--red);
+      }
+      .pub-links {
+        display: flex;
+        gap: 14px;
+        margin-top: 6px;
+      }
+      .pub-links a {
+        font: 500 11px var(--mono);
+        letter-spacing: 0.12em;
+        color: var(--blue);
+      }
+      .pub-links a:hover {
+        color: var(--red);
+        text-decoration: underline;
+      }
+
+      /* 教育经历：虚线条目 */
+      .timeline {
+        position: relative;
+      }
+      .entry {
+        display: grid;
+        grid-template-columns: 92px 1fr;
+        gap: 12px;
+        position: relative;
+        padding: 12px 0 13px;
+        border-top: 1px dashed rgba(34, 32, 28, 0.5);
+      }
+      .entry:first-child {
+        border-top: 0;
+        padding-top: 0;
+      }
+      .entry-year {
+        padding-top: 2px;
+        font: 500 11px var(--mono);
+        letter-spacing: 0.04em;
+        color: var(--red);
+      }
+      .entry-content {
+        position: relative;
+      }
+      .entry-content::before {
+        content: "◆";
+        position: absolute;
+        left: -19px;
+        top: 3px;
+        font-size: 8.5px;
+        color: var(--red);
+      }
+      .entry h3 {
+        margin: 0;
+        font: 700 15px/1.5 var(--serif);
+      }
+      .entry p {
+        margin: 2px 0 0;
+        font: 400 13px/1.55 var(--serif);
+        color: var(--muted);
+      }
+
+      /* 近期动态（预留区块） */
+      .news {
+        display: grid;
+        gap: 0;
+      }
+      .news-item {
+        display: grid;
+        grid-template-columns: 76px 1fr;
+        gap: 12px;
+        padding: 12px 0;
+        border-top: 1px solid rgba(34, 32, 28, 0.45);
+      }
+      .news-item:first-child {
+        border-top: 0;
+      }
+      .news-date {
+        padding-top: 2px;
+        font: 500 11px var(--mono);
+        color: var(--red);
+      }
+      .news-item p {
+        margin: 0;
+        font: 400 14px/1.7 var(--serif);
+        color: var(--ink-soft);
+      }
+
+      /* 页脚：版权栏 */
+      footer {
+        margin-top: 34px;
+        padding: 11px 0 10px;
+        border-top: 3px double var(--ink);
+        border-bottom: 1px solid var(--ink);
+        text-align: center;
+        font: 500 11px var(--mono);
+        letter-spacing: 0.3em;
+        text-transform: uppercase;
+        color: var(--ink);
+      }
+      footer span {
+        display: block;
+      }
+      footer span + span {
+        margin-top: 5px;
+        color: var(--muted);
+        letter-spacing: 0.16em;
+      }
+
+      #toast {
+        position: fixed;
+        left: 50%;
+        bottom: 25px;
+        transform: translate(-50%, 90px);
+        padding: 9px 17px;
+        background: var(--ink);
+        color: var(--paper);
+        border: 1px solid var(--paper);
+        box-shadow: 4px 4px 0 rgba(34, 32, 28, 0.35);
+        font: 500 13px var(--serif);
+        transition: transform 0.25s;
+        z-index: 9;
+      }
+      #toast.show {
+        transform: translate(-50%, 0);
+      }
+
+      /* ────────────── 响应式 ────────────── */
+      @media (max-width: 900px) {
+        .masthead {
+          padding: 13px 20px 0;
+        }
+        .masthead-title {
+          font-size: clamp(26px, 7.6vw, 46px);
+          letter-spacing: 0.05em;
+        }
+        .seal {
+          width: 72px;
+          height: 72px;
+          font-size: 19px;
+          border-radius: 12px;
+          border-width: 2.5px;
+        }
+        .seal small {
+          font-size: 6.5px;
+        }
+        .masthead-meta span:nth-child(2) {
+          display: none;
+        }
+        .masthead-body {
+          gap: 10px 16px;
+          padding: 12px 0 10px;
+        }
+        .contact {
+          border: 0;
+          padding: 0;
+        }
+        .contact a,
+        .contact button {
+          font-size: 0;
+          padding: 3px;
+        }
+        .contact .icon {
+          width: 18px;
+          height: 18px;
+        }
+        nav {
+          justify-content: flex-start;
+        }
+        nav a {
+          padding: 6px 13px;
+          font-size: 12px;
+          letter-spacing: 0.09em;
+        }
+        main {
+          padding: 0 20px 40px;
+        }
+        .hero h1 {
+          font-size: 30px;
+        }
+        .hero p {
+          font-size: 15.5px;
+        }
+        .news-grid {
+          grid-template-columns: 1fr;
+          gap: 0;
+        }
+        .bio {
+          columns: 1;
+        }
+        #publications {
+          columns: 1;
+        }
+        .stat b {
+          font-size: 21px;
+        }
+        .stat {
+          padding: 8px 10px 7px;
+        }
+        .project {
+          grid-template-columns: 1fr;
+          gap: 4px;
+        }
+        footer {
+          letter-spacing: 0.16em;
+        }
+      }
+      @media (max-width: 520px) {
+        .edition {
+          letter-spacing: 0.18em;
+        }
+        .masthead-main {
+          display: block;
+          position: relative;
+          padding: 10px 0 2px;
+        }
+        .masthead-title {
+          display: block;
+          padding-right: 58px;
+          font-size: clamp(19px, 5.9vw, 26px);
+          letter-spacing: 0.03em;
+          text-align: center;
+        }
+        .seal {
+          position: absolute;
+          top: 6px;
+          right: 0;
+          width: 50px;
+          height: 50px;
+          font-size: 14px;
+          border-radius: 9px;
+          border-width: 2px;
+        }
+        .seal small {
+          display: none;
+        }
+        .masthead-meta {
+          letter-spacing: 0.1em;
+        }
+        .masthead-meta span:first-child {
+          display: none;
+        }
+        .side-foot {
+          letter-spacing: 0.14em;
+        }
+        .identity {
+          flex-wrap: wrap;
+          gap: 6px 10px;
+        }
+        .hero h1 {
+          font-size: 25px;
+        }
+        .byline {
+          letter-spacing: 0.08em;
+        }
+        .stats {
+          flex-wrap: wrap;
+        }
+        .stat {
+          flex: 1 1 45%;
+          border-bottom: 1px solid rgba(34, 32, 28, 0.4);
+        }
+        .stat:nth-child(2) {
+          border-right: 0;
+        }
+        .stat:nth-child(3) {
+          border-right: 0;
+          border-bottom: 0;
+          flex: 1 1 100%;
+        }
+        .publication {
+          grid-template-columns: 44px 1fr;
+          gap: 9px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="layout">
+      <aside class="masthead">
+        <div class="masthead-top">
+          <div class="edition">
+            <span>VOL. I · QINGHAI SALT LAKE · 2026</span>
+            <div class="language-switch">
+              <span>LANGUAGE</span
+              ><button id="language-toggle" type="button" aria-label="切换至英文">
+                EN
+              </button>
+            </div>
+          </div>
+          <div class="masthead-main">
+            <h2 class="masthead-title">THE HYDROGEOLOGIST</h2>
+            <div class="seal"><span>盐<br />湖</span><small>SEAL</small></div>
+          </div>
+          <div class="masthead-meta">
+            <span>QINGHAI, CHINA · AUGUST 2026</span>
+            <span>GROUNDWATER · SALT LAKES · ENVIRONMENT</span>
+            <span class="side-foot" data-i18n="updated"
+              >LAST UPDATED · JUL 2026</span
+            >
+          </div>
+        </div>
+        <div class="masthead-body">
+          <div class="identity">
+            <h3 class="name">汪子涛</h3>
+            <p class="name-en">Zitao Wang</p>
+          </div>
+          <p class="title" data-i18n="title">
+            助理教授 · 水文地质<br />安徽理工大学
+          </p>
+          <div class="contact">
+            <button id="copy-email" title="复制邮箱" aria-label="复制邮箱">
+              <svg
+                class="icon"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.8"
+              >
+                <rect x="3" y="5" width="18" height="14" rx="2" />
+                <path d="m3 7 9 6 9-6" /></svg
+              >zitao.wang@aust.edu.cn
+            </button>
+            <button
+              id="copy-google-email"
+              title="Copy Google email"
+              aria-label="Copy Google email"
+            >
+              <svg
+                class="icon"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.8"
+              >
+                <rect x="3" y="5" width="18" height="14" rx="2" />
+                <path d="m3 7 9 6 9-6" /></svg
+              >zitao.waung@gmail.com
+            </button>
+            <a
+              href="https://scholar.google.com/citations?user=aIXhXM4AAAAJ"
+              title="Google Scholar"
+              aria-label="Google Scholar"
+              ><svg
+                class="icon"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.8"
+              >
+                <path d="m12 3 10 5-10 5L2 8l10-5Z" />
+                <path d="M6 10.2V15c3.4 2.5 8.6 2.5 12 0v-4.8" /></svg
+              >Google Scholar</a
+            >
+            <a
+              href="https://orcid.org/0000-0002-7776-4282"
+              title="ORCID"
+              aria-label="ORCID"
+              ><svg
+                class="icon"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.8"
+              >
+                <circle cx="12" cy="12" r="9" />
+                <circle cx="8" cy="8" r="1" fill="currentColor" stroke="none" />
+                <path
+                  d="M8 11v5M11 11v5M11 11h2.2a2.5 2.5 0 0 0 0-5H11M15 11v5"
+                /></svg
+              >ORCID</a
+            >
+            <a
+              href="https://github.com/wangzitao21"
+              title="GitHub"
+              aria-label="GitHub"
+              ><svg
+                class="icon"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.8"
+              >
+                <path
+                  d="M12 2a10 10 0 0 0-3.2 19.5c.5.1.7-.2.7-.5v-1.9c-2.8.6-3.4-1.2-3.4-1.2-.5-1.2-1.1-1.5-1.1-1.5-.9-.6.1-.6.1-.6 1 .1 1.5 1 1.5 1 .9 1.5 2.3 1.1 2.9.8.1-.6.4-1.1.7-1.3-2.2-.3-4.5-1.1-4.5-4.9 0-1.1.4-2 1-2.7-.1-.2-.4-1.3.1-2.7 0 0 .8-.3 2.8 1.1A9.7 9.7 0 0 1 12 6.8c.9 0 1.7.1 2.5.3 2-1.4 2.8-1.1 2.8-1.1.5 1.4.2 2.5.1 2.7.6.7 1 1.6 1 2.7 0 3.8-2.3 4.6-4.5 4.9.4.3.7.9.7 1.8V21c0 .3.2.6.7.5A10 10 0 0 0 12 2Z"
+                /></svg
+              >GitHub</a
+            >
+          </div>
+          <nav>
+            <a class="active" href="#about" data-i18n="navAbout">关于我</a
+            ><a href="#projects" data-i18n="navProjects">科研项目</a
+            ><a href="#publications" data-i18n="navPubs">研究成果</a
+            ><a href="#education" data-i18n="navEducation">教育经历</a>
+            <!-- <a href="#news" data-i18n="navNews">近期动态</a> -->
+          </nav>
+        </div>
+      </aside>
+      <main>
+        <header class="hero" id="about">
+          <div class="hero-content">
+            <div class="eyebrow">Hydrogeology · Groundwater Science</div>
+            <h1 data-i18n="hero">
+              探索地下水系统过程，服务水资源的可持续利用。
+            </h1>
+            <div class="byline">By <b>Zitao Wang</b>, AUST · SALT LAKE DESK</div>
+            <p data-i18n="heroText">
+              我主要关注盐湖地下卤水的反应运移过程，并结合数值模拟与数据驱动方法开展水文地质研究。
+            </p>
+            <div class="snapshot-label">— DATA AT A GLANCE · 数据快报 —</div>
+            <div class="stats">
+              <div class="stat">
+                <b>17</b><span data-i18n="papers">发表论文</span>
+              </div>
+              <div class="stat">
+                <b>0.2k</b><span data-i18n="citations">引用次数</span>
+              </div>
+              <div class="stat">
+                <b>5</b><span data-i18n="projects">科研项目</span>
+              </div>
+            </div>
+          </div>
+        </header>
+        <div class="news-grid">
+          <section>
+            <h2 class="section-title">
+              01 / <span data-i18n="about">About</span>
+            </h2>
+            <p class="bio" data-i18n="bio">
+              你好！我是<strong>汪子涛</strong>，安徽理工大学地球与环境学院助理教授。博士毕业于中国科学院大学。我尤其关心盐湖地下卤水的反应运移过程。
+            </p>
+            <div class="interests">
+              <span class="tag" data-i18n="tag1">地下卤水反应运移</span
+              ><span class="tag" data-i18n="tag2">数值模拟</span
+              ><span class="tag" data-i18n="tag4">盐湖资源</span>
+            </div>
+          </section>
+          <section id="education">
+            <h2 class="section-title">
+              04 / <span data-i18n="education">Education & Experience</span>
+            </h2>
+            <div class="timeline">
+              <div class="entry">
+                <div class="entry-year">
+                  2024-<span data-i18n="now">Now</span>
+                </div>
+                <div class="entry-content">
+                  <h3 data-i18n="exp1">安徽理工大学 · 助理教授</h3>
+                  <p data-i18n="exp1d">地球与环境学院</p>
+                </div>
+              </div>
+              <div class="entry">
+                <div class="entry-year">2024-2026</div>
+                <div class="entry-content">
+                  <h3 data-i18n="exp2">安徽理工大学 · 博士后研究员</h3>
+                  <p data-i18n="exp2d">地球与环境学院</p>
+                </div>
+              </div>
+              <div class="entry">
+                <div class="entry-year">2021-2024</div>
+                <div class="entry-content">
+                  <h3 data-i18n="exp3">中国科学院大学 · 地质学博士</h3>
+                  <p data-i18n="exp3d">导师：王建萍研究员</p>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+        <section id="projects">
+          <h2 class="section-title">
+            02 / <span data-i18n="researchProjects">Research Projects</span>
+          </h2>
+          <article class="project">
+            <div class="project-meta" data-i18n="project1Period">
+              2026.01–2028.12
+            </div>
+            <div>
+              <h3 class="project-title" data-i18n="project1Title">
+                国家自然科学基金青年C类项目（No.
+                42502241）：盐湖卤水含水层动态演化及优势渗流通道形成机制研究
+              </h3>
+              <p class="project-detail" data-i18n="project1Detail">
+                主持 · 在研 · 30 万元
+              </p>
+            </div>
+          </article>
+          <article class="project">
+            <div class="project-meta" data-i18n="project2Period">
+              2024.12–2026.06
+            </div>
+            <div>
+              <h3 class="project-title" data-i18n="project2Title">
+                中国博士后科学基金面上项目 (No.
+                2024M760016)：人工驱动溶采下盐湖钾锂矿床固液转换机理及反应运移规律研究
+              </h3>
+              <p class="project-detail" data-i18n="project2Detail">
+                主持 · 已结题 · 8 万元
+              </p>
+            </div>
+          </article>
+          <article class="project">
+            <div class="project-meta" data-i18n="project3Period">2025–2026</div>
+            <div>
+              <h3 class="project-title" data-i18n="project3Title">
+                国家资助博士后研究人员计划 C 档 (No. GZC20250302)
+              </h3>
+              <p class="project-detail" data-i18n="project3Detail">
+                主持 · 已结题
+              </p>
+            </div>
+          </article>
+        </section>
+        <section id="publications">
+          <h2 class="section-title">
+            03 / <span data-i18n="publications">Selected Publications</span>
+          </h2>
+          <article class="publication">
+            <div class="year">2026</div>
+            <div>
+              <h3 class="pub-title">
+                <a
+                  href="https://www.sciencedirect.com/science/article/pii/S1364815225004396"
+                  >Enhancing surrogate assisted optimization with SHAP guided
+                  two-stage sampling</a
+                >
+              </h3>
+              <p class="authors"><b>Zitao Wang</b>, Kai Chen, Jianping Wang</p>
+              <p class="venue">Environmental Modelling & Software</p>
+              <div class="pub-links">
+                <!--
+              <a href="#">[PDF]</a>
+              <a href="#">[PROJECT]</a>
+              <a href="#">[CODE]</a>
+              --></div>
+            </div>
+          </article>
+          <article class="publication">
+            <div class="year">2024</div>
+            <div>
+              <h3 class="pub-title">
+                <a
+                  href="https://www.sciencedirect.com/science/article/pii/S1568494624007658"
+                  >An Optimization Framework with Dimensionality Reduction Using
+                  Markov Chain Monte Carlo and Genetic Algorithms for
+                  Groundwater Potential Assessment</a
+                >
+              </h3>
+              <p class="authors"><b>Zitao Wang</b>, Chao Yue, Jianping Wang</p>
+              <p class="venue">Applied Soft Computing</p>
+              <div class="pub-links">
+                <!--
+              <a href="#">[PDF]</a>
+              <a href="#">[PROJECT]</a>
+              <a href="#">[CODE]</a>
+              --></div>
+            </div>
+          </article>
+          <article class="publication">
+            <div class="year">2025</div>
+            <div>
+              <h3 class="pub-title">
+                <a
+                  href="https://www.sciencedirect.com/science/article/pii/S2214581825000199"
+                  >Spatial modeling of brine level and salinity in the Qarhan
+                  Salt Lake using GIS and automated machine learning
+                  algorithms</a
+                >
+              </h3>
+              <p class="authors">
+                Dongmei Yu, <b>Zitao Wang</b>, Yue Chao, Jianping Wang
+              </p>
+              <p class="venue">Journal of Hydrology: Regional Studies</p>
+              <div class="pub-links">
+                <!--
+              <a href="#">[PDF]</a>
+              <a href="#">[PROJECT]</a>
+              <a href="#">[CODE]</a>
+              --></div>
+            </div>
+          </article>
+        </section>
+        <!-- <section id="news">
+          <h2 class="section-title">05 / <span data-i18n="news">News</span></h2>
+          <div class="news">
+            <div class="news-item">
+              <time class="news-date">2026.06</time>
+              <p data-i18n="news1">
+                关于 SHAP 引导的代理辅助优化研究发表于
+                <em>Environmental Modelling &amp; Software</em>。
+              </p>
+            </div>
+            <div class="news-item">
+              <time class="news-date">2025.01</time>
+              <p data-i18n="news2">
+                盐湖卤水水位与盐度空间建模研究发表于
+                <em>Journal of Hydrology: Regional Studies</em>。
+              </p>
+            </div>
+            <div class="news-item">
+              <time class="news-date">2024.10</time>
+              <p data-i18n="news3">
+                欢迎对地下水数值模拟、盐湖资源与水文地球化学感兴趣的同学通过邮件联系。
+              </p>
+            </div>
+          </div>
+        </section> -->
+        <footer>
+          <span>© 2026 AUST PRESS · ALL RIGHTS RESERVED</span
+          ><span>GROUNDWATER · MODELING · ENVIRONMENT</span>
+        </footer>
+      </main>
+    </div>
+    <div id="toast" role="status">邮箱已复制</div>
+    <script>
+      const translations = {
+        en: {
+          title:
+            "Assistant Professor · Hydrogeology<br>Anhui University of Science and Technology",
+          navAbout: "About",
+          navProjects: "Projects",
+          navPubs: "Publications",
+          navEducation: "Education",
+          navNews: "News",
+          updated: "LAST UPDATED · JUL 2026",
+          hero: "Exploring groundwater systems for sustainable water-resource use.",
+          heroText:
+            "My research focuses on reactive transport in saline-lake groundwater and develops numerical and data-driven methods for hydrogeological problems.",
+          papers: "Publications",
+          citations: "Citations",
+          projects: "Research projects",
+          about: "About",
+          bio: "Hello! I am <strong>Zitao Wang</strong>, an Assistant Professor in the School of Earth and Environment at Anhui University of Science and Technology. I received my PhD in Geology from the University of Chinese Academy of Sciences. My research interests include reactive transport in saline-lake brines, groundwater modelling, and salt-lake resources.",
+          tag1: "Reactive Transport in Groundwater",
+          tag2: "Numerical Modelling",
+          tag4: "Salt-lake Resources",
+          researchProjects: "Research Projects",
+          project1Period: "2026.01–2028.12",
+          project1Title:
+            "National Natural Science Foundation of China (No. 42502241): Dynamic evolution of saline-lake brine aquifers and mechanisms of preferential flow-path formation",
+          project1Detail: "Principal Investigator · Ongoing · RMB 300,000",
+          project2Period: "2024.12–2026.06",
+          project2Title:
+            "China Postdoctoral Science Foundation (No. 2024M760016): Solid-liquid transformation mechanisms and reactive transport of potash–lithium deposits under artificial solution mining",
+          project2Detail: "Principal Investigator · Completed · RMB 80,000",
+          project3Period: "2025–2026",
+          project3Title:
+            "Postdoctoral Fellowship Program of China Postdoctoral Science Foundation (No. GZC20250302)",
+          project3Detail: "Principal Investigator · Completed",
+          publications: "Selected Publications",
+          education: "Education & Experience",
+          now: "Present",
+          exp1: "Anhui University of Science and Technology · Assistant Professor",
+          exp1d: "School of Earth and Environment",
+          exp2: "Anhui University of Science and Technology · Postdoctoral Researcher",
+          exp2d: "School of Earth and Environment",
+          exp3: "University of Chinese Academy of Sciences · PhD in Geology",
+          exp3d: "Advisor: Prof. Jianping Wang",
+          news: "News",
+          news1:
+            "Our work on SHAP-guided surrogate-assisted optimization was published in <em>Environmental Modelling &amp; Software</em>.",
+          news2:
+            "Our research on spatial modelling of brine level and salinity was published in <em>Journal of Hydrology: Regional Studies</em>.",
+          news3:
+            "Students interested in groundwater modelling, salt-lake resources, and hydrogeochemistry are welcome to get in touch by email.",
+        },
+        zh: {
+          title: "助理教授 · 水文地质<br>安徽理工大学",
+          navAbout: "关于我",
+          navProjects: "科研项目",
+          navPubs: "研究成果",
+          navEducation: "教育经历",
+          navNews: "近期动态",
+          updated: "最后更新 · 2026年7月",
+          hero: "探索地下水系统过程，服务水资源的可持续利用。",
+          heroText:
+            "我关注盐湖地下卤水的反应运移过程，并结合数值模拟与数据驱动方法开展水文地质研究。",
+          papers: "发表论文",
+          citations: "引用次数",
+          projects: "科研项目",
+          about: "关于我",
+          bio: "你好！我是<strong>汪子涛</strong>，安徽理工大学地球与环境学院助理教授。博士毕业于中国科学院大学地质学专业。我主要研究盐湖地下卤水反应运移、地下水数值模拟与盐湖资源开发利用。",
+          tag1: "地下卤水反应运移",
+          tag2: "数值模拟",
+          tag4: "盐湖资源",
+          researchProjects: "主持科研项目",
+          project1Period: "2026.01–2028.12",
+          project1Title:
+            "国家自然科学基金青年项目 (No. 42502241)：盐湖卤水含水层动态演化及优势渗流通道形成机制研究",
+          project1Detail: "主持 · 在研 · 30 万元",
+          project2Period: "2024.12–2026.06",
+          project2Title:
+            "中国博士后科学基金面上项目 (No. 2024M760016)：人工驱动溶采下盐湖钾锂矿床固液转换机理及反应运移规律研究",
+          project2Detail: "主持 · 已结题 · 8 万元",
+          project3Period: "2025–2026",
+          project3Title: "国家资助博士后研究人员计划 C 档 (No. GZC20250302)",
+          project3Detail: "主持 · 已结题",
+          publications: "精选论文",
+          education: "教育经历与工作经验",
+          now: "至今",
+          exp1: "安徽理工大学 · 助理教授",
+          exp1d: "地球与环境学院",
+          exp2: "安徽理工大学 · 博士后研究员",
+          exp2d: "地球与环境学院",
+          exp3: "中国科学院大学 · 地质学博士",
+          exp3d: "导师：王建萍研究员",
+          news: "近期动态",
+          news1:
+            "关于 SHAP 引导的代理辅助优化研究发表于 <em>Environmental Modelling &amp; Software</em>。",
+          news2:
+            "盐湖卤水水位与盐度空间建模研究发表于 <em>Journal of Hydrology: Regional Studies</em>。",
+          news3:
+            "欢迎对地下水数值模拟、盐湖资源与水文地球化学感兴趣的同学通过邮件联系。",
+        },
+      };
+      // ——— 预览模式语言切换：本地切换，不改变 URL（主题预览用） ———
+      let lang;
+      const langButton = document.getElementById("language-toggle");
+      function applyLanguage(nextLanguage) {
+        lang = nextLanguage;
+        document.documentElement.lang = lang === "zh" ? "zh-CN" : "en";
+        document
+          .querySelector("aside")
+          .classList.toggle("is-en", lang === "en");
+        document
+          .querySelectorAll("[data-i18n]")
+          .forEach(
+            (el) => (el.innerHTML = translations[lang][el.dataset.i18n])
+          );
+        langButton.textContent = lang === "zh" ? "EN" : "中文";
+        langButton.setAttribute(
+          "aria-label",
+          lang === "zh" ? "Switch to English" : "Switch to Chinese"
+        );
+        document.title = "Zitao Wang (汪子涛) · Academic Homepage";
+      }
+      applyLanguage(location.pathname.includes("/cn/") ? "zh" : "en");
+      langButton.addEventListener("click", () =>
+        applyLanguage(lang === "zh" ? "en" : "zh")
+      );
+      window.addEventListener("popstate", () =>
+        applyLanguage(location.pathname.includes("/cn/") ? "zh" : "en")
+      );
+      const showToast = (message) => {
+        const toast = document.getElementById("toast");
+        toast.textContent = message;
+        toast.classList.add("show");
+        setTimeout(() => toast.classList.remove("show"), 1800);
+      };
+      const enableEmailCopy = (id, email, toastMessage) => {
+        document.getElementById(id).addEventListener("click", async () => {
+          try {
+            await navigator.clipboard.writeText(email);
+          } catch (e) {}
+          showToast(toastMessage());
+        });
+      };
+      enableEmailCopy("copy-email", "zitao.wang@aust.edu.cn", () =>
+        lang === "zh" ? "邮箱已复制" : "Email copied"
+      );
+      enableEmailCopy(
+        "copy-google-email",
+        "zitao.wang.research@gmail.com",
+        () => "Email copied"
+      );
+      const links = [...document.querySelectorAll("nav a")];
+      const sections = links
+        .map((a) => document.querySelector(a.getAttribute("href")))
+        .filter(Boolean);
+      const updateActiveLink = (entries) =>
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          links.forEach((link) =>
+            link.classList.toggle(
+              "active",
+              link.getAttribute("href") === `#${entry.target.id}`
+            )
+          );
+        });
+      const sectionObserver = new IntersectionObserver(updateActiveLink, {
+        rootMargin: "-35% 0px -55% 0px",
+      });
+      sections.forEach((section) => sectionObserver.observe(section));
+    </script>
+  </body>
+</html>

@@ -1,17 +1,26 @@
 <!DOCTYPE html>
 <!--
   ═══════════════════════════════════════════════════════════════
-  THEME 03 — SALT LAKE · 盐湖地质自然风
+  THEME TEMPLATE — 主题基准模板
   ═══════════════════════════════════════════════════════════════
-  设计主题：盐湖 / 水文学地质（呼应主人研究盐湖卤水与地下水）
-  - 配色：湖水蓝绿渐变（#0e7c86 → #2ab7a9 → #b8e0d2）、盐白 #fdfcf8、
-    米白盐粒 #f2efe6、深墨绿 #0b3d3d、暖砂金 #c99748
-  - 字体：Fraunces（标题，地质感衬线） + Karla（正文） + DM Mono（数字）
-    中文回退链：Noto Serif SC / SimSun / KaiTi
-  - hero 全宽湖面渐变横幅：分层渐变模拟湖面深浅 + 放射渐变模拟水下盐丘，
-    上下波浪形边缘（内联 SVG），纯 CSS 气泡上浮 + hover 涟漪扩散动效
-  - 侧栏盐白微纹理（CSS 噪点渐变），内容区块间"沉积层"分隔线，
-    卡片盐晶质感（圆角 14-18px），页面底部水位线，页脚湖岸线
+  这是一个完整的单文件学术主页。作为主题设计师，你的任务是：
+
+  1. 复制本文件为 themes/theme-XX-<slug>.html（<slug> 为风格英文名）
+  2. 完全重写 <head> 中的 <link>（Google Fonts 字体组合）与整个 <style>，
+     实现一个完全独立的设计风格（详见任务描述中的设计方向）
+  3. 允许调整 body 中 HTML 结构的布局方式（例如改变侧栏位置、卡片化、
+     两栏布局等），但【必须保留】：
+     - 所有 [data-i18n] 属性与 id（copy-email / copy-google-email /
+       language-toggle / toast / nav a 的 href 锚点）
+     - <aside> 上的 is-en 类切换逻辑依赖 aside 元素存在
+     - 所有 SVG 图标内容
+     - <script> 部分保持不变（双语、复制、滚动高亮功能）
+  4. 必须包含响应式设计（移动端友好），代码完整可直接双击打开运行
+  5. 不要引用任何外部 CSS 框架，只用内联 CSS + Google Fonts
+  6. 禁止修改其他任何文件
+
+  注意：中文正文的回退字体链务必包含适合该风格的系统中文字体
+  （如 KaiTi 楷体 / FangSong 仿宋 / SimSun 宋体 / Microsoft YaHei 黑体）。
   ═══════════════════════════════════════════════════════════════
 -->
 <html lang="en">
@@ -22,136 +31,210 @@
       name="description"
       content="Zitao Wang (汪子涛) · Academic Homepage"
     />
-    <title>Zitao Wang (汪子涛) · Academic Homepage</title>
+    <title>Zitao Wang · Midnight Theme</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Karla:wght@400;500;600&display=swap"
+        <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap"
       rel="stylesheet"
     />
     <style>
-      /* ══════════ 1. 设计令牌 ══════════ */
+      /* ═══════════════ Midnight — 深空夜间学术风 ═══════════════ */
       :root {
-        --lake-deep: #0e7c86; /* 湖水深处 */
-        --lake-mid: #2ab7a9; /* 湖水中间 */
-        --lake-shallow: #b8e0d2; /* 湖面浅色 */
-        --salt: #fdfcf8; /* 盐白 */
-        --grain: #f2efe6; /* 盐粒米白 */
-        --ink: #0b3d3d; /* 深墨绿文字 */
-        --muted: #4f6f6c; /* 次级文字 */
-        --line: #dce9e3; /* 极淡蓝边框 */
-        --gold: #c99748; /* 暖砂金点缀 */
-        --serif: "Fraunces", "Noto Serif SC", "SimSun", "KaiTi", serif;
-        --sans: "Karla", "Noto Serif SC", "SimSun", "KaiTi", sans-serif;
-        --mono: "DM Mono", monospace;
+        --bg-deep: #060a18;
+        --bg-mid: #0b1230;
+        --ink: #e8eefc;
+        --muted: #8b97b5;
+        --cyan: #8ecae6;
+        --cyan-bright: #7dd3fc;
+        --violet: #a78bfa;
+        --warm: #fcd34d;
+        --card: rgba(13, 23, 52, 0.6);
+        --card-border: rgba(125, 211, 252, 0.15);
+        --font-head: "Space Grotesk", "Noto Serif SC", "KaiTi", "STKaiti", serif;
+        --font-body: "Inter", "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+        --font-mono: "JetBrains Mono", "Consolas", "Courier New", monospace;
       }
       * {
         box-sizing: border-box;
       }
       html {
         scroll-behavior: smooth;
+        background: var(--bg-deep);
+        background-image: radial-gradient(
+          ellipse 130% 90% at 50% -12%,
+          var(--bg-mid) 0%,
+          var(--bg-deep) 55%,
+          #04070f 100%
+        );
+        background-attachment: fixed;
       }
-
-      /* ══════════ 2. 基础 ══════════ */
       body {
         margin: 0;
+        min-height: 100vh;
         color: var(--ink);
-        background:
-          radial-gradient(1100px 460px at 88% -8%, rgba(184, 224, 210, 0.4), transparent 62%),
-          radial-gradient(900px 420px at -12% 102%, rgba(42, 183, 169, 0.13), transparent 56%),
-          radial-gradient(700px 300px at 55% 108%, rgba(201, 151, 72, 0.07), transparent 60%),
-          var(--salt);
-        font-family: var(--sans);
+        font-family: var(--font-body);
         font-size: 16px;
-        line-height: 1.65;
+        line-height: 1.7;
+      }
+      ::selection {
+        background: rgba(125, 211, 252, 0.28);
+        color: #fff;
       }
       a {
         color: inherit;
         text-decoration: none;
       }
-      /* 页面底部"水位线"装饰 */
+
+      /* ── 星空层：两组 box-shadow 星点，共 60+ 颗 ── */
+      .stars {
+        position: fixed;
+        inset: 0;
+        z-index: 0;
+        pointer-events: none;
+      }
+      .stars::before,
+      .stars::after {
+        content: "";
+        position: absolute;
+        border-radius: 50%;
+      }
+      .stars::before {
+        width: 2px;
+        height: 2px;
+        background: #fff;
+        box-shadow:
+          14vw 9vh 0 0 #ffffff,
+          27vw 4vh 0 0 rgba(142, 202, 230, 0.9),
+          38vw 16vh 0 0 rgba(255, 255, 255, 0.7),
+          51vw 7vh 0 0 rgba(167, 139, 250, 0.85),
+          63vw 21vh 0 0 rgba(255, 255, 255, 0.8),
+          74vw 5vh 0 0 rgba(142, 202, 230, 0.8),
+          86vw 12vh 0 0 rgba(255, 255, 255, 0.6),
+          93vw 29vh 0 0 #ffffff,
+          8vw 24vh 0 0 rgba(255, 255, 255, 0.55),
+          19vw 34vh 0 0 rgba(142, 202, 230, 0.75),
+          33vw 27vh 0 0 rgba(255, 255, 255, 0.7),
+          45vw 38vh 0 0 rgba(167, 139, 250, 0.7),
+          58vw 31vh 0 0 rgba(255, 255, 255, 0.8),
+          69vw 44vh 0 0 rgba(255, 255, 255, 0.6),
+          82vw 36vh 0 0 rgba(142, 202, 230, 0.8),
+          96vw 47vh 0 0 rgba(255, 255, 255, 0.65),
+          12vw 53vh 0 0 rgba(255, 255, 255, 0.7),
+          24vw 47vh 0 0 rgba(252, 211, 77, 0.75),
+          37vw 58vh 0 0 rgba(255, 255, 255, 0.6),
+          50vw 50vh 0 0 rgba(142, 202, 230, 0.8),
+          61vw 66vh 0 0 rgba(255, 255, 255, 0.55),
+          73vw 57vh 0 0 rgba(167, 139, 250, 0.7),
+          88vw 63vh 0 0 rgba(255, 255, 255, 0.8),
+          97vw 74vh 0 0 rgba(255, 255, 255, 0.6),
+          6vw 72vh 0 0 rgba(142, 202, 230, 0.7),
+          18vw 83vh 0 0 rgba(255, 255, 255, 0.6),
+          30vw 75vh 0 0 rgba(255, 255, 255, 0.8),
+          43vw 86vh 0 0 rgba(255, 255, 255, 0.55),
+          55vw 79vh 0 0 rgba(167, 139, 250, 0.7),
+          67vw 90vh 0 0 rgba(255, 255, 255, 0.6),
+          79vw 84vh 0 0 rgba(142, 202, 230, 0.75),
+          91vw 92vh 0 0 #ffffff,
+          3vw 95vh 0 0 rgba(255, 255, 255, 0.55),
+          47vw 96vh 0 0 rgba(252, 211, 77, 0.7),
+          71vw 98vh 0 0 rgba(255, 255, 255, 0.6);
+        animation: twinkle 6s ease-in-out infinite;
+      }
+      .stars::after {
+        width: 1.4px;
+        height: 1.4px;
+        background: rgba(232, 238, 252, 0.9);
+        box-shadow:
+          9vw 15vh 0 0 rgba(232, 238, 252, 0.8),
+          22vw 12vh 0 0 rgba(232, 238, 252, 0.6),
+          35vw 21vh 0 0 rgba(232, 238, 252, 0.7),
+          48vw 11vh 0 0 rgba(232, 238, 252, 0.55),
+          60vw 28vh 0 0 rgba(232, 238, 252, 0.75),
+          72vw 17vh 0 0 rgba(232, 238, 252, 0.6),
+          85vw 24vh 0 0 rgba(232, 238, 252, 0.8),
+          11vw 42vh 0 0 rgba(232, 238, 252, 0.6),
+          26vw 40vh 0 0 rgba(232, 238, 252, 0.7),
+          41vw 48vh 0 0 rgba(232, 238, 252, 0.6),
+          55vw 43vh 0 0 rgba(232, 238, 252, 0.75),
+          68vw 52vh 0 0 rgba(232, 238, 252, 0.6),
+          80vw 47vh 0 0 rgba(232, 238, 252, 0.7),
+          94vw 58vh 0 0 rgba(232, 238, 252, 0.6),
+          5vw 63vh 0 0 rgba(232, 238, 252, 0.7),
+          20vw 68vh 0 0 rgba(232, 238, 252, 0.6),
+          33vw 62vh 0 0 rgba(232, 238, 252, 0.7),
+          47vw 71vh 0 0 rgba(232, 238, 252, 0.6),
+          60vw 77vh 0 0 rgba(232, 238, 252, 0.7),
+          76vw 70vh 0 0 rgba(232, 238, 252, 0.6),
+          89vw 81vh 0 0 rgba(232, 238, 252, 0.7),
+          15vw 91vh 0 0 rgba(232, 238, 252, 0.6),
+          38vw 93vh 0 0 rgba(232, 238, 252, 0.7),
+          58vw 95vh 0 0 rgba(232, 238, 252, 0.6),
+          84vw 90vh 0 0 rgba(232, 238, 252, 0.7);
+        animation: twinkle 8s ease-in-out infinite reverse;
+      }
+
+      /* 星云光晕（大而朦胧的色斑） */
       body::after {
         content: "";
         position: fixed;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        height: 5px;
-        background: linear-gradient(
-          90deg,
-          rgba(14, 124, 134, 0.6),
-          rgba(42, 183, 169, 0.55) 35%,
-          rgba(184, 224, 210, 0.6) 70%,
-          rgba(201, 151, 72, 0.45)
-        );
-        z-index: 5;
+        inset: 0;
+        z-index: 0;
         pointer-events: none;
-      }
-
-      /* ══════════ 3. 布局骨架（左右侧栏） ══════════ */
-      .layout {
-        max-width: 1280px;
-        margin: auto;
-        min-height: 100vh;
-        display: grid;
-        grid-template-columns: 316px minmax(0, 1fr);
-        background: var(--salt);
-      }
-
-      /* 侧栏：盐白微纹理（极淡噪点渐变）+ 底部湖岸线 */
-      aside {
-        position: relative;
-        padding: 50px 36px 44px;
-        border-right: 1px solid var(--line);
         background:
-          radial-gradient(circle at 18% 20%, rgba(14, 124, 134, 0.05) 0 1.6px, transparent 2.3px),
-          radial-gradient(circle at 66% 34%, rgba(201, 151, 72, 0.07) 0 1.4px, transparent 2.1px),
-          radial-gradient(circle at 28% 62%, rgba(14, 124, 134, 0.045) 0 1.3px, transparent 2px),
-          radial-gradient(circle at 78% 82%, rgba(42, 183, 169, 0.055) 0 1.7px, transparent 2.4px),
-          radial-gradient(circle at 50% 12%, rgba(255, 255, 255, 0.85) 0 30%, transparent 70%),
-          linear-gradient(165deg, #fdfcf8 0%, #f8f5ec 100%);
+          radial-gradient(46vw 34vw at 84% 6%, rgba(125, 211, 252, 0.07), transparent 70%),
+          radial-gradient(52vw 40vw at 6% 42%, rgba(167, 139, 250, 0.06), transparent 70%),
+          radial-gradient(40vw 34vw at 55% 100%, rgba(125, 211, 252, 0.05), transparent 70%);
       }
-      aside::after {
-        content: "";
-        position: absolute;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        height: 6px;
-        background: linear-gradient(
-          90deg,
-          rgba(14, 124, 134, 0.75),
-          rgba(42, 183, 169, 0.6) 55%,
-          rgba(184, 224, 210, 0.7)
-        );
-        opacity: 0.55;
+      @keyframes twinkle {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.4;
+        }
       }
 
-      .identity {
+      /* ── 布局：单栏 + 左侧固定细导航 ── */
+      .layout {
         position: relative;
-        padding-bottom: 18px;
+        z-index: 1;
+        max-width: 1080px;
+        margin: 0 auto;
+        padding: 0 44px 72px 248px;
+        min-height: 100vh;
       }
-      /* 名字下方的"湖面线" */
-      .identity::after {
-        content: "";
-        position: absolute;
-        left: 0;
+      aside {
+        position: fixed;
+        top: 0;
         bottom: 0;
-        width: 48px;
-        height: 3px;
-        border-radius: 3px;
-        background: linear-gradient(90deg, var(--lake-deep), var(--lake-mid), var(--lake-shallow));
+        left: 0;
+        width: 208px;
+        z-index: 5;
+        padding: 34px 22px 28px;
+        display: flex;
+        flex-direction: column;
+        overflow-y: auto;
+        background: rgba(8, 13, 31, 0.6);
+        -webkit-backdrop-filter: blur(16px);
+        backdrop-filter: blur(16px);
+        border-right: 1px solid rgba(125, 211, 252, 0.12);
       }
+
+      /* 姓名（导航顶部小标识） */
       .name {
         margin: 0;
-        font: 700 33px/1.18 var(--serif);
-        letter-spacing: 0.04em;
+        font: 700 24px/1.25 var(--font-head);
+        letter-spacing: 0.06em;
+        color: #fff;
+        text-shadow: 0 0 16px rgba(125, 211, 252, 0.25);
       }
       .name-en {
-        margin: 8px 0 24px;
-        color: var(--lake-mid);
-        font: 500 12px/1.3 var(--mono);
-        letter-spacing: 0.1em;
+        margin: 7px 0 0;
+        color: var(--cyan);
+        font: 500 9px/1.5 var(--font-mono);
+        letter-spacing: 0.24em;
         text-transform: uppercase;
       }
       aside.is-en .identity {
@@ -160,338 +243,312 @@
       }
       aside.is-en .name-en {
         order: 1;
-        margin: 0 0 8px;
-        color: var(--ink);
-        font: 700 33px/1.16 var(--serif);
-        letter-spacing: 0.01em;
-        text-transform: none;
+        margin: 0;
+        color: #fff;
+        font: 700 24px/1.25 var(--font-head);
+        letter-spacing: 0.05em;
       }
       aside.is-en .name {
         order: 2;
-        margin: 0 0 24px;
-        color: var(--lake-deep);
-        font: 500 15px/1.4 var(--serif);
-        letter-spacing: 0.08em;
+        margin: 7px 0 0;
+        color: var(--cyan);
+        font: 500 9px/1.5 var(--font-mono);
+        letter-spacing: 0.24em;
       }
       .title {
-        margin: 0 0 22px;
+        margin: 15px 0 0;
         color: var(--muted);
-        font-size: 14.5px;
-        line-height: 1.6;
+        font-size: 12px;
+        line-height: 1.7;
       }
+
+      /* 联系方式 */
       .contact {
-        padding: 20px 0;
-        border-top: 1px solid var(--line);
-        border-bottom: 1px solid var(--line);
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+        margin-top: 18px;
+        padding-top: 16px;
+        border-top: 1px solid rgba(125, 211, 252, 0.12);
       }
       .contact a,
       .contact button {
         display: flex;
         align-items: center;
-        gap: 10px;
-        padding: 5px 0;
-        color: #3f5f5e;
+        gap: 9px;
+        padding: 6px 9px;
+        border-radius: 8px;
+        color: #a9b4d0;
         font: inherit;
-        font-size: 14px;
+        font-size: 12px;
         text-align: left;
         border: 0;
         background: none;
         cursor: pointer;
-        transition: color 0.2s;
+        transition: color 0.25s, background 0.25s, text-shadow 0.25s;
       }
       .contact a:hover,
       .contact button:hover {
-        color: var(--lake-deep);
+        color: var(--cyan-bright);
+        background: rgba(125, 211, 252, 0.06);
+        text-shadow: 0 0 10px rgba(125, 211, 252, 0.4);
       }
       .icon {
-        width: 17px;
-        color: var(--lake-deep);
+        width: 15px;
+        color: var(--cyan);
         flex: none;
-        transition: transform 0.2s;
       }
-      .contact a:hover .icon,
-      .contact button:hover .icon {
-        transform: translateY(-1px);
-      }
+
+      /* 左侧细导航：竖排小字，hover 发光 */
       nav {
-        display: grid;
-        gap: 6px;
-        margin-top: 28px;
-      }
-      .language-switch {
         display: flex;
-        align-items: center;
-        gap: 8px;
-        margin-top: 26px;
-        color: var(--muted);
-        font: 500 12px var(--mono);
-        letter-spacing: 0.08em;
-      }
-      .language-switch button {
-        padding: 6px 10px;
-        color: var(--lake-deep);
-        border: 1px solid rgba(14, 124, 134, 0.35);
-        border-radius: 9px;
-        background: rgba(255, 255, 255, 0.65);
-        font: 500 12px var(--mono);
-        cursor: pointer;
-        transition: all 0.2s;
-      }
-      .language-switch button:hover {
-        color: white;
-        background: linear-gradient(135deg, var(--lake-deep), var(--lake-mid));
-        border-color: transparent;
+        flex-direction: column;
+        gap: 2px;
+        margin-top: 20px;
+        padding-top: 18px;
+        border-top: 1px solid rgba(125, 211, 252, 0.12);
       }
       nav a {
-        padding: 7px 0;
+        padding: 8px 9px;
+        border-radius: 8px;
         color: var(--muted);
-        font: 500 14px var(--mono);
+        font: 500 11.5px var(--font-head);
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        transition: color 0.25s, background 0.25s, text-shadow 0.25s;
       }
       nav a::before {
-        content: "◆";
-        color: var(--gold);
-        font-size: 9px;
+        content: "\2726";
         margin-right: 9px;
-        transform: translateY(-1px);
+        color: var(--cyan);
         opacity: 0;
-        transition: opacity 0.2s;
+        transition: opacity 0.25s;
       }
       nav a:hover,
       nav a.active {
-        color: var(--lake-deep);
-      }
-      nav a.active {
-        font-weight: 600;
+        color: var(--cyan-bright);
+        background: rgba(125, 211, 252, 0.06);
+        text-shadow: 0 0 12px rgba(125, 211, 252, 0.65);
       }
       nav a:hover::before,
       nav a.active::before {
         opacity: 1;
       }
-      .side-foot {
-        margin-top: 38px;
-        color: #94a5a1;
-        font: 12px var(--mono);
-        letter-spacing: 0.05em;
-      }
-      .side-foot::before {
-        content: "— ";
-        color: var(--gold);
-      }
 
-      main {
-        padding: 0 70px 55px;
-        overflow: hidden;
-      }
-
-      /* ══════════ 4. Hero 湖面横幅 ══════════ */
-      .hero {
-        position: relative;
-        margin: 0 -70px; /* 负边距铺满 main，形成全宽横幅 */
-        min-height: 470px;
-        padding: 86px 70px 112px;
+      /* 语言切换：深色玻璃 */
+      .language-switch {
         display: flex;
         align-items: center;
-        overflow: hidden;
-        color: #eefbf7;
-        /* 分层渐变模拟湖面深浅 + 放射渐变模拟水下盐丘 */
-        background:
-          radial-gradient(ellipse 480px 340px at 84% 10%, rgba(255, 255, 255, 0.2), transparent 62%),
-          radial-gradient(ellipse 540px 400px at 6% 92%, rgba(11, 61, 61, 0.4), transparent 70%),
-          radial-gradient(ellipse 320px 240px at 54% 26%, rgba(255, 255, 255, 0.11), transparent 60%),
-          radial-gradient(ellipse 260px 200px at 30% 72%, rgba(11, 61, 61, 0.22), transparent 66%),
-          linear-gradient(
-            166deg,
-            #0a6f78 0%,
-            var(--lake-deep) 24%,
-            #129a96 48%,
-            var(--lake-mid) 72%,
-            #6fc9b8 90%,
-            var(--lake-shallow) 100%
-          );
+        gap: 8px;
+        margin-top: auto;
+        padding-top: 20px;
+        color: var(--muted);
+        font: 500 9px var(--font-mono);
+        letter-spacing: 0.2em;
       }
-      /* 顶部水纹波浪 */
-      .hero::before {
-        content: "";
-        position: absolute;
-        left: 0;
-        right: 0;
-        top: -1px;
-        height: 36px;
-        background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 48' preserveAspectRatio='none'%3E%3Cpath fill='%23ffffff' fill-opacity='0.16' d='M0,22 C180,42 360,2 540,18 C720,34 900,6 1080,18 C1260,30 1350,10 1440,18 L1440,48 L0,48 Z'/%3E%3C/svg%3E");
-        background-size: 100% 100%;
+      .language-switch button {
+        padding: 6px 13px;
+        border-radius: 999px;
+        border: 1px solid rgba(125, 211, 252, 0.3);
+        background: rgba(125, 211, 252, 0.07);
+        -webkit-backdrop-filter: blur(8px);
+        backdrop-filter: blur(8px);
+        color: var(--cyan);
+        font: 500 11px var(--font-mono);
+        cursor: pointer;
+        transition: background 0.25s, box-shadow 0.25s;
       }
-      /* 底部波浪过渡回盐白 */
+      .language-switch button:hover {
+        background: rgba(125, 211, 252, 0.18);
+        box-shadow: 0 0 14px rgba(125, 211, 252, 0.25);
+      }
+      .side-foot {
+        margin: 14px 0 0;
+        color: #5c6884;
+        font: 9px var(--font-mono);
+        letter-spacing: 0.16em;
+      }
+
+      /* ── 主内容 ── */
+      main {
+        min-width: 0;
+      }
+
+      /* Hero：超大姓名 + 星尘小字 + 地平线 */
+      .hero {
+        min-height: 56vh;
+        padding: 90px 0 74px;
+        display: flex;
+        align-items: center;
+        position: relative;
+      }
       .hero::after {
         content: "";
         position: absolute;
         left: 0;
         right: 0;
-        bottom: -1px;
-        height: 56px;
-        background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 72' preserveAspectRatio='none'%3E%3Cpath fill='%23fdfcf8' d='M0,38 C240,70 480,6 720,34 C960,62 1200,10 1440,38 L1440,72 L0,72 Z'/%3E%3C/svg%3E");
-        background-size: 100% 100%;
+        bottom: 0;
+        height: 1px;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(125, 211, 252, 0.65) 30%,
+          rgba(125, 211, 252, 0.65) 70%,
+          transparent
+        );
       }
-      /* 纯 CSS 气泡上浮动效 */
-      .bubbles {
+      .hero::before {
+        content: "";
         position: absolute;
-        inset: 0;
-        overflow: hidden;
-        pointer-events: none;
-      }
-      .bubbles span {
-        position: absolute;
-        bottom: -46px;
-        left: var(--l);
-        width: var(--s);
-        height: var(--s);
+        left: 50%;
+        bottom: 13px;
+        width: 2.5px;
+        height: 2.5px;
         border-radius: 50%;
-        background: radial-gradient(circle at 34% 30%, rgba(255, 255, 255, 0.78), rgba(255, 255, 255, 0.05) 62%);
-        box-shadow: inset 0 -2px 4px rgba(255, 255, 255, 0.22);
-        opacity: 0;
-        animation: bubble-rise var(--d) linear var(--p) infinite;
-      }
-      @keyframes bubble-rise {
-        0% {
-          transform: translateY(0) translateX(0) scale(1);
-          opacity: 0;
-        }
-        10% {
-          opacity: 0.75;
-        }
-        50% {
-          transform: translateY(-40vh) translateX(14px) scale(1.06);
-          opacity: 0.5;
-        }
-        100% {
-          transform: translateY(-76vh) translateX(-10px) scale(0.55);
-          opacity: 0;
-        }
+        background: #fff;
+        box-shadow:
+          -280px -5px 0 0 #fff,
+          -205px -19px 0 0 rgba(142, 202, 230, 1),
+          -130px -8px 0 0 #fff,
+          -62px -24px 0 0 rgba(255, 255, 255, 0.85),
+          30px -6px 0 0 rgba(142, 202, 230, 0.95),
+          118px -17px 0 0 #fff,
+          205px -4px 0 0 rgba(167, 139, 250, 0.9),
+          285px -21px 0 0 #fff,
+          355px -9px 0 0 rgba(142, 202, 230, 1);
+        filter: drop-shadow(0 0 5px rgba(125, 211, 252, 0.9));
+        animation: twinkle 5s ease-in-out infinite;
       }
       .hero-content {
-        max-width: 680px;
+        max-width: 760px;
         position: relative;
         z-index: 1;
       }
-      .eyebrow {
-        color: rgba(255, 255, 255, 0.85);
-        font: 500 12px var(--mono);
-        letter-spacing: 0.14em;
-        text-transform: uppercase;
+      .hero-name {
+        margin-bottom: 26px;
       }
-      .eyebrow::before {
-        content: "◈ ";
-        color: rgba(255, 255, 255, 0.55);
-      }
-      .hero h1 {
-        margin: 15px 0 18px;
-        max-width: 640px;
-        font: 700 clamp(34px, 4.2vw, 56px) / 1.22 var(--serif);
-        letter-spacing: 0.01em;
-        text-shadow: 0 2px 20px rgba(8, 64, 66, 0.4);
-      }
-      .hero p {
-        max-width: 620px;
-        margin: 0;
-        color: rgba(240, 250, 247, 0.92);
-        font-size: 17.5px;
-      }
-      /* 统计数字：玻璃盐晶卡片 + 渐变文字 */
-      .stats {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 14px;
-        margin-top: 32px;
-      }
-      .stat {
-        min-width: 132px;
-        padding: 15px 20px;
-        border: 1px solid rgba(255, 255, 255, 0.3);
-        border-radius: 16px;
-        background: rgba(255, 255, 255, 0.13);
-        backdrop-filter: blur(4px);
-      }
-      .stat b {
-        display: block;
-        color: #ffe9b8;
-        font: 600 25px/1 var(--mono);
-        background: linear-gradient(115deg, #fffdf4, #ffe9b8 45%, #cfeae0);
+      .hero-name-cn {
+        font: 700 clamp(60px, 8.5vw, 108px)/1.1 "Noto Serif SC", "KaiTi", "STKaiti", serif;
+        letter-spacing: 0.04em;
+        background: linear-gradient(180deg, #ffffff 25%, #b9d6f2 100%);
         -webkit-background-clip: text;
         background-clip: text;
         -webkit-text-fill-color: transparent;
+        color: transparent;
+        filter: drop-shadow(0 0 28px rgba(125, 211, 252, 0.3));
+      }
+      .hero-name-en {
+        display: none;
+        font: 700 clamp(56px, 8vw, 102px)/1.08 var(--font-head);
+        letter-spacing: 0.015em;
+        background: linear-gradient(180deg, #ffffff 25%, #b9d6f2 100%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        color: transparent;
+        filter: drop-shadow(0 0 28px rgba(125, 211, 252, 0.3));
+      }
+      aside.is-en + main .hero-name-cn {
+        display: none;
+      }
+      aside.is-en + main .hero-name-en {
+        display: block;
+      }
+      .eyebrow {
+        color: var(--cyan);
+        font: 500 12px/1 var(--font-mono);
+        letter-spacing: 0.38em;
+        text-transform: uppercase;
+        text-shadow: 0 0 14px rgba(125, 211, 252, 0.35);
+      }
+      .hero h1 {
+        margin: 24px 0 15px;
+        max-width: 740px;
+        font: 600 clamp(24px, 3vw, 34px)/1.42 var(--font-head);
+        letter-spacing: 0.01em;
+        color: #fff;
+        text-shadow: 0 0 34px rgba(125, 211, 252, 0.12);
+      }
+      .hero p {
+        max-width: 660px;
+        margin: 0;
+        color: var(--muted);
+        font-size: 16.5px;
+      }
+
+      /* 统计数字：青色发光大字 */
+      .stats {
+        display: flex;
+        gap: 54px;
+        margin-top: 36px;
+      }
+      .stat b {
+        display: block;
+        color: var(--cyan-bright);
+        font: 600 31px/1 var(--font-mono);
+        letter-spacing: 0.02em;
+        text-shadow: 0 0 16px rgba(125, 211, 252, 0.6), 0 0 36px rgba(125, 211, 252, 0.28);
       }
       .stat span {
         display: block;
-        margin-top: 5px;
-        color: rgba(255, 255, 255, 0.85);
-        font-size: 12.5px;
-        letter-spacing: 0.04em;
+        margin-top: 7px;
+        color: var(--muted);
+        font-size: 11px;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
       }
 
-      /* ══════════ 5. 内容区 ══════════ */
+      /* ── 内容区块：半透明深蓝卡片 ── */
       section {
-        padding: 58px 0 12px;
-        scroll-margin-top: 15px;
+        margin-top: 34px;
+        padding: 38px 42px 34px;
+        border-radius: 16px;
+        border: 1px solid var(--card-border);
+        background:
+          radial-gradient(120% 90% at 100% 0%, rgba(125, 211, 252, 0.05), transparent 60%),
+          var(--card);
+        -webkit-backdrop-filter: blur(10px);
+        backdrop-filter: blur(10px);
+        scroll-margin-top: 26px;
       }
-      /* section 标题：左侧小菱形 ◆ */
       .section-title {
         display: flex;
         align-items: center;
-        gap: 12px;
+        gap: 13px;
         margin: 0 0 26px;
-        font: 600 13px var(--mono);
-        letter-spacing: 0.12em;
-        color: var(--lake-deep);
+        font: 600 13px/1 var(--font-head);
+        letter-spacing: 0.16em;
         text-transform: uppercase;
+        color: var(--cyan);
       }
       .section-title::before {
-        content: "◆";
-        color: var(--gold);
-        font-size: 12px;
-        text-shadow: 0 0 12px rgba(201, 151, 72, 0.55);
+        content: "";
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        flex: none;
+        background: var(--cyan-bright);
+        box-shadow: 0 0 10px rgba(125, 211, 252, 0.9), 0 0 24px rgba(125, 211, 252, 0.45);
       }
       .section-title::after {
         content: "";
         height: 1px;
+        background: linear-gradient(90deg, rgba(125, 211, 252, 0.28), transparent);
         flex: 1;
-        background: linear-gradient(90deg, var(--line), transparent);
       }
-      /* "沉积层"分隔：几条不同深浅的渐变细线模拟地层 */
-      .strata {
-        display: flex;
-        flex-direction: column;
-        gap: 5px;
-        margin: 42px 0 2px;
-      }
-      .strata i {
-        display: block;
-        height: 1px;
-        border-radius: 1px;
-      }
-      .strata i:nth-child(1) {
-        background: linear-gradient(90deg, transparent, #e6eee9 25%, #e6eee9 75%, transparent);
-      }
-      .strata i:nth-child(2) {
-        background: linear-gradient(90deg, transparent, #c6ddd3 30%, #c6ddd3 70%, transparent);
-      }
-      .strata i:nth-child(3) {
-        background: linear-gradient(90deg, transparent, #82b6aa 42%, #82b6aa 58%, transparent);
-      }
-      .strata i:nth-child(4) {
-        background: linear-gradient(90deg, transparent, #2ab7a9 46%, #2ab7a9 54%, transparent);
-        opacity: 0.6;
-      }
-
       .bio {
-        max-width: 780px;
+        max-width: 720px;
         margin: 0;
-        font-size: 18px;
-        color: #25494a;
+        font-size: 16.5px;
+        color: #c9d3e8;
       }
       .bio strong {
-        color: var(--lake-deep);
+        color: var(--cyan-bright);
         font-weight: 600;
+        text-shadow: 0 0 10px rgba(125, 211, 252, 0.35);
       }
-      /* 标签：盐晶颗粒（旋转 45° 菱形图标 + 圆角方块） */
+
+      /* 星云胶囊标签 */
       .interests {
         display: flex;
         flex-wrap: wrap;
@@ -499,123 +556,112 @@
         margin-top: 26px;
       }
       .tag {
-        position: relative;
-        padding: 8px 15px 8px 32px;
-        border: 1px solid #d7e4de;
-        border-radius: 12px;
-        background: linear-gradient(180deg, #fdfcf8, var(--grain));
-        color: #29585a;
-        font-size: 14px;
-        box-shadow: 0 1px 3px rgba(11, 61, 61, 0.06);
-        transition: box-shadow 0.25s, transform 0.25s;
-      }
-      .tag:hover {
-        transform: translateY(-1px);
-        box-shadow: 0 4px 10px rgba(11, 61, 61, 0.1);
-      }
-      .tag::before {
-        content: "";
-        position: absolute;
-        left: 12px;
-        top: 50%;
-        width: 10px;
-        height: 10px;
-        transform: translateY(-50%) rotate(45deg);
-        border-radius: 2.5px;
-        background: linear-gradient(135deg, var(--lake-mid), var(--lake-deep));
-        box-shadow: 0 0 0 3px rgba(42, 183, 169, 0.14);
+        padding: 7px 16px;
+        border-radius: 999px;
+        border: 1px solid rgba(125, 211, 252, 0.35);
+        background: rgba(125, 211, 252, 0.07);
+        color: var(--cyan);
+        font-size: 13.5px;
+        letter-spacing: 0.03em;
       }
 
-      /* ══════════ 6. 卡片（论文 / 项目） ══════════ */
+      /* 项目 / 论文卡片：hover 边框发光 */
       .project,
       .publication {
-        position: relative;
         display: grid;
         gap: 18px;
-        margin-bottom: 16px;
+        margin-top: 18px;
         padding: 24px 26px;
-        border: 1px solid rgba(14, 124, 134, 0.15);
-        border-radius: 17px;
-        background: var(--salt);
-        box-shadow:
-          0 2px 10px rgba(11, 61, 61, 0.05),
-          inset 0 0 0 1px rgba(255, 255, 255, 0.65);
-        transition: transform 0.28s ease, box-shadow 0.28s ease, border-color 0.28s ease;
+        border-radius: 14px;
+        border: 1px solid rgba(125, 211, 252, 0.1);
+        background:
+          radial-gradient(110% 90% at 0% 0%, rgba(167, 139, 250, 0.05), transparent 55%),
+          rgba(8, 14, 34, 0.45);
+        transition: border-color 0.3s, box-shadow 0.3s, transform 0.3s;
       }
-      .project {
-        grid-template-columns: 134px 1fr;
+      .project:first-of-type,
+      .publication:first-of-type {
+        margin-top: 0;
       }
-      .publication {
-        grid-template-columns: 62px 1fr;
-      }
-      /* hover：微微浮起 + 涟漪扩散动画 */
       .project:hover,
       .publication:hover {
-        transform: translateY(-4px);
-        border-color: rgba(14, 124, 134, 0.32);
-        animation: ripple-ring 1.15s ease-out;
+        border-color: rgba(125, 211, 252, 0.45);
+        box-shadow: 0 0 30px rgba(125, 211, 252, 0.15);
+        transform: translateY(-2px);
       }
-      @keyframes ripple-ring {
-        0% {
-          box-shadow: 0 0 0 0 rgba(42, 183, 169, 0.28), 0 12px 26px rgba(11, 61, 61, 0.12);
-        }
-        100% {
-          box-shadow: 0 0 0 30px rgba(42, 183, 169, 0), 0 12px 26px rgba(11, 61, 61, 0.12);
-        }
+      .project {
+        grid-template-columns: 130px 1fr;
+      }
+      .publication {
+        grid-template-columns: 58px 1fr;
+        gap: 20px;
       }
       .project-meta {
-        color: var(--gold);
-        font: 500 13px/1.55 var(--mono);
+        color: var(--violet);
+        font: 500 12.5px/1.6 var(--font-mono);
+        letter-spacing: 0.04em;
+        text-shadow: 0 0 12px rgba(167, 139, 250, 0.3);
+      }
+      .year {
+        color: var(--warm);
+        font: 500 15px/1 var(--font-mono);
+        padding-top: 3px;
+        text-shadow: 0 0 12px rgba(252, 211, 77, 0.4);
       }
       .project-title,
       .pub-title {
-        margin: 0 0 5px;
-        font: 600 18px/1.42 var(--serif);
+        margin: 0 0 7px;
+        font: 600 17px/1.5 var(--font-head);
+        color: #eef4ff;
       }
       .project-detail {
         margin: 0;
         color: var(--muted);
-        font-size: 15px;
+        font-size: 14.5px;
       }
-      .year {
-        color: var(--gold);
-        font: 500 14px var(--mono);
-        padding-top: 3px;
+      .pub-title a {
+        color: inherit;
       }
       .pub-title a:hover {
-        color: var(--lake-deep);
+        color: var(--cyan-bright);
         text-decoration: underline;
-        text-underline-offset: 4px;
-        text-decoration-color: rgba(42, 183, 169, 0.55);
+        text-decoration-color: rgba(125, 211, 252, 0.7);
+        text-underline-offset: 5px;
+        text-shadow: 0 0 12px rgba(125, 211, 252, 0.5);
       }
       .authors,
       .venue {
         margin: 0;
         color: var(--muted);
-        font-size: 15px;
+        font-size: 14.5px;
       }
       .authors b {
-        color: var(--lake-deep);
+        color: var(--cyan-bright);
         font-weight: 600;
       }
       .venue {
         font-style: italic;
-        color: #6d8a86;
+        color: #96a3c2;
       }
       .pub-links {
         display: flex;
-        gap: 12px;
-        margin-top: 9px;
+        gap: 14px;
+        margin-top: 10px;
       }
       .pub-links a {
-        color: var(--lake-deep);
-        font: 500 12px var(--mono);
+        color: var(--cyan);
+        font: 500 11.5px var(--font-mono);
+        letter-spacing: 0.06em;
       }
       .pub-links a:hover {
-        color: var(--gold);
+        color: var(--cyan-bright);
+        text-decoration: underline;
+        text-decoration-color: rgba(125, 211, 252, 0.6);
+        text-underline-offset: 4px;
+        text-shadow: 0 0 10px rgba(125, 211, 252, 0.6);
       }
 
-      /* ══════════ 7. 时间线 ══════════ */
+      /* 时间线 */
       .timeline {
         position: relative;
       }
@@ -623,280 +669,346 @@
         content: "";
         position: absolute;
         top: 10px;
-        bottom: 10px;
-        left: 111.5px;
-        width: 2px;
-        border-radius: 2px;
-        background: linear-gradient(180deg, var(--lake-mid), var(--lake-shallow), transparent);
-        opacity: 0.7;
+        bottom: 16px;
+        left: 78px;
+        width: 1px;
+        background: linear-gradient(180deg, rgba(125, 211, 252, 0.5), rgba(125, 211, 252, 0.06));
       }
       .entry {
         display: grid;
-        grid-template-columns: 110px 1fr;
+        grid-template-columns: 78px 1fr;
         gap: 20px;
         position: relative;
-        padding: 0 0 26px;
+        padding: 0 0 27px;
+      }
+      .entry:last-child {
+        padding-bottom: 0;
       }
       .entry-year {
-        color: var(--gold);
-        font: 500 13px var(--mono);
+        color: var(--warm);
+        font: 500 12.5px var(--font-mono);
+        text-shadow: 0 0 10px rgba(252, 211, 77, 0.3);
       }
       .entry-content {
         position: relative;
       }
-      /* 时间线节点：盐水滴菱形 */
       .entry-content::before {
         content: "";
         position: absolute;
-        left: -23px;
-        top: 9px;
-        width: 11px;
-        height: 11px;
-        transform: rotate(45deg);
-        border-radius: 2.5px;
-        background: linear-gradient(135deg, var(--lake-mid), var(--lake-deep));
-        box-shadow: 0 0 0 4px rgba(42, 183, 169, 0.15);
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        left: -25px;
+        top: 7px;
+        background: var(--cyan-bright);
+        box-shadow: 0 0 10px rgba(125, 211, 252, 0.9);
       }
       .entry h3 {
         margin: 0;
-        font: 600 17.5px/1.45 var(--serif);
+        font: 600 16px/1.5 var(--font-head);
+        color: #eef4ff;
       }
       .entry p {
-        margin: 2px 0 0;
+        margin: 3px 0 0;
         color: var(--muted);
-        font-size: 15px;
+        font-size: 14.5px;
       }
 
-      .news {
-        display: grid;
-        gap: 0;
-      }
+      /* 近期动态（备用区块） */
       .news-item {
         display: grid;
-        grid-template-columns: 95px 1fr;
-        gap: 17px;
-        padding: 13px 0;
-        border-top: 1px solid var(--line);
+        grid-template-columns: 92px 1fr;
+        gap: 16px;
+        padding: 15px 0;
+        border-top: 1px solid rgba(125, 211, 252, 0.1);
+      }
+      .news-item:first-child {
+        border-top: 0;
+        padding-top: 2px;
       }
       .news-date {
-        color: var(--gold);
-        font: 12px var(--mono);
+        color: var(--warm);
+        font: 12px var(--font-mono);
         padding-top: 4px;
       }
       .news-item p {
         margin: 0;
+        color: #c9d3e8;
+      }
+      .news-item em {
+        color: var(--cyan);
+        font-style: normal;
       }
 
-      /* ══════════ 8. 页脚（湖岸线） ══════════ */
+      /* ── 页脚 ── */
       footer {
-        position: relative;
         margin-top: 46px;
-        padding-top: 36px;
-        color: #7c918d;
-        font: 12px var(--mono);
-        letter-spacing: 0.06em;
+        padding: 24px 6px 8px;
         display: flex;
+        align-items: center;
         justify-content: space-between;
-        gap: 15px;
+        gap: 18px;
+        border-top: 1px solid rgba(125, 211, 252, 0.12);
+        color: var(--muted);
+        font: 500 11px var(--font-mono);
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
       }
-      footer::before {
-        content: "";
-        position: absolute;
-        left: -70px;
-        right: -70px;
-        top: 0;
-        height: 28px;
-        background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 26' preserveAspectRatio='none'%3E%3Cpath fill='%23e0ece6' d='M0,12 C25,24 50,0 75,10 C100,20 125,2 150,11 C175,20 190,8 200,12 L200,26 L0,26 Z'/%3E%3Cpath fill='none' stroke='%232ab7a9' stroke-opacity='0.5' stroke-width='1.6' d='M0,8 C25,20 50,-4 75,6 C100,16 125,-2 150,7 C175,16 190,4 200,8'/%3E%3C/svg%3E")
-          repeat-x top center;
-        background-size: 200px 26px;
-        opacity: 0.55;
+      .constellation {
+        width: 128px;
+        height: auto;
+        flex: none;
+        opacity: 0.9;
+        filter: drop-shadow(0 0 6px rgba(125, 211, 252, 0.35));
       }
 
-      /* ══════════ 9. Toast ══════════ */
+      /* Toast */
       #toast {
         position: fixed;
         left: 50%;
-        bottom: 26px;
-        transform: translate(-50%, 100px);
-        padding: 11px 19px;
-        color: #f2fbf8;
-        background: linear-gradient(135deg, var(--lake-deep), var(--lake-mid));
-        border: 1px solid rgba(255, 255, 255, 0.28);
-        border-radius: 14px;
-        font: 500 14px var(--sans);
-        box-shadow: 0 10px 26px rgba(11, 61, 61, 0.32);
-        transition: transform 0.3s cubic-bezier(0.2, 0.9, 0.3, 1.2);
-        z-index: 9;
+        bottom: 28px;
+        transform: translate(-50%, 110px);
+        padding: 11px 22px;
+        border-radius: 999px;
+        color: var(--ink);
+        background: rgba(13, 23, 52, 0.88);
+        border: 1px solid rgba(125, 211, 252, 0.3);
+        -webkit-backdrop-filter: blur(12px);
+        backdrop-filter: blur(12px);
+        box-shadow: 0 10px 34px rgba(0, 0, 0, 0.5), 0 0 22px rgba(125, 211, 252, 0.1);
+        font-size: 14px;
+        transition: transform 0.25s;
+        z-index: 50;
       }
       #toast.show {
         transform: translate(-50%, 0);
       }
 
-      /* ══════════ 10. 响应式（移动端） ══════════ */
-      @media (max-width: 800px) {
+      /* 滚动条 */
+      ::-webkit-scrollbar {
+        width: 9px;
+        height: 9px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #060a18;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: rgba(125, 211, 252, 0.18);
+        border-radius: 8px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: rgba(125, 211, 252, 0.32);
+      }
+
+      /* ── 响应式：移动端（导航改顶部、星点减少）── */
+      @media (max-width: 820px) {
         .layout {
-          display: block;
+          max-width: 100%;
+          padding: 0 16px 52px;
         }
-        .layout aside {
-          padding: 26px 24px 22px;
+        aside {
+          position: static;
+          width: auto;
+          z-index: 5;
+          margin: 0 -16px 24px;
+          padding: 14px 16px 10px;
+          flex-direction: row;
+          flex-wrap: wrap;
+          align-items: center;
+          gap: 8px 14px;
+          overflow: visible;
           border-right: 0;
-          border-bottom: 1px solid var(--line);
+          border-bottom: 1px solid rgba(125, 211, 252, 0.14);
+          -webkit-backdrop-filter: blur(14px);
+          backdrop-filter: blur(14px);
         }
-        .name {
-          font-size: 26px;
+        aside .identity {
+          display: flex;
+          flex-direction: row;
+          align-items: baseline;
+          gap: 10px;
         }
-        .name-en {
-          margin: 2px 0 0;
-          font-size: 11px;
+        aside .name {
+          font-size: 19px;
+          letter-spacing: 0.04em;
+        }
+        aside .name-en {
+          margin: 0;
+          font-size: 8.5px;
+        }
+        aside.is-en .identity {
+          flex-direction: row;
         }
         aside.is-en .name-en {
-          margin: 0 0 2px;
-          font-size: 26px;
+          font-size: 19px;
         }
         aside.is-en .name {
           margin: 0;
-          font-size: 14px;
+          font-size: 8.5px;
         }
-        .title {
-          clear: both;
-          padding-top: 16px;
-          margin-bottom: 14px;
+        aside .title {
+          display: none;
         }
         .contact {
-          display: flex;
-          gap: 16px;
-          padding: 12px 0;
+          flex-direction: row;
+          align-items: center;
+          gap: 4px;
+          margin: 0;
+          padding: 0;
+          border-top: 0;
         }
         .contact a,
         .contact button {
           font-size: 0;
-          padding: 2px;
+          padding: 5px;
         }
         .contact .icon {
-          width: 19px;
+          width: 17px;
+          height: 17px;
         }
         nav {
-          display: none;
+          order: 10;
+          flex-direction: row;
+          flex-wrap: wrap;
+          gap: 3px 6px;
+          width: 100%;
+          margin: 2px 0 0;
+          padding: 9px 0 0;
+          border-top: 1px solid rgba(125, 211, 252, 0.12);
+        }
+        nav a {
+          font-size: 10.5px;
+          padding: 5px 9px;
+          letter-spacing: 0.12em;
         }
         .language-switch {
-          position: absolute;
-          top: 26px;
-          right: 24px;
-          margin: 0;
+          margin: 0 0 0 auto;
+          padding-top: 0;
         }
         .language-switch span {
           display: none;
         }
         .language-switch button {
-          font-size: 12px;
-          padding: 5px 7px;
+          font-size: 10.5px;
+          padding: 5px 11px;
         }
         .side-foot {
           display: none;
         }
-        main {
-          padding: 0 24px 34px;
+
+        /* 星点减少：覆盖星空层为少量星 */
+        .stars::before {
+          box-shadow:
+            12vw 8vh 0 0 #fff,
+            42vw 14vh 0 0 rgba(142, 202, 230, 0.9),
+            78vw 10vh 0 0 #fff,
+            88vw 34vh 0 0 rgba(167, 139, 250, 0.8),
+            24vw 40vh 0 0 rgba(255, 255, 255, 0.7),
+            64vw 55vh 0 0 rgba(255, 255, 255, 0.65),
+            8vw 72vh 0 0 rgba(142, 202, 230, 0.75),
+            52vw 84vh 0 0 #fff,
+            90vw 80vh 0 0 rgba(255, 255, 255, 0.7);
         }
-        /* 湖面横幅变矮、波浪简化 */
+        .stars::after {
+          box-shadow:
+            28vw 26vh 0 0 rgba(232, 238, 252, 0.7),
+            58vw 30vh 0 0 rgba(232, 238, 252, 0.6),
+            94vw 58vh 0 0 rgba(232, 238, 252, 0.7),
+            36vw 66vh 0 0 rgba(232, 238, 252, 0.6),
+            72vw 90vh 0 0 rgba(232, 238, 252, 0.7),
+            16vw 95vh 0 0 rgba(232, 238, 252, 0.6);
+        }
+        body::after {
+          background:
+            radial-gradient(60vw 40vw at 80% 0%, rgba(125, 211, 252, 0.06), transparent 70%),
+            radial-gradient(60vw 45vw at 10% 90%, rgba(167, 139, 250, 0.05), transparent 70%);
+        }
+
         .hero {
-          margin: 0 -24px;
           min-height: 0;
-          padding: 58px 24px 90px;
+          padding: 58px 0 56px;
         }
         .hero::before {
-          height: 18px;
+          box-shadow:
+            -150px -5px 0 0 #fff,
+            -90px -17px 0 0 rgba(142, 202, 230, 1),
+            -30px -7px 0 0 #fff,
+            40px -20px 0 0 rgba(255, 255, 255, 0.85),
+            110px -8px 0 0 rgba(167, 139, 250, 0.9),
+            185px -15px 0 0 #fff;
         }
-        .hero::after {
-          height: 32px;
+        .hero-name-cn {
+          font-size: clamp(46px, 13vw, 66px);
         }
-        .bubbles span:nth-child(n + 6) {
-          display: none;
+        .hero-name-en {
+          font-size: clamp(42px, 12vw, 62px);
         }
         .hero h1 {
-          font-size: 32px;
+          font-size: 21px;
         }
         .hero p {
           font-size: 15.5px;
         }
         .stats {
-          gap: 10px;
-          margin-top: 26px;
-        }
-        .stat {
-          min-width: 0;
-          flex: 1 1 100px;
-          padding: 12px 14px;
+          flex-wrap: wrap;
+          gap: 26px;
+          margin-top: 30px;
         }
         .stat b {
-          font-size: 21px;
-        }
-        .stat span {
-          font-size: 11.5px;
+          font-size: 24px;
         }
         section {
-          padding-top: 44px;
+          margin-top: 22px;
+          padding: 28px 22px 26px;
+          border-radius: 14px;
+          scroll-margin-top: 18px;
         }
-        .strata {
-          margin-top: 34px;
+        .section-title {
+          margin-bottom: 22px;
         }
         .bio {
-          font-size: 16px;
+          font-size: 15.5px;
         }
-        .project {
-          grid-template-columns: 1fr;
-          gap: 8px;
-          padding: 20px;
-        }
+        .project,
         .publication {
-          grid-template-columns: 48px 1fr;
-          gap: 12px;
-          padding: 20px;
+          grid-template-columns: 1fr;
+          gap: 9px;
+          margin-top: 14px;
+          padding: 20px 18px;
         }
         .project-title,
         .pub-title {
-          font-size: 16px;
+          font-size: 15.5px;
         }
         .timeline::before {
-          left: 85px;
+          left: 56px;
         }
         .entry {
-          grid-template-columns: 84px 1fr;
-          gap: 15px;
+          grid-template-columns: 56px 1fr;
+          gap: 14px;
         }
         .entry-content::before {
-          left: -18.5px;
+          left: -18px;
         }
         .news-item {
-          grid-template-columns: 76px 1fr;
-          gap: 11px;
+          grid-template-columns: 74px 1fr;
+          gap: 12px;
         }
         footer {
-          display: block;
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 12px;
+          margin-top: 36px;
+          padding: 20px 6px 6px;
         }
         footer span + span {
           display: block;
-          margin-top: 4px;
-        }
-        footer::before {
-          left: -24px;
-          right: -24px;
-        }
-      }
-
-      /* 尊重系统"减少动效"偏好 */
-      @media (prefers-reduced-motion: reduce) {
-        .bubbles span {
-          animation: none;
-          opacity: 0;
-        }
-        .project:hover,
-        .publication:hover {
-          animation: none;
         }
       }
     </style>
   </head>
   <body>
+    <div class="stars" aria-hidden="true"></div>
     <div class="layout">
       <aside>
         <div class="identity">
@@ -1002,17 +1114,11 @@
       </aside>
       <main>
         <header class="hero" id="about">
-          <div class="bubbles" aria-hidden="true">
-            <span style="--s: 13px; --l: 6%; --d: 10s; --p: 0s"></span>
-            <span style="--s: 8px; --l: 16%; --d: 13s; --p: 2.5s"></span>
-            <span style="--s: 16px; --l: 26%; --d: 11s; --p: 5s"></span>
-            <span style="--s: 7px; --l: 38%; --d: 15s; --p: 1s"></span>
-            <span style="--s: 11px; --l: 52%; --d: 12s; --p: 6.5s"></span>
-            <span style="--s: 9px; --l: 64%; --d: 14s; --p: 3.5s"></span>
-            <span style="--s: 15px; --l: 76%; --d: 10.5s; --p: 7.5s"></span>
-            <span style="--s: 7px; --l: 88%; --d: 13.5s; --p: 4.5s"></span>
-          </div>
           <div class="hero-content">
+            <div class="hero-name">
+              <span class="hero-name-cn">汪子涛</span
+              ><span class="hero-name-en">Zitao Wang</span>
+            </div>
             <div class="eyebrow">Hydrogeology · Groundwater Science</div>
             <h1 data-i18n="hero">
               探索地下水系统过程，服务水资源的可持续利用。
@@ -1046,9 +1152,6 @@
             ><span class="tag" data-i18n="tag4">盐湖资源</span>
           </div>
         </section>
-        <div class="strata" aria-hidden="true">
-          <i></i><i></i><i></i><i></i>
-        </div>
         <section id="projects">
           <h2 class="section-title">
             02 / <span data-i18n="researchProjects">Research Projects</span>
@@ -1093,9 +1196,6 @@
             </div>
           </article>
         </section>
-        <div class="strata" aria-hidden="true">
-          <i></i><i></i><i></i><i></i>
-        </div>
         <section id="publications">
           <h2 class="section-title">
             03 / <span data-i18n="publications">Selected Publications</span>
@@ -1111,7 +1211,7 @@
                 >
               </h3>
               <p class="authors"><b>Zitao Wang</b>, Kai Chen, Jianping Wang</p>
-              <p class="venue">Environmental Modelling &amp; Software</p>
+              <p class="venue">Environmental Modelling & Software</p>
               <div class="pub-links">
                 <!--
               <a href="#">[PDF]</a>
@@ -1165,12 +1265,9 @@
             </div>
           </article>
         </section>
-        <div class="strata" aria-hidden="true">
-          <i></i><i></i><i></i><i></i>
-        </div>
         <section id="education">
           <h2 class="section-title">
-            04 / <span data-i18n="education">Education &amp; Experience</span>
+            04 / <span data-i18n="education">Education & Experience</span>
           </h2>
           <div class="timeline">
             <div class="entry">
@@ -1224,8 +1321,32 @@
           </div>
         </section> -->
         <footer>
-          <span>© 2026 Zitao Wang</span
-          ><span>GROUNDWATER · MODELING · ENVIRONMENT</span>
+          <span>© 2026 Zitao Wang</span>
+          <svg
+            class="constellation"
+            viewBox="0 0 140 32"
+            fill="none"
+            aria-hidden="true"
+          >
+            <g stroke="rgba(125,211,252,0.45)" stroke-width="1">
+              <line x1="14" y1="24" x2="34" y2="15" />
+              <line x1="34" y1="15" x2="54" y2="20" />
+              <line x1="54" y1="20" x2="70" y2="10" />
+              <line x1="70" y1="10" x2="86" y2="16" />
+              <line x1="86" y1="16" x2="104" y2="8" />
+              <line x1="104" y1="8" x2="124" y2="18" />
+            </g>
+            <g fill="#8ecae6">
+              <circle cx="14" cy="24" r="1.8" />
+              <circle cx="34" cy="15" r="1.8" />
+              <circle cx="54" cy="20" r="1.4" />
+              <circle cx="70" cy="10" r="1.8" />
+              <circle cx="86" cy="16" r="1.3" />
+              <circle cx="104" cy="8" r="1.8" />
+              <circle cx="124" cy="18" r="1.4" />
+            </g>
+          </svg>
+          <span>Looking up at the sky — 2026</span>
         </footer>
       </main>
     </div>
@@ -1331,17 +1452,10 @@
             "欢迎对地下水数值模拟、盐湖资源与水文地球化学感兴趣的同学通过邮件联系。",
         },
       };
+      // ——— 预览模式语言切换：本地切换，不改变 URL（主题预览用） ———
       let lang;
       const langButton = document.getElementById("language-toggle");
-      const languageFromPath = () =>
-        location.pathname.replace(/\/+$/, "").endsWith("/cn") ? "zh" : "en";
-      const languagePath = (language) => {
-        const base = location.pathname.replace(/\/(?:en|cn)\/?$/, "") || "/";
-        return `${base}${base.endsWith("/") ? "" : "/"}${
-          language === "zh" ? "cn" : "en"
-        }`;
-      };
-      function applyLanguage(nextLanguage, updateUrl = false) {
+      function applyLanguage(nextLanguage) {
         lang = nextLanguage;
         document.documentElement.lang = lang === "zh" ? "zh-CN" : "en";
         document
@@ -1358,23 +1472,13 @@
           lang === "zh" ? "Switch to English" : "Switch to Chinese"
         );
         document.title = "Zitao Wang (汪子涛) · Academic Homepage";
-        if (updateUrl)
-          history.pushState(
-            { lang },
-            "",
-            languagePath(lang) + location.search + location.hash
-          );
       }
-      // The root URL is normalized to /en so the default language is shareable too.
-      applyLanguage(
-        languageFromPath(),
-        !/\/(?:en|cn)\/?$/.test(location.pathname)
-      );
+      applyLanguage(location.pathname.includes("/cn/") ? "zh" : "en");
       langButton.addEventListener("click", () =>
-        applyLanguage(lang === "zh" ? "en" : "zh", true)
+        applyLanguage(lang === "zh" ? "en" : "zh")
       );
       window.addEventListener("popstate", () =>
-        applyLanguage(languageFromPath())
+        applyLanguage(location.pathname.includes("/cn/") ? "zh" : "en")
       );
       const showToast = (message) => {
         const toast = document.getElementById("toast");

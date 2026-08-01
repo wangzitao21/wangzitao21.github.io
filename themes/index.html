@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>风格画廊 · Zitao Wang Homepage Themes</title>
+<style>
+  :root {
+    --bg: #f4f2ec;
+    --ink: #1c1c1c;
+    --muted: #6b6b6b;
+    --accent: #c97b2d;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+  }
+  header {
+    padding: 34px 26px 22px;
+    border-bottom: 2px solid var(--ink);
+    background: #fffdf7;
+  }
+  header h1 {
+    margin: 0 0 6px;
+    font-size: 26px;
+    letter-spacing: 0.02em;
+  }
+  header p {
+    margin: 0;
+    color: var(--muted);
+    font-size: 14px;
+  }
+  .tabbar {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding: 14px 26px;
+    background: #fffdf7;
+    border-bottom: 1px solid #ddd8cc;
+    position: sticky;
+    top: 0;
+    z-index: 5;
+  }
+  .tab {
+    flex: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 14px;
+    border: 1.5px solid var(--ink);
+    border-radius: 999px;
+    background: #fff;
+    font-size: 13.5px;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: transform 0.12s, box-shadow 0.12s;
+  }
+  .tab:hover { transform: translateY(-1px); }
+  .tab.active {
+    background: var(--ink);
+    color: #fff;
+  }
+  .dot {
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+    border: 1px solid rgba(0,0,0,0.25);
+    flex: none;
+  }
+  .stage {
+    padding: 22px 26px 30px;
+  }
+  .desc {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    margin: 0 0 14px;
+    font-size: 14px;
+    color: var(--muted);
+  }
+  .desc b {
+    color: var(--ink);
+    font-size: 15px;
+  }
+  .frame-wrap {
+    position: relative;
+    width: 100%;
+    height: calc(100vh - 235px);
+    min-height: 480px;
+    border: 1.5px solid var(--ink);
+    background: #fff;
+    box-shadow: 8px 8px 0 rgba(28,28,28,0.12);
+  }
+  iframe {
+    width: 100%;
+    height: 100%;
+    border: 0;
+    background: #fff;
+  }
+  .hint {
+    margin: 16px 0 0;
+    font-size: 12.5px;
+    color: var(--muted);
+  }
+  .hint a { color: var(--accent); }
+  @media (max-width: 640px) {
+    .tabbar { padding: 10px 16px; }
+    .stage { padding: 14px 16px 24px; }
+    .frame-wrap { height: calc(100vh - 210px); min-height: 380px; }
+    header { padding: 24px 16px 16px; }
+    header h1 { font-size: 21px; }
+  }
+</style>
+</head>
+<body>
+<header>
+  <h1>风格画廊 · 10 种独立设计</h1>
+  <p>点击上方标签切换预览。每个主题都是完整的独立页面，选中后点击「在浏览器打开」体验完整效果。</p>
+</header>
+
+<div class="tabbar" id="tabbar"></div>
+
+<div class="stage">
+  <p class="desc" id="desc"></p>
+  <div class="frame-wrap">
+    <iframe id="frame" title="theme preview"></iframe>
+  </div>
+  <p class="hint" id="hint"></p>
+</div>
+
+<script>
+  const THEMES = [
+    { file: "theme-01-swiss.html", name: "01 瑞士极简", en: "Swiss Minimalism",
+      desc: "黑白灰网格 + 瑞士红，超大字号与严格对齐，无装饰的理性排版。",
+      color: "#FF3B00" },
+    { file: "theme-02-terminal.html", name: "02 终端科技", en: "Terminal",
+      desc: "CRT 终端模拟：荧光绿提示符、命令行导航、扫描线质感。",
+      color: "#33ff66" },
+    { file: "theme-03-saltlake.html", name: "03 盐湖地质", en: "Salt Lake",
+      desc: "呼应盐湖卤水研究：湖面渐变、盐晶颗粒、沉积地层分隔线。",
+      color: "#0e7c86" },
+    { file: "theme-04-inkwash.html", name: "04 东方水墨", en: "Ink Wash",
+      desc: "宣纸留白、毛笔大字、朱砂印章、竖排标题，宋韵审美。",
+      color: "#b3452f" },
+    { file: "theme-05-paper.html", name: "05 学术论文", en: "Paper / LaTeX",
+      desc: "像一篇排印的期刊论文：窄栏、衬线、文献编号、首行缩进。",
+      color: "#1a3a5c" },
+    { file: "theme-06-glass.html", name: "06 玻璃拟态", en: "Glassmorphism",
+      desc: "流动渐变背景 + 毛玻璃卡片，轻盈现代的界面质感。",
+      color: "#7b5cf0" },
+    { file: "theme-07-newspaper.html", name: "07 复古报纸", en: "Newspaper",
+      desc: "THE HYDROGEOLOGIST 头版：刊头大字、双栏版面、朱红印章。",
+      color: "#c0341e" },
+    { file: "theme-08-dashboard.html", name: "08 数据仪表盘", en: "Dashboard",
+      desc: "科研监控面板：KPI 数字卡、迷你图表、日志式论文列表。",
+      color: "#22d3ee" },
+    { file: "theme-09-brutalist.html", name: "09 新粗野主义", en: "Neo-Brutalism",
+      desc: "高饱和色块、粗黑边框、硬阴影与贴纸旋转，大胆张扬。",
+      color: "#ffd23f" },
+    { file: "theme-10-midnight.html", name: "10 深空夜色", en: "Midnight",
+      desc: "星空背景 + 发光青色，深夜阅读与天文般的学术氛围。",
+      color: "#8ecae6" },
+  ];
+
+  const tabbar = document.getElementById("tabbar");
+  const frame = document.getElementById("frame");
+  const desc = document.getElementById("desc");
+  const hint = document.getElementById("hint");
+
+  let current = null;
+  function select(index) {
+    const t = THEMES[index];
+    current = index;
+    [...tabbar.children].forEach((el, i) => el.classList.toggle("active", i === index));
+    frame.src = t.file;
+    desc.innerHTML = `<b>${t.name}</b> ${t.en} — ${t.desc}`;
+    hint.innerHTML = `正在预览：<a href="${t.file}" target="_blank" rel="noopener">${t.file}</a>（新标签页打开 / 也可以直接双击 themes 目录里的这个文件）`;
+  }
+
+  THEMES.forEach((t, i) => {
+    const btn = document.createElement("button");
+    btn.className = "tab" + (i === 0 ? " active" : "");
+    btn.innerHTML = `<span class="dot" style="background:${t.color}"></span>${t.name}`;
+    btn.addEventListener("click", () => select(i));
+    tabbar.appendChild(btn);
+  });
+  select(0);
+</script>
+</body>
+</html>

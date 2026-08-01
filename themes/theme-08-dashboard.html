@@ -1,0 +1,1495 @@
+<!DOCTYPE html>
+<!--
+  ═══════════════════════════════════════════════════════════════
+  THEME TEMPLATE — 主题基准模板
+  ═══════════════════════════════════════════════════════════════
+  这是一个完整的单文件学术主页。作为主题设计师，你的任务是：
+
+  1. 复制本文件为 themes/theme-XX-<slug>.html（<slug> 为风格英文名）
+  2. 完全重写 <head> 中的 <link>（Google Fonts 字体组合）与整个 <style>，
+     实现一个完全独立的设计风格（详见任务描述中的设计方向）
+  3. 允许调整 body 中 HTML 结构的布局方式（例如改变侧栏位置、卡片化、
+     两栏布局等），但【必须保留】：
+     - 所有 [data-i18n] 属性与 id（copy-email / copy-google-email /
+       language-toggle / toast / nav a 的 href 锚点）
+     - <aside> 上的 is-en 类切换逻辑依赖 aside 元素存在
+     - 所有 SVG 图标内容
+     - <script> 部分保持不变（双语、复制、滚动高亮功能）
+  4. 必须包含响应式设计（移动端友好），代码完整可直接双击打开运行
+  5. 不要引用任何外部 CSS 框架，只用内联 CSS + Google Fonts
+  6. 禁止修改其他任何文件
+
+  注意：中文正文的回退字体链务必包含适合该风格的系统中文字体
+  （如 KaiTi 楷体 / FangSong 仿宋 / SimSun 宋体 / Microsoft YaHei 黑体）。
+  ═══════════════════════════════════════════════════════════════
+-->
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Zitao Wang (汪子涛) · Academic Homepage"
+    />
+    <title>Zitao Wang · Dashboard Theme</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      /* ═══ RESEARCH DASHBOARD — 科研数据仪表盘主题 ═══ */
+      :root {
+        --bg: #0b1220;
+        --panel: #111a2e;
+        --panel2: #0f1830;
+        --line: #1e2a44;
+        --cyan: #22d3ee;
+        --violet: #8b5cf6;
+        --orange: #f59e0b;
+        --green: #34d399;
+        --text: #e2e8f0;
+        --muted: #64748b;
+        --font-display: "Space Grotesk", "Noto Sans SC", "Microsoft YaHei",
+          sans-serif;
+        --font-body: "Inter", "Noto Sans SC", "Microsoft YaHei", sans-serif;
+        --font-mono: "IBM Plex Mono", "Consolas", "Courier New", monospace;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      body {
+        margin: 0;
+        color: var(--text);
+        background:
+          repeating-linear-gradient(
+            0deg,
+            rgba(30, 42, 68, 0.16) 0 1px,
+            transparent 1px 26px
+          ),
+          repeating-linear-gradient(
+            90deg,
+            rgba(30, 42, 68, 0.16) 0 1px,
+            transparent 1px 26px
+          ),
+          var(--bg);
+        font-family: var(--font-body);
+        font-size: 16px;
+        line-height: 1.6;
+      }
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+      .layout {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 0 20px;
+      }
+
+      /* ── 系统状态栏（sticky） ── */
+      .sysbar {
+        position: sticky;
+        top: 0;
+        z-index: 30;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 14px;
+        margin: 0 -20px;
+        padding: 10px 26px;
+        background: rgba(7, 12, 24, 0.92);
+        backdrop-filter: blur(10px);
+        border-bottom: 1px solid var(--line);
+        font-family: var(--font-mono);
+      }
+      .sys-id {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        min-width: 0;
+      }
+      .sys-dot {
+        width: 9px;
+        height: 9px;
+        border-radius: 50%;
+        background: var(--cyan);
+        box-shadow: 0 0 10px var(--cyan);
+        flex: none;
+      }
+      .sys-name {
+        font-size: 12px;
+        font-weight: 600;
+        letter-spacing: 0.22em;
+        color: var(--text);
+        white-space: nowrap;
+      }
+      .sys-ver {
+        font-size: 10px;
+        color: var(--cyan);
+        border: 1px solid rgba(34, 211, 238, 0.35);
+        padding: 2px 7px;
+        border-radius: 4px;
+        letter-spacing: 0.08em;
+      }
+      .sys-tools {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+      }
+      .utc-chip {
+        font-size: 11px;
+        color: var(--muted);
+        letter-spacing: 0.06em;
+        white-space: nowrap;
+      }
+      .language-switch {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .language-switch > span {
+        font-size: 10px;
+        letter-spacing: 0.2em;
+        color: var(--muted);
+      }
+      #language-toggle {
+        padding: 5px 10px;
+        font: 600 11px var(--font-mono);
+        letter-spacing: 0.08em;
+        color: var(--cyan);
+        background: rgba(15, 24, 48, 0.8);
+        border: 1px solid rgba(34, 211, 238, 0.4);
+        border-radius: 6px;
+        cursor: pointer;
+        transition: box-shadow 0.2s, color 0.2s;
+      }
+      #language-toggle:hover {
+        box-shadow: 0 0 0 1px rgba(34, 211, 238, 0.4),
+          0 0 14px rgba(34, 211, 238, 0.25);
+      }
+
+      main {
+        padding: 0 0 60px;
+      }
+
+      /* ── 标签页导航（tab 风格） ── */
+      .tabnav {
+        display: flex;
+        gap: 4px;
+        margin-top: 18px;
+        padding: 0 6px;
+        border-bottom: 1px solid var(--line);
+        overflow-x: auto;
+        scrollbar-width: none;
+      }
+      .tabnav::-webkit-scrollbar {
+        display: none;
+      }
+      .tabnav a {
+        flex: none;
+        padding: 10px 18px 9px;
+        font: 500 12px var(--font-mono);
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--muted);
+        border: 1px solid transparent;
+        border-bottom: none;
+        border-radius: 8px 8px 0 0;
+        transition: color 0.2s, background 0.2s, border-color 0.2s;
+      }
+      .tabnav a:hover {
+        color: var(--text);
+        background: rgba(17, 26, 46, 0.7);
+      }
+      .tabnav a.active {
+        color: var(--cyan);
+        background: var(--panel);
+        border-color: var(--line);
+        box-shadow: inset 0 2px 0 var(--cyan);
+      }
+
+      /* ── Hero：KPI 面板区 ── */
+      .hero {
+        position: relative;
+        margin-top: 20px;
+        padding: 44px 26px 26px;
+        background: linear-gradient(180deg, var(--panel2), var(--panel));
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        overflow: hidden;
+        scroll-margin-top: 70px;
+      }
+      .hero::before {
+        content: "";
+        position: absolute;
+        top: -90px;
+        right: -70px;
+        width: 340px;
+        height: 340px;
+        background: radial-gradient(
+          circle,
+          rgba(34, 211, 238, 0.09),
+          transparent 65%
+        );
+        pointer-events: none;
+      }
+      .data-flow {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 44px;
+        opacity: 0.9;
+        pointer-events: none;
+      }
+      .data-flow svg {
+        width: 100%;
+        height: 100%;
+        display: block;
+      }
+      .hero-bar {
+        position: relative;
+        display: flex;
+        align-items: center;
+        gap: 11px;
+        margin: -20px -26px 20px;
+        padding: 10px 20px;
+        background: rgba(7, 12, 24, 0.5);
+        border-bottom: 1px solid var(--line);
+      }
+      .panel-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--cyan);
+        box-shadow: 0 0 8px var(--cyan);
+        flex: none;
+      }
+      .hero-bar-title {
+        font: 600 11px var(--font-mono);
+        letter-spacing: 0.2em;
+        color: var(--text);
+      }
+      .hero-bar-meta {
+        margin-left: auto;
+        font: 500 10px var(--font-mono);
+        letter-spacing: 0.1em;
+        color: var(--muted);
+      }
+      .hero-head {
+        position: relative;
+      }
+      .eyebrow {
+        margin: 0 0 10px;
+        color: var(--cyan);
+        font: 500 11px var(--font-mono);
+        letter-spacing: 0.22em;
+        text-transform: uppercase;
+      }
+      .eyebrow::before {
+        content: "// ";
+        opacity: 0.55;
+      }
+      .identity {
+        display: flex;
+        align-items: baseline;
+        gap: 16px;
+        flex-wrap: wrap;
+      }
+      .name {
+        margin: 0;
+        font: 700 clamp(28px, 3.6vw, 40px) / 1.12 var(--font-display);
+        color: var(--text);
+        letter-spacing: 0.01em;
+      }
+      .name-en {
+        margin: 0;
+        font: 500 13px var(--font-mono);
+        letter-spacing: 0.24em;
+        text-transform: uppercase;
+        color: var(--cyan);
+      }
+      .title {
+        margin: 12px 0 0;
+        color: #93a4c4;
+        font-size: 14.5px;
+      }
+      .hero-slogan {
+        margin: 18px 0 8px;
+        max-width: 760px;
+        font: 600 clamp(19px, 2.4vw, 25px) / 1.45 var(--font-display);
+        color: var(--text);
+      }
+      .hero-slogan::before {
+        content: "> ";
+        color: var(--violet);
+      }
+      .hero-text {
+        margin: 0;
+        max-width: 720px;
+        color: var(--muted);
+        font-size: 15px;
+      }
+
+      /* ── 联系区（数据徽章式按钮） ── */
+      .contact {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 9px;
+        margin-top: 20px;
+      }
+      .contact a,
+      .contact button {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 7px 13px;
+        font: 500 12px var(--font-mono);
+        color: #9fb6d8;
+        background: rgba(15, 24, 48, 0.7);
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        cursor: pointer;
+        transition: border-color 0.2s, box-shadow 0.2s, color 0.2s;
+      }
+      .contact a:hover,
+      .contact button:hover {
+        color: var(--cyan);
+        border-color: rgba(34, 211, 238, 0.5);
+        box-shadow: 0 0 0 1px rgba(34, 211, 238, 0.25),
+          0 0 14px rgba(34, 211, 238, 0.12);
+      }
+      .icon {
+        width: 15px;
+        color: var(--cyan);
+        flex: none;
+      }
+
+      /* ── KPI 指标卡 ── */
+      .kpi-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 16px;
+        margin-top: 28px;
+      }
+      .kpi-card {
+        position: relative;
+        padding: 14px 18px 12px;
+        background: linear-gradient(180deg, #141f38, #0f1830);
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        transition: border-color 0.25s, box-shadow 0.25s, transform 0.25s;
+      }
+      .kpi-card:hover {
+        transform: translateY(-2px);
+        border-color: rgba(34, 211, 238, 0.55);
+        box-shadow: 0 0 0 1px rgba(34, 211, 238, 0.33),
+          0 0 24px rgba(34, 211, 238, 0.08);
+      }
+      .kpi-top {
+        display: flex;
+        justify-content: flex-end;
+      }
+      .kpi-status {
+        font: 500 10px var(--font-mono);
+        letter-spacing: 0.12em;
+      }
+      .kpi-status.cyan {
+        color: var(--cyan);
+      }
+      .kpi-status.violet {
+        color: var(--violet);
+      }
+      .kpi-status.green {
+        color: var(--green);
+      }
+      .kpi-value {
+        margin: 8px 0 2px;
+        font: 700 44px/1 var(--font-mono);
+        color: var(--text);
+        letter-spacing: 0.01em;
+      }
+      .kpi-label {
+        font: 500 11px var(--font-mono);
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: var(--muted);
+      }
+      .kpi-label::before {
+        content: "> ";
+        color: var(--cyan);
+        opacity: 0.7;
+      }
+      .spark {
+        display: block;
+        width: 100%;
+        height: 36px;
+        margin-top: 10px;
+      }
+      .spark rect {
+        fill: rgba(34, 211, 238, 0.75);
+      }
+      .spark polyline {
+        stroke: rgba(34, 211, 238, 0.9);
+      }
+      .spark.violet rect {
+        fill: rgba(139, 92, 246, 0.75);
+      }
+      .spark.violet polyline {
+        stroke: rgba(139, 92, 246, 0.9);
+      }
+      .spark.green rect {
+        fill: rgba(52, 211, 153, 0.75);
+      }
+      .spark.green polyline {
+        stroke: rgba(52, 211, 153, 0.9);
+      }
+
+      /* ── 内容面板（Grafana 式卡片） ── */
+      .panel {
+        margin-top: 20px;
+        background: linear-gradient(180deg, var(--panel), var(--panel2));
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        overflow: hidden;
+        scroll-margin-top: 70px;
+      }
+      .panel-bar {
+        display: flex;
+        align-items: center;
+        gap: 11px;
+        padding: 11px 20px;
+        background: rgba(7, 12, 24, 0.5);
+        border-bottom: 1px solid var(--line);
+      }
+      .section-title {
+        margin: 0;
+        font: 600 12px var(--font-mono);
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: var(--text);
+      }
+      .panel-count {
+        margin-left: auto;
+        font: 500 10px var(--font-mono);
+        letter-spacing: 0.1em;
+        color: var(--muted);
+        border: 1px solid var(--line);
+        border-radius: 20px;
+        padding: 2px 8px;
+      }
+      .panel-body {
+        padding: 20px 22px 24px;
+      }
+
+      .bio {
+        margin: 0;
+        max-width: 780px;
+        color: #b9c6dd;
+        font-size: 15.5px;
+      }
+      .bio strong {
+        color: var(--cyan);
+        font-weight: 600;
+      }
+      .interests {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 18px;
+      }
+      .tag {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        padding: 5px 12px;
+        font: 500 12px var(--font-mono);
+        color: #9fb6d8;
+        background: rgba(13, 20, 38, 0.7);
+        border: 1px solid var(--line);
+        border-radius: 20px;
+        transition: border-color 0.2s, box-shadow 0.2s;
+      }
+      .tag:hover {
+        border-color: rgba(34, 211, 238, 0.5);
+        box-shadow: 0 0 0 1px rgba(34, 211, 238, 0.2);
+      }
+      .tag::before {
+        content: "";
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--cyan);
+        box-shadow: 0 0 6px rgba(34, 211, 238, 0.7);
+      }
+
+      /* ── 项目：日志行 + 进度条 ── */
+      .project {
+        padding: 15px 0;
+        border-top: 1px solid rgba(30, 42, 68, 0.55);
+      }
+      .project:first-of-type {
+        border-top: 0;
+        padding-top: 0;
+      }
+      .project-row {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 11px;
+      }
+      .project-meta {
+        font: 500 12px var(--font-mono);
+        letter-spacing: 0.05em;
+        color: var(--violet);
+      }
+      .project-meta::before {
+        content: ">";
+        color: var(--cyan);
+        margin-right: 8px;
+        opacity: 0.8;
+      }
+      .project-badge {
+        font: 500 9.5px var(--font-mono);
+        letter-spacing: 0.14em;
+        padding: 2px 8px;
+        border-radius: 20px;
+        border: 1px solid;
+      }
+      .project-badge.ongoing {
+        color: var(--orange);
+        border-color: rgba(245, 158, 11, 0.4);
+        background: rgba(245, 158, 11, 0.08);
+      }
+      .project-badge.done {
+        color: var(--violet);
+        border-color: rgba(139, 92, 246, 0.4);
+        background: rgba(139, 92, 246, 0.08);
+      }
+      .project-title {
+        margin: 9px 0 4px;
+        font: 600 15.5px/1.45 var(--font-display);
+        color: var(--text);
+      }
+      .project-detail {
+        margin: 0 0 12px;
+        color: var(--muted);
+        font-size: 14px;
+      }
+      .progress {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .progress-track {
+        flex: 1;
+        height: 7px;
+        border-radius: 4px;
+        background: rgba(13, 20, 38, 0.9);
+        border: 1px solid rgba(30, 42, 68, 0.6);
+        overflow: hidden;
+      }
+      .progress-fill {
+        height: 100%;
+        border-radius: 3px;
+      }
+      .progress-fill.ongoing {
+        background: linear-gradient(90deg, #0e7490, var(--cyan));
+        box-shadow: 0 0 12px rgba(34, 211, 238, 0.4);
+      }
+      .progress-fill.done {
+        background: linear-gradient(90deg, #6d28d9, var(--violet));
+      }
+      .progress-label {
+        flex: none;
+        width: 34px;
+        text-align: right;
+        font: 500 10px var(--font-mono);
+        color: var(--muted);
+      }
+
+      /* ── 论文：日志行 ── */
+      .publication {
+        padding: 15px 0;
+        border-top: 1px solid rgba(30, 42, 68, 0.55);
+      }
+      .publication:first-of-type {
+        border-top: 0;
+        padding-top: 0;
+      }
+      .log-line {
+        display: flex;
+        align-items: baseline;
+        flex-wrap: wrap;
+        gap: 12px;
+      }
+      .log-date {
+        flex: none;
+        font: 500 12px var(--font-mono);
+        letter-spacing: 0.08em;
+        color: var(--cyan);
+      }
+      .log-date::before {
+        content: ">";
+        color: var(--violet);
+        margin-right: 8px;
+        opacity: 0.8;
+      }
+      .pub-title {
+        margin: 0;
+        font: 600 15.5px/1.4 var(--font-display);
+        color: var(--text);
+      }
+      .pub-title a:hover {
+        color: var(--cyan);
+      }
+      .pub-badge {
+        margin-left: auto;
+        font: 500 9.5px var(--font-mono);
+        letter-spacing: 0.14em;
+        color: var(--green);
+        border: 1px solid rgba(52, 211, 153, 0.4);
+        background: rgba(52, 211, 153, 0.08);
+        border-radius: 20px;
+        padding: 2px 8px;
+      }
+      .authors {
+        margin: 6px 0 0;
+        color: var(--muted);
+        font-size: 14px;
+      }
+      .authors b {
+        color: var(--cyan);
+        font-weight: 600;
+      }
+      .venue {
+        margin: 3px 0 0;
+        color: #52658a;
+        font: 400 12px var(--font-mono);
+      }
+      .pub-links {
+        display: flex;
+        gap: 12px;
+        margin-top: 8px;
+      }
+
+      /* ── 时间线（教育经历） ── */
+      .timeline {
+        position: relative;
+      }
+      .timeline::before {
+        content: "";
+        position: absolute;
+        top: 6px;
+        bottom: 6px;
+        left: 121px;
+        border-left: 1px solid var(--line);
+      }
+      .entry {
+        position: relative;
+        display: grid;
+        grid-template-columns: 122px 1fr;
+        gap: 18px;
+        padding: 0 0 24px;
+      }
+      .entry:last-child {
+        padding-bottom: 0;
+      }
+      .entry-year {
+        padding-top: 3px;
+        font: 500 12px var(--font-mono);
+        letter-spacing: 0.04em;
+        color: var(--violet);
+      }
+      .entry-year::before {
+        content: ">";
+        color: var(--cyan);
+        margin-right: 8px;
+        opacity: 0.8;
+      }
+      .entry-content {
+        position: relative;
+      }
+      .entry-content::before {
+        content: "";
+        position: absolute;
+        left: -22px;
+        top: 8px;
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: var(--cyan);
+        box-shadow: 0 0 8px rgba(34, 211, 238, 0.8);
+      }
+      .entry h3 {
+        margin: 0;
+        font: 600 15px var(--font-display);
+        color: var(--text);
+      }
+      .entry p {
+        margin: 3px 0 0;
+        color: var(--muted);
+        font-size: 14px;
+      }
+
+      /* ── 页脚 ── */
+      footer {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 12px 18px;
+        margin-top: 26px;
+        padding: 18px 4px 8px;
+        border-top: 1px solid var(--line);
+        font: 400 11px var(--font-mono);
+        letter-spacing: 0.08em;
+        color: var(--muted);
+      }
+      .sys-status {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        color: var(--green);
+        font-weight: 500;
+      }
+      .status-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--green);
+        box-shadow: 0 0 10px rgba(52, 211, 153, 0.8);
+        animation: pulse 2.2s infinite;
+      }
+      @keyframes pulse {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.35;
+        }
+      }
+      .side-foot {
+        margin: 0 0 0 auto;
+        color: var(--muted);
+      }
+
+      /* ── Toast ── */
+      #toast {
+        position: fixed;
+        left: 50%;
+        bottom: 25px;
+        transform: translate(-50%, 90px);
+        padding: 10px 17px;
+        color: var(--cyan);
+        background: var(--panel);
+        border: 1px solid rgba(34, 211, 238, 0.4);
+        border-radius: 8px;
+        font: 500 13px var(--font-mono);
+        box-shadow: 0 0 20px rgba(34, 211, 238, 0.15);
+        transition: transform 0.25s;
+        z-index: 50;
+      }
+      #toast.show {
+        transform: translate(-50%, 0);
+      }
+
+      /* ── 响应式 ── */
+      @media (max-width: 800px) {
+        .layout {
+          padding: 0 12px;
+        }
+        .sysbar {
+          margin: 0 -12px;
+          padding: 8px 14px;
+        }
+        .sys-ver {
+          display: none;
+        }
+        .utc-chip {
+          display: none;
+        }
+        .tabnav {
+          margin-top: 14px;
+          padding: 0 2px;
+        }
+        .tabnav a {
+          padding: 8px 12px;
+          font-size: 11px;
+        }
+        .hero {
+          padding: 40px 14px 18px;
+          scroll-margin-top: 56px;
+        }
+        .data-flow {
+          height: 34px;
+        }
+        .hero-bar {
+          margin: -16px -14px 16px;
+          padding: 9px 14px;
+        }
+        .hero-bar-meta {
+          display: none;
+        }
+        .identity {
+          gap: 10px;
+        }
+        .name {
+          font-size: 28px;
+        }
+        .kpi-grid {
+          grid-template-columns: 1fr;
+          gap: 12px;
+        }
+        .kpi-value {
+          font-size: 38px;
+        }
+        .panel {
+          scroll-margin-top: 56px;
+        }
+        .panel-bar {
+          padding: 10px 14px;
+        }
+        .panel-body {
+          padding: 15px 14px 18px;
+        }
+        .contact a,
+        .contact button {
+          padding: 6px 10px;
+          font-size: 11px;
+        }
+        .log-line {
+          gap: 8px;
+        }
+        .pub-badge {
+          margin-left: 0;
+        }
+        .entry {
+          grid-template-columns: 96px 1fr;
+          gap: 12px;
+        }
+        .timeline::before {
+          left: 95px;
+        }
+        .entry-content::before {
+          left: -18px;
+        }
+        footer {
+          padding: 14px 2px 6px;
+        }
+        .side-foot {
+          margin-left: 0;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="layout">
+      <aside class="sysbar">
+        <div class="sys-id">
+          <span class="sys-dot" aria-hidden="true"></span>
+          <span class="sys-name">RESEARCH SYSTEMS</span>
+          <span class="sys-ver">v2.1.0</span>
+        </div>
+        <div class="sys-tools">
+          <span class="utc-chip">UTC+08:00 · 2026-08-01 09:41:27</span>
+          <div class="language-switch">
+            <span>LANGUAGE</span
+            ><button id="language-toggle" type="button" aria-label="切换至英文">
+              EN
+            </button>
+          </div>
+        </div>
+      </aside>
+      <main>
+        <nav class="tabnav">
+          <a class="active" href="#about" data-i18n="navAbout">关于我</a
+          ><a href="#projects" data-i18n="navProjects">科研项目</a
+          ><a href="#publications" data-i18n="navPubs">研究成果</a
+          ><a href="#education" data-i18n="navEducation">教育经历</a>
+          <!-- <a href="#news" data-i18n="navNews">近期动态</a> -->
+        </nav>
+        <header class="hero" id="about">
+          <div class="data-flow" aria-hidden="true">
+            <svg viewBox="0 0 1200 52" preserveAspectRatio="none">
+              <path
+                d="M0,30 C80,12 160,44 260,30 C360,16 440,42 540,28 C640,14 720,40 820,26 C920,12 1000,38 1100,24 C1130,20 1170,26 1200,22"
+                fill="none"
+                stroke="#22d3ee"
+                stroke-width="2"
+              />
+              <path
+                d="M0,36 C100,24 200,46 320,34 C440,22 560,44 680,32 C800,20 920,42 1040,30 C1100,25 1160,34 1200,30"
+                fill="none"
+                stroke="#8b5cf6"
+                stroke-width="1"
+                opacity="0.5"
+              />
+            </svg>
+          </div>
+          <div class="hero-bar">
+            <span class="panel-dot" aria-hidden="true"></span>
+            <span class="hero-bar-title">OVERVIEW // RESEARCH PROFILE</span>
+            <span class="hero-bar-meta">GW-SCI / AUST · CN</span>
+          </div>
+          <div class="hero-head">
+            <div class="eyebrow">Hydrogeology · Groundwater Science</div>
+            <div class="identity">
+              <h1 class="name">汪子涛</h1>
+              <p class="name-en">Zitao Wang</p>
+            </div>
+            <p class="title" data-i18n="title">
+              助理教授 · 水文地质<br />安徽理工大学
+            </p>
+            <h1 class="hero-slogan" data-i18n="hero">
+              探索地下水系统过程，服务水资源的可持续利用。
+            </h1>
+            <p class="hero-text" data-i18n="heroText">
+              我主要关注盐湖地下卤水的反应运移过程，并结合数值模拟与数据驱动方法开展水文地质研究。
+            </p>
+            <div class="contact">
+              <button id="copy-email" title="复制邮箱" aria-label="复制邮箱">
+                <svg
+                  class="icon"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                >
+                  <rect x="3" y="5" width="18" height="14" rx="2" />
+                  <path d="m3 7 9 6 9-6" /></svg
+                >zitao.wang@aust.edu.cn
+              </button>
+              <button
+                id="copy-google-email"
+                title="Copy Google email"
+                aria-label="Copy Google email"
+              >
+                <svg
+                  class="icon"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                >
+                  <rect x="3" y="5" width="18" height="14" rx="2" />
+                  <path d="m3 7 9 6 9-6" /></svg
+                >zitao.waung@gmail.com
+              </button>
+              <a
+                href="https://scholar.google.com/citations?user=aIXhXM4AAAAJ"
+                title="Google Scholar"
+                aria-label="Google Scholar"
+                ><svg
+                  class="icon"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                >
+                  <path d="m12 3 10 5-10 5L2 8l10-5Z" />
+                  <path d="M6 10.2V15c3.4 2.5 8.6 2.5 12 0v-4.8" /></svg
+                >Google Scholar</a
+              >
+              <a
+                href="https://orcid.org/0000-0002-7776-4282"
+                title="ORCID"
+                aria-label="ORCID"
+                ><svg
+                  class="icon"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                >
+                  <circle cx="12" cy="12" r="9" />
+                  <circle cx="8" cy="8" r="1" fill="currentColor" stroke="none" />
+                  <path
+                    d="M8 11v5M11 11v5M11 11h2.2a2.5 2.5 0 0 0 0-5H11M15 11v5"
+                  /></svg
+                >ORCID</a
+              >
+              <a
+                href="https://github.com/wangzitao21"
+                title="GitHub"
+                aria-label="GitHub"
+                ><svg
+                  class="icon"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                >
+                  <path
+                    d="M12 2a10 10 0 0 0-3.2 19.5c.5.1.7-.2.7-.5v-1.9c-2.8.6-3.4-1.2-3.4-1.2-.5-1.2-1.1-1.5-1.1-1.5-.9-.6.1-.6.1-.6 1 .1 1.5 1 1.5 1 .9 1.5 2.3 1.1 2.9.8.1-.6.4-1.1.7-1.3-2.2-.3-4.5-1.1-4.5-4.9 0-1.1.4-2 1-2.7-.1-.2-.4-1.3.1-2.7 0 0 .8-.3 2.8 1.1A9.7 9.7 0 0 1 12 6.8c.9 0 1.7.1 2.5.3 2-1.4 2.8-1.1 2.8-1.1.5 1.4.2 2.5.1 2.7.6.7 1 1.6 1 2.7 0 3.8-2.3 4.6-4.5 4.9.4.3.7.9.7 1.8V21c0 .3.2.6.7.5A10 10 0 0 0 12 2Z"
+                  /></svg
+                >GitHub</a
+              >
+            </div>
+          </div>
+          <div class="kpi-grid">
+            <article class="kpi-card">
+              <div class="kpi-top"><span class="kpi-status cyan">● ONLINE</span></div>
+              <div class="kpi-value">17</div>
+              <div class="kpi-label" data-i18n="papers">发表论文</div>
+              <svg class="spark" viewBox="0 0 120 36" preserveAspectRatio="none" aria-hidden="true">
+                <rect x="7" y="20" width="11" height="14" rx="1.5" />
+                <rect x="21" y="16" width="11" height="18" rx="1.5" />
+                <rect x="35" y="18" width="11" height="16" rx="1.5" />
+                <rect x="49" y="12" width="11" height="22" rx="1.5" />
+                <rect x="63" y="14" width="11" height="20" rx="1.5" />
+                <rect x="77" y="9" width="11" height="25" rx="1.5" />
+                <rect x="91" y="7" width="11" height="27" rx="1.5" />
+                <rect x="105" y="4" width="11" height="30" rx="1.5" />
+              </svg>
+            </article>
+            <article class="kpi-card">
+              <div class="kpi-top"><span class="kpi-status violet">● ONLINE</span></div>
+              <div class="kpi-value">0.2k</div>
+              <div class="kpi-label" data-i18n="citations">引用次数</div>
+              <svg class="spark violet" viewBox="0 0 120 36" preserveAspectRatio="none" aria-hidden="true">
+                <polyline
+                  points="0,32 16,30 32,30 48,26 64,23 80,17 96,13 120,8"
+                  fill="none"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </article>
+            <article class="kpi-card">
+              <div class="kpi-top"><span class="kpi-status green">● ACTIVE</span></div>
+              <div class="kpi-value">5</div>
+              <div class="kpi-label" data-i18n="projects">科研项目</div>
+              <svg class="spark green" viewBox="0 0 120 36" preserveAspectRatio="none" aria-hidden="true">
+                <polyline
+                  points="0,30 24,26 48,20 72,14 96,10 120,6"
+                  fill="none"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </article>
+          </div>
+        </header>
+        <section class="panel">
+          <div class="panel-bar">
+            <span class="panel-dot" aria-hidden="true"></span>
+            <h2 class="section-title">
+              01 / <span data-i18n="about">About</span>
+            </h2>
+            <span class="panel-count">NODE: BIO</span>
+          </div>
+          <div class="panel-body">
+            <p class="bio" data-i18n="bio">
+              你好！我是<strong>汪子涛</strong>，安徽理工大学地球与环境学院助理教授。博士毕业于中国科学院大学。我尤其关心盐湖地下卤水的反应运移过程。
+            </p>
+            <div class="interests">
+              <span class="tag" data-i18n="tag1">地下卤水反应运移</span
+              ><span class="tag" data-i18n="tag2">数值模拟</span
+              ><span class="tag" data-i18n="tag4">盐湖资源</span>
+            </div>
+          </div>
+        </section>
+        <section id="projects" class="panel">
+          <div class="panel-bar">
+            <span class="panel-dot" aria-hidden="true"></span>
+            <h2 class="section-title">
+              02 / <span data-i18n="researchProjects">Research Projects</span>
+            </h2>
+            <span class="panel-count">COUNT: 03</span>
+          </div>
+          <div class="panel-body">
+            <article class="project">
+              <div class="project-row">
+                <div class="project-meta" data-i18n="project1Period">
+                  2026.01–2028.12
+                </div>
+                <span class="project-badge ongoing">IN PROGRESS</span>
+              </div>
+              <h3 class="project-title" data-i18n="project1Title">
+                国家自然科学基金青年C类项目（No.
+                42502241）：盐湖卤水含水层动态演化及优势渗流通道形成机制研究
+              </h3>
+              <p class="project-detail" data-i18n="project1Detail">
+                主持 · 在研 · 30 万元
+              </p>
+              <div class="progress">
+                <div class="progress-track">
+                  <div class="progress-fill ongoing" style="width: 25%"></div>
+                </div>
+                <span class="progress-label">25%</span>
+              </div>
+            </article>
+            <article class="project">
+              <div class="project-row">
+                <div class="project-meta" data-i18n="project2Period">
+                  2024.12–2026.06
+                </div>
+                <span class="project-badge done">COMPLETED</span>
+              </div>
+              <h3 class="project-title" data-i18n="project2Title">
+                中国博士后科学基金面上项目 (No.
+                2024M760016)：人工驱动溶采下盐湖钾锂矿床固液转换机理及反应运移规律研究
+              </h3>
+              <p class="project-detail" data-i18n="project2Detail">
+                主持 · 已结题 · 8 万元
+              </p>
+              <div class="progress">
+                <div class="progress-track">
+                  <div class="progress-fill done" style="width: 100%"></div>
+                </div>
+                <span class="progress-label">100%</span>
+              </div>
+            </article>
+            <article class="project">
+              <div class="project-row">
+                <div class="project-meta" data-i18n="project3Period">2025–2026</div>
+                <span class="project-badge done">COMPLETED</span>
+              </div>
+              <h3 class="project-title" data-i18n="project3Title">
+                国家资助博士后研究人员计划 C 档 (No. GZC20250302)
+              </h3>
+              <p class="project-detail" data-i18n="project3Detail">
+                主持 · 已结题
+              </p>
+              <div class="progress">
+                <div class="progress-track">
+                  <div class="progress-fill done" style="width: 100%"></div>
+                </div>
+                <span class="progress-label">100%</span>
+              </div>
+            </article>
+          </div>
+        </section>
+        <section id="publications" class="panel">
+          <div class="panel-bar">
+            <span class="panel-dot" aria-hidden="true"></span>
+            <h2 class="section-title">
+              03 / <span data-i18n="publications">Selected Publications</span>
+            </h2>
+            <span class="panel-count">LOGS: 03</span>
+          </div>
+          <div class="panel-body">
+            <article class="publication">
+              <div class="log-line">
+                <span class="log-date">[2026]</span>
+                <h3 class="pub-title">
+                  <a
+                    href="https://www.sciencedirect.com/science/article/pii/S1364815225004396"
+                    >Enhancing surrogate assisted optimization with SHAP guided
+                    two-stage sampling</a
+                  >
+                </h3>
+                <span class="pub-badge">PUBLISHED</span>
+              </div>
+              <p class="authors"><b>Zitao Wang</b>, Kai Chen, Jianping Wang</p>
+              <p class="venue">Environmental Modelling &amp; Software</p>
+              <div class="pub-links">
+                <!--
+              <a href="#">[PDF]</a>
+              <a href="#">[PROJECT]</a>
+              <a href="#">[CODE]</a>
+              -->
+              </div>
+            </article>
+            <article class="publication">
+              <div class="log-line">
+                <span class="log-date">[2024]</span>
+                <h3 class="pub-title">
+                  <a
+                    href="https://www.sciencedirect.com/science/article/pii/S1568494624007658"
+                    >An Optimization Framework with Dimensionality Reduction
+                    Using Markov Chain Monte Carlo and Genetic Algorithms for
+                    Groundwater Potential Assessment</a
+                  >
+                </h3>
+                <span class="pub-badge">PUBLISHED</span>
+              </div>
+              <p class="authors"><b>Zitao Wang</b>, Chao Yue, Jianping Wang</p>
+              <p class="venue">Applied Soft Computing</p>
+              <div class="pub-links">
+                <!--
+              <a href="#">[PDF]</a>
+              <a href="#">[PROJECT]</a>
+              <a href="#">[CODE]</a>
+              -->
+              </div>
+            </article>
+            <article class="publication">
+              <div class="log-line">
+                <span class="log-date">[2025]</span>
+                <h3 class="pub-title">
+                  <a
+                    href="https://www.sciencedirect.com/science/article/pii/S2214581825000199"
+                    >Spatial modeling of brine level and salinity in the Qarhan
+                    Salt Lake using GIS and automated machine learning
+                    algorithms</a
+                  >
+                </h3>
+                <span class="pub-badge">PUBLISHED</span>
+              </div>
+              <p class="authors">
+                Dongmei Yu, <b>Zitao Wang</b>, Yue Chao, Jianping Wang
+              </p>
+              <p class="venue">Journal of Hydrology: Regional Studies</p>
+              <div class="pub-links">
+                <!--
+              <a href="#">[PDF]</a>
+              <a href="#">[PROJECT]</a>
+              <a href="#">[CODE]</a>
+              -->
+              </div>
+            </article>
+          </div>
+        </section>
+        <section id="education" class="panel">
+          <div class="panel-bar">
+            <span class="panel-dot" aria-hidden="true"></span>
+            <h2 class="section-title">
+              04 / <span data-i18n="education">Education &amp; Experience</span>
+            </h2>
+            <span class="panel-count">REC: 03</span>
+          </div>
+          <div class="panel-body">
+            <div class="timeline">
+              <div class="entry">
+                <div class="entry-year">
+                  2024-<span data-i18n="now">Now</span>
+                </div>
+                <div class="entry-content">
+                  <h3 data-i18n="exp1">安徽理工大学 · 助理教授</h3>
+                  <p data-i18n="exp1d">地球与环境学院</p>
+                </div>
+              </div>
+              <div class="entry">
+                <div class="entry-year">2024-2026</div>
+                <div class="entry-content">
+                  <h3 data-i18n="exp2">安徽理工大学 · 博士后研究员</h3>
+                  <p data-i18n="exp2d">地球与环境学院</p>
+                </div>
+              </div>
+              <div class="entry">
+                <div class="entry-year">2021-2024</div>
+                <div class="entry-content">
+                  <h3 data-i18n="exp3">中国科学院大学 · 地质学博士</h3>
+                  <p data-i18n="exp3d">导师：王建萍研究员</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+        <!-- <section id="news">
+          <h2 class="section-title">05 / <span data-i18n="news">News</span></h2>
+          <div class="news">
+            <div class="news-item">
+              <time class="news-date">2026.06</time>
+              <p data-i18n="news1">
+                关于 SHAP 引导的代理辅助优化研究发表于
+                <em>Environmental Modelling &amp; Software</em>。
+              </p>
+            </div>
+            <div class="news-item">
+              <time class="news-date">2025.01</time>
+              <p data-i18n="news2">
+                盐湖卤水水位与盐度空间建模研究发表于
+                <em>Journal of Hydrology: Regional Studies</em>。
+              </p>
+            </div>
+            <div class="news-item">
+              <time class="news-date">2024.10</time>
+              <p data-i18n="news3">
+                欢迎对地下水数值模拟、盐湖资源与水文地球化学感兴趣的同学通过邮件联系。
+              </p>
+            </div>
+          </div>
+        </section> -->
+        <footer>
+          <span class="sys-status"
+            ><span class="status-dot" aria-hidden="true"></span>SYSTEM STATUS:
+            OPERATIONAL</span
+          >
+          <span>© 2026 Zitao Wang · GROUNDWATER / MODELING / ENVIRONMENT</span>
+          <p class="side-foot" data-i18n="updated">LAST UPDATED · JUL 2026</p>
+        </footer>
+      </main>
+    </div>
+    <div id="toast" role="status">邮箱已复制</div>
+    <script>
+      const translations = {
+        en: {
+          title:
+            "Assistant Professor · Hydrogeology<br>Anhui University of Science and Technology",
+          navAbout: "About",
+          navProjects: "Projects",
+          navPubs: "Publications",
+          navEducation: "Education",
+          navNews: "News",
+          updated: "LAST UPDATED · JUL 2026",
+          hero: "Exploring groundwater systems for sustainable water-resource use.",
+          heroText:
+            "My research focuses on reactive transport in saline-lake groundwater and develops numerical and data-driven methods for hydrogeological problems.",
+          papers: "Publications",
+          citations: "Citations",
+          projects: "Research projects",
+          about: "About",
+          bio: "Hello! I am <strong>Zitao Wang</strong>, an Assistant Professor in the School of Earth and Environment at Anhui University of Science and Technology. I received my PhD in Geology from the University of Chinese Academy of Sciences. My research interests include reactive transport in saline-lake brines, groundwater modelling, and salt-lake resources.",
+          tag1: "Reactive Transport in Groundwater",
+          tag2: "Numerical Modelling",
+          tag4: "Salt-lake Resources",
+          researchProjects: "Research Projects",
+          project1Period: "2026.01–2028.12",
+          project1Title:
+            "National Natural Science Foundation of China (No. 42502241): Dynamic evolution of saline-lake brine aquifers and mechanisms of preferential flow-path formation",
+          project1Detail: "Principal Investigator · Ongoing · RMB 300,000",
+          project2Period: "2024.12–2026.06",
+          project2Title:
+            "China Postdoctoral Science Foundation (No. 2024M760016): Solid-liquid transformation mechanisms and reactive transport of potash–lithium deposits under artificial solution mining",
+          project2Detail: "Principal Investigator · Completed · RMB 80,000",
+          project3Period: "2025–2026",
+          project3Title:
+            "Postdoctoral Fellowship Program of China Postdoctoral Science Foundation (No. GZC20250302)",
+          project3Detail: "Principal Investigator · Completed",
+          publications: "Selected Publications",
+          education: "Education & Experience",
+          now: "Present",
+          exp1: "Anhui University of Science and Technology · Assistant Professor",
+          exp1d: "School of Earth and Environment",
+          exp2: "Anhui University of Science and Technology · Postdoctoral Researcher",
+          exp2d: "School of Earth and Environment",
+          exp3: "University of Chinese Academy of Sciences · PhD in Geology",
+          exp3d: "Advisor: Prof. Jianping Wang",
+          news: "News",
+          news1:
+            "Our work on SHAP-guided surrogate-assisted optimization was published in <em>Environmental Modelling &amp; Software</em>.",
+          news2:
+            "Our research on spatial modelling of brine level and salinity was published in <em>Journal of Hydrology: Regional Studies</em>.",
+          news3:
+            "Students interested in groundwater modelling, salt-lake resources, and hydrogeochemistry are welcome to get in touch by email.",
+        },
+        zh: {
+          title: "助理教授 · 水文地质<br>安徽理工大学",
+          navAbout: "关于我",
+          navProjects: "科研项目",
+          navPubs: "研究成果",
+          navEducation: "教育经历",
+          navNews: "近期动态",
+          updated: "最后更新 · 2026年7月",
+          hero: "探索地下水系统过程，服务水资源的可持续利用。",
+          heroText:
+            "我关注盐湖地下卤水的反应运移过程，并结合数值模拟与数据驱动方法开展水文地质研究。",
+          papers: "发表论文",
+          citations: "引用次数",
+          projects: "科研项目",
+          about: "关于我",
+          bio: "你好！我是<strong>汪子涛</strong>，安徽理工大学地球与环境学院助理教授。博士毕业于中国科学院大学地质学专业。我主要研究盐湖地下卤水反应运移、地下水数值模拟与盐湖资源开发利用。",
+          tag1: "地下卤水反应运移",
+          tag2: "数值模拟",
+          tag4: "盐湖资源",
+          researchProjects: "主持科研项目",
+          project1Period: "2026.01–2028.12",
+          project1Title:
+            "国家自然科学基金青年项目 (No. 42502241)：盐湖卤水含水层动态演化及优势渗流通道形成机制研究",
+          project1Detail: "主持 · 在研 · 30 万元",
+          project2Period: "2024.12–2026.06",
+          project2Title:
+            "中国博士后科学基金面上项目 (No. 2024M760016)：人工驱动溶采下盐湖钾锂矿床固液转换机理及反应运移规律研究",
+          project2Detail: "主持 · 已结题 · 8 万元",
+          project3Period: "2025–2026",
+          project3Title: "国家资助博士后研究人员计划 C 档 (No. GZC20250302)",
+          project3Detail: "主持 · 已结题",
+          publications: "精选论文",
+          education: "教育经历与工作经验",
+          now: "至今",
+          exp1: "安徽理工大学 · 助理教授",
+          exp1d: "地球与环境学院",
+          exp2: "安徽理工大学 · 博士后研究员",
+          exp2d: "地球与环境学院",
+          exp3: "中国科学院大学 · 地质学博士",
+          exp3d: "导师：王建萍研究员",
+          news: "近期动态",
+          news1:
+            "关于 SHAP 引导的代理辅助优化研究发表于 <em>Environmental Modelling &amp; Software</em>。",
+          news2:
+            "盐湖卤水水位与盐度空间建模研究发表于 <em>Journal of Hydrology: Regional Studies</em>。",
+          news3:
+            "欢迎对地下水数值模拟、盐湖资源与水文地球化学感兴趣的同学通过邮件联系。",
+        },
+      };
+      // ——— 预览模式语言切换：本地切换，不改变 URL（主题预览用） ———
+      let lang;
+      const langButton = document.getElementById("language-toggle");
+      function applyLanguage(nextLanguage) {
+        lang = nextLanguage;
+        document.documentElement.lang = lang === "zh" ? "zh-CN" : "en";
+        document
+          .querySelector("aside")
+          .classList.toggle("is-en", lang === "en");
+        document
+          .querySelectorAll("[data-i18n]")
+          .forEach(
+            (el) => (el.innerHTML = translations[lang][el.dataset.i18n])
+          );
+        langButton.textContent = lang === "zh" ? "EN" : "中文";
+        langButton.setAttribute(
+          "aria-label",
+          lang === "zh" ? "Switch to English" : "Switch to Chinese"
+        );
+        document.title = "Zitao Wang (汪子涛) · Academic Homepage";
+      }
+      applyLanguage(location.pathname.includes("/cn/") ? "zh" : "en");
+      langButton.addEventListener("click", () =>
+        applyLanguage(lang === "zh" ? "en" : "zh")
+      );
+      window.addEventListener("popstate", () =>
+        applyLanguage(location.pathname.includes("/cn/") ? "zh" : "en")
+      );
+      const showToast = (message) => {
+        const toast = document.getElementById("toast");
+        toast.textContent = message;
+        toast.classList.add("show");
+        setTimeout(() => toast.classList.remove("show"), 1800);
+      };
+      const enableEmailCopy = (id, email, toastMessage) => {
+        document.getElementById(id).addEventListener("click", async () => {
+          try {
+            await navigator.clipboard.writeText(email);
+          } catch (e) {}
+          showToast(toastMessage());
+        });
+      };
+      enableEmailCopy("copy-email", "zitao.wang@aust.edu.cn", () =>
+        lang === "zh" ? "邮箱已复制" : "Email copied"
+      );
+      enableEmailCopy(
+        "copy-google-email",
+        "zitao.wang.research@gmail.com",
+        () => "Email copied"
+      );
+      const links = [...document.querySelectorAll("nav a")];
+      const sections = links
+        .map((a) => document.querySelector(a.getAttribute("href")))
+        .filter(Boolean);
+      const updateActiveLink = (entries) =>
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          links.forEach((link) =>
+            link.classList.toggle(
+              "active",
+              link.getAttribute("href") === `#${entry.target.id}`
+            )
+          );
+        });
+      const sectionObserver = new IntersectionObserver(updateActiveLink, {
+        rootMargin: "-35% 0px -55% 0px",
+      });
+      sections.forEach((section) => sectionObserver.observe(section));
+    </script>
+  </body>
+</html>

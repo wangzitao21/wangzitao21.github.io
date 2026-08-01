@@ -22,7 +22,7 @@
       name="description"
       content="Zitao Wang (汪子涛) · Academic Homepage"
     />
-    <title>Zitao Wang (汪子涛) · Academic Homepage</title>
+    <title>Zitao Wang · Salt Lake Theme</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -1331,17 +1331,10 @@
             "欢迎对地下水数值模拟、盐湖资源与水文地球化学感兴趣的同学通过邮件联系。",
         },
       };
+      // ——— 预览模式语言切换：本地切换，不改变 URL（主题预览用） ———
       let lang;
       const langButton = document.getElementById("language-toggle");
-      const languageFromPath = () =>
-        location.pathname.replace(/\/+$/, "").endsWith("/cn") ? "zh" : "en";
-      const languagePath = (language) => {
-        const base = location.pathname.replace(/\/(?:en|cn)\/?$/, "") || "/";
-        return `${base}${base.endsWith("/") ? "" : "/"}${
-          language === "zh" ? "cn" : "en"
-        }`;
-      };
-      function applyLanguage(nextLanguage, updateUrl = false) {
+      function applyLanguage(nextLanguage) {
         lang = nextLanguage;
         document.documentElement.lang = lang === "zh" ? "zh-CN" : "en";
         document
@@ -1358,23 +1351,13 @@
           lang === "zh" ? "Switch to English" : "Switch to Chinese"
         );
         document.title = "Zitao Wang (汪子涛) · Academic Homepage";
-        if (updateUrl)
-          history.pushState(
-            { lang },
-            "",
-            languagePath(lang) + location.search + location.hash
-          );
       }
-      // The root URL is normalized to /en so the default language is shareable too.
-      applyLanguage(
-        languageFromPath(),
-        !/\/(?:en|cn)\/?$/.test(location.pathname)
-      );
+      applyLanguage(location.pathname.includes("/cn/") ? "zh" : "en");
       langButton.addEventListener("click", () =>
-        applyLanguage(lang === "zh" ? "en" : "zh", true)
+        applyLanguage(lang === "zh" ? "en" : "zh")
       );
       window.addEventListener("popstate", () =>
-        applyLanguage(languageFromPath())
+        applyLanguage(location.pathname.includes("/cn/") ? "zh" : "en")
       );
       const showToast = (message) => {
         const toast = document.getElementById("toast");

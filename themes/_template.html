@@ -1,17 +1,26 @@
 <!DOCTYPE html>
 <!--
   ═══════════════════════════════════════════════════════════════
-  THEME 03 — SALT LAKE · 盐湖地质自然风
+  THEME TEMPLATE — 主题基准模板
   ═══════════════════════════════════════════════════════════════
-  设计主题：盐湖 / 水文学地质（呼应主人研究盐湖卤水与地下水）
-  - 配色：湖水蓝绿渐变（#0e7c86 → #2ab7a9 → #b8e0d2）、盐白 #fdfcf8、
-    米白盐粒 #f2efe6、深墨绿 #0b3d3d、暖砂金 #c99748
-  - 字体：Fraunces（标题，地质感衬线） + Karla（正文） + DM Mono（数字）
-    中文回退链：Noto Serif SC / SimSun / KaiTi
-  - hero 全宽湖面渐变横幅：分层渐变模拟湖面深浅 + 放射渐变模拟水下盐丘，
-    上下波浪形边缘（内联 SVG），纯 CSS 气泡上浮 + hover 涟漪扩散动效
-  - 侧栏盐白微纹理（CSS 噪点渐变），内容区块间"沉积层"分隔线，
-    卡片盐晶质感（圆角 14-18px），页面底部水位线，页脚湖岸线
+  这是一个完整的单文件学术主页。作为主题设计师，你的任务是：
+
+  1. 复制本文件为 themes/theme-XX-<slug>.html（<slug> 为风格英文名）
+  2. 完全重写 <head> 中的 <link>（Google Fonts 字体组合）与整个 <style>，
+     实现一个完全独立的设计风格（详见任务描述中的设计方向）
+  3. 允许调整 body 中 HTML 结构的布局方式（例如改变侧栏位置、卡片化、
+     两栏布局等），但【必须保留】：
+     - 所有 [data-i18n] 属性与 id（copy-email / copy-google-email /
+       language-toggle / toast / nav a 的 href 锚点）
+     - <aside> 上的 is-en 类切换逻辑依赖 aside 元素存在
+     - 所有 SVG 图标内容
+     - <script> 部分保持不变（双语、复制、滚动高亮功能）
+  4. 必须包含响应式设计（移动端友好），代码完整可直接双击打开运行
+  5. 不要引用任何外部 CSS 框架，只用内联 CSS + Google Fonts
+  6. 禁止修改其他任何文件
+
+  注意：中文正文的回退字体链务必包含适合该风格的系统中文字体
+  （如 KaiTi 楷体 / FangSong 仿宋 / SimSun 宋体 / Microsoft YaHei 黑体）。
   ═══════════════════════════════════════════════════════════════
 -->
 <html lang="en">
@@ -26,24 +35,19 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Karla:wght@400;500;600&display=swap"
+      href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Playfair+Display:wght@600;700&family=Source+Han+Serif+SC:wght@500;600;700&family=Source+Sans+3:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
     <style>
-      /* ══════════ 1. 设计令牌 ══════════ */
       :root {
-        --lake-deep: #0e7c86; /* 湖水深处 */
-        --lake-mid: #2ab7a9; /* 湖水中间 */
-        --lake-shallow: #b8e0d2; /* 湖面浅色 */
-        --salt: #fdfcf8; /* 盐白 */
-        --grain: #f2efe6; /* 盐粒米白 */
-        --ink: #0b3d3d; /* 深墨绿文字 */
-        --muted: #4f6f6c; /* 次级文字 */
-        --line: #dce9e3; /* 极淡蓝边框 */
-        --gold: #c99748; /* 暖砂金点缀 */
-        --serif: "Fraunces", "Noto Serif SC", "SimSun", "KaiTi", serif;
-        --sans: "Karla", "Noto Serif SC", "SimSun", "KaiTi", sans-serif;
-        --mono: "DM Mono", monospace;
+        --ink: #172228;
+        --muted: #607076;
+        --paper: #f7f6f2;
+        --white: #fffefa;
+        --line: #dbe1dc;
+        --accent: #08676b;
+        --soft: #e7f1ef;
+        --gold: #c99748;
       }
       * {
         box-sizing: border-box;
@@ -51,17 +55,11 @@
       html {
         scroll-behavior: smooth;
       }
-
-      /* ══════════ 2. 基础 ══════════ */
       body {
         margin: 0;
         color: var(--ink);
-        background:
-          radial-gradient(1100px 460px at 88% -8%, rgba(184, 224, 210, 0.4), transparent 62%),
-          radial-gradient(900px 420px at -12% 102%, rgba(42, 183, 169, 0.13), transparent 56%),
-          radial-gradient(700px 300px at 55% 108%, rgba(201, 151, 72, 0.07), transparent 60%),
-          var(--salt);
-        font-family: var(--sans);
+        background: var(--paper);
+        font-family: "Source Sans 3", "Microsoft YaHei", sans-serif;
         font-size: 16px;
         line-height: 1.65;
       }
@@ -69,89 +67,29 @@
         color: inherit;
         text-decoration: none;
       }
-      /* 页面底部"水位线"装饰 */
-      body::after {
-        content: "";
-        position: fixed;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        height: 5px;
-        background: linear-gradient(
-          90deg,
-          rgba(14, 124, 134, 0.6),
-          rgba(42, 183, 169, 0.55) 35%,
-          rgba(184, 224, 210, 0.6) 70%,
-          rgba(201, 151, 72, 0.45)
-        );
-        z-index: 5;
-        pointer-events: none;
-      }
-
-      /* ══════════ 3. 布局骨架（左右侧栏） ══════════ */
       .layout {
-        max-width: 1280px;
+        max-width: 1240px;
         margin: auto;
         min-height: 100vh;
         display: grid;
-        grid-template-columns: 316px minmax(0, 1fr);
-        background: var(--salt);
+        grid-template-columns: 310px minmax(0, 1fr);
+        background: var(--white);
       }
-
-      /* 侧栏：盐白微纹理（极淡噪点渐变）+ 底部湖岸线 */
       aside {
-        position: relative;
-        padding: 50px 36px 44px;
+        padding: 54px 38px;
         border-right: 1px solid var(--line);
-        background:
-          radial-gradient(circle at 18% 20%, rgba(14, 124, 134, 0.05) 0 1.6px, transparent 2.3px),
-          radial-gradient(circle at 66% 34%, rgba(201, 151, 72, 0.07) 0 1.4px, transparent 2.1px),
-          radial-gradient(circle at 28% 62%, rgba(14, 124, 134, 0.045) 0 1.3px, transparent 2px),
-          radial-gradient(circle at 78% 82%, rgba(42, 183, 169, 0.055) 0 1.7px, transparent 2.4px),
-          radial-gradient(circle at 50% 12%, rgba(255, 255, 255, 0.85) 0 30%, transparent 70%),
-          linear-gradient(165deg, #fdfcf8 0%, #f8f5ec 100%);
-      }
-      aside::after {
-        content: "";
-        position: absolute;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        height: 6px;
-        background: linear-gradient(
-          90deg,
-          rgba(14, 124, 134, 0.75),
-          rgba(42, 183, 169, 0.6) 55%,
-          rgba(184, 224, 210, 0.7)
-        );
-        opacity: 0.55;
-      }
-
-      .identity {
-        position: relative;
-        padding-bottom: 18px;
-      }
-      /* 名字下方的"湖面线" */
-      .identity::after {
-        content: "";
-        position: absolute;
-        left: 0;
-        bottom: 0;
-        width: 48px;
-        height: 3px;
-        border-radius: 3px;
-        background: linear-gradient(90deg, var(--lake-deep), var(--lake-mid), var(--lake-shallow));
+        background: #fbfbf8;
       }
       .name {
         margin: 0;
-        font: 700 33px/1.18 var(--serif);
-        letter-spacing: 0.04em;
+        font: 700 34px/1.16 "Source Han Serif SC", serif;
+        letter-spacing: 0.03em;
       }
       .name-en {
-        margin: 8px 0 24px;
-        color: var(--lake-mid);
-        font: 500 12px/1.3 var(--mono);
-        letter-spacing: 0.1em;
+        margin: 7px 0 24px;
+        color: var(--accent);
+        font: 500 12px/1.3 "DM Mono", monospace;
+        letter-spacing: 0.09em;
         text-transform: uppercase;
       }
       aside.is-en .identity {
@@ -160,24 +98,24 @@
       }
       aside.is-en .name-en {
         order: 1;
-        margin: 0 0 8px;
+        margin: 0 0 7px;
         color: var(--ink);
-        font: 700 33px/1.16 var(--serif);
+        font: 700 34px/1.16 "Playfair Display", serif;
         letter-spacing: 0.01em;
         text-transform: none;
       }
       aside.is-en .name {
         order: 2;
         margin: 0 0 24px;
-        color: var(--lake-deep);
-        font: 500 15px/1.4 var(--serif);
-        letter-spacing: 0.08em;
+        color: var(--accent);
+        font: 500 16px/1.35 "Source Han Serif SC", serif;
+        letter-spacing: 0.09em;
       }
       .title {
-        margin: 0 0 22px;
+        margin: 0 0 24px;
         color: var(--muted);
-        font-size: 14.5px;
-        line-height: 1.6;
+        font-size: 15px;
+        line-height: 1.55;
       }
       .contact {
         padding: 20px 0;
@@ -188,389 +126,211 @@
       .contact button {
         display: flex;
         align-items: center;
-        gap: 10px;
+        gap: 9px;
         padding: 5px 0;
-        color: #3f5f5e;
+        color: #395057;
         font: inherit;
         font-size: 14px;
         text-align: left;
         border: 0;
         background: none;
         cursor: pointer;
-        transition: color 0.2s;
       }
       .contact a:hover,
       .contact button:hover {
-        color: var(--lake-deep);
+        color: var(--accent);
       }
       .icon {
         width: 17px;
-        color: var(--lake-deep);
+        color: var(--accent);
         flex: none;
-        transition: transform 0.2s;
-      }
-      .contact a:hover .icon,
-      .contact button:hover .icon {
-        transform: translateY(-1px);
       }
       nav {
         display: grid;
-        gap: 6px;
-        margin-top: 28px;
+        gap: 5px;
+        margin-top: 30px;
       }
       .language-switch {
         display: flex;
         align-items: center;
-        gap: 8px;
-        margin-top: 26px;
+        gap: 7px;
+        margin-top: 25px;
         color: var(--muted);
-        font: 500 12px var(--mono);
-        letter-spacing: 0.08em;
+        font: 500 12px "DM Mono", monospace;
       }
       .language-switch button {
-        padding: 6px 10px;
-        color: var(--lake-deep);
-        border: 1px solid rgba(14, 124, 134, 0.35);
-        border-radius: 9px;
-        background: rgba(255, 255, 255, 0.65);
-        font: 500 12px var(--mono);
+        padding: 5px 8px;
+        color: var(--accent);
+        border: 1px solid #b9d0cb;
+        background: transparent;
+        font: 500 12px "DM Mono", monospace;
         cursor: pointer;
-        transition: all 0.2s;
       }
       .language-switch button:hover {
         color: white;
-        background: linear-gradient(135deg, var(--lake-deep), var(--lake-mid));
-        border-color: transparent;
+        background: var(--accent);
       }
       nav a {
         padding: 7px 0;
         color: var(--muted);
-        font: 500 14px var(--mono);
+        font: 500 14px "DM Mono", monospace;
       }
       nav a::before {
-        content: "◆";
+        content: "/";
         color: var(--gold);
-        font-size: 9px;
-        margin-right: 9px;
-        transform: translateY(-1px);
+        margin-right: 8px;
         opacity: 0;
         transition: opacity 0.2s;
       }
       nav a:hover,
       nav a.active {
-        color: var(--lake-deep);
-      }
-      nav a.active {
-        font-weight: 600;
+        color: var(--accent);
       }
       nav a:hover::before,
       nav a.active::before {
         opacity: 1;
       }
       .side-foot {
-        margin-top: 38px;
-        color: #94a5a1;
-        font: 12px var(--mono);
-        letter-spacing: 0.05em;
+        margin-top: 42px;
+        color: #94a09e;
+        font: 12px "DM Mono", monospace;
       }
-      .side-foot::before {
-        content: "— ";
-        color: var(--gold);
-      }
-
       main {
         padding: 0 70px 55px;
         overflow: hidden;
       }
-
-      /* ══════════ 4. Hero 湖面横幅 ══════════ */
       .hero {
-        position: relative;
-        margin: 0 -70px; /* 负边距铺满 main，形成全宽横幅 */
-        min-height: 470px;
-        padding: 86px 70px 112px;
+        min-height: 385px;
+        padding: 72px 0 50px;
         display: flex;
         align-items: center;
-        overflow: hidden;
-        color: #eefbf7;
-        /* 分层渐变模拟湖面深浅 + 放射渐变模拟水下盐丘 */
-        background:
-          radial-gradient(ellipse 480px 340px at 84% 10%, rgba(255, 255, 255, 0.2), transparent 62%),
-          radial-gradient(ellipse 540px 400px at 6% 92%, rgba(11, 61, 61, 0.4), transparent 70%),
-          radial-gradient(ellipse 320px 240px at 54% 26%, rgba(255, 255, 255, 0.11), transparent 60%),
-          radial-gradient(ellipse 260px 200px at 30% 72%, rgba(11, 61, 61, 0.22), transparent 66%),
-          linear-gradient(
-            166deg,
-            #0a6f78 0%,
-            var(--lake-deep) 24%,
-            #129a96 48%,
-            var(--lake-mid) 72%,
-            #6fc9b8 90%,
-            var(--lake-shallow) 100%
-          );
+        position: relative;
+        border-bottom: 1px solid var(--line);
       }
-      /* 顶部水纹波浪 */
-      .hero::before {
-        content: "";
-        position: absolute;
-        left: 0;
-        right: 0;
-        top: -1px;
-        height: 36px;
-        background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 48' preserveAspectRatio='none'%3E%3Cpath fill='%23ffffff' fill-opacity='0.16' d='M0,22 C180,42 360,2 540,18 C720,34 900,6 1080,18 C1260,30 1350,10 1440,18 L1440,48 L0,48 Z'/%3E%3C/svg%3E");
-        background-size: 100% 100%;
-      }
-      /* 底部波浪过渡回盐白 */
       .hero::after {
         content: "";
         position: absolute;
-        left: 0;
-        right: 0;
-        bottom: -1px;
-        height: 56px;
-        background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 72' preserveAspectRatio='none'%3E%3Cpath fill='%23fdfcf8' d='M0,38 C240,70 480,6 720,34 C960,62 1200,10 1440,38 L1440,72 L0,72 Z'/%3E%3C/svg%3E");
-        background-size: 100% 100%;
-      }
-      /* 纯 CSS 气泡上浮动效 */
-      .bubbles {
-        position: absolute;
-        inset: 0;
-        overflow: hidden;
-        pointer-events: none;
-      }
-      .bubbles span {
-        position: absolute;
-        bottom: -46px;
-        left: var(--l);
-        width: var(--s);
-        height: var(--s);
+        width: 340px;
+        height: 340px;
+        right: -125px;
+        top: -112px;
+        border: 1px solid #bdd5d0;
         border-radius: 50%;
-        background: radial-gradient(circle at 34% 30%, rgba(255, 255, 255, 0.78), rgba(255, 255, 255, 0.05) 62%);
-        box-shadow: inset 0 -2px 4px rgba(255, 255, 255, 0.22);
-        opacity: 0;
-        animation: bubble-rise var(--d) linear var(--p) infinite;
-      }
-      @keyframes bubble-rise {
-        0% {
-          transform: translateY(0) translateX(0) scale(1);
-          opacity: 0;
-        }
-        10% {
-          opacity: 0.75;
-        }
-        50% {
-          transform: translateY(-40vh) translateX(14px) scale(1.06);
-          opacity: 0.5;
-        }
-        100% {
-          transform: translateY(-76vh) translateX(-10px) scale(0.55);
-          opacity: 0;
-        }
+        box-shadow: 0 0 0 36px #f3f7f4, 0 0 0 37px #d7e6e1;
+        opacity: 0.85;
       }
       .hero-content {
-        max-width: 680px;
+        max-width: 660px;
         position: relative;
         z-index: 1;
       }
       .eyebrow {
-        color: rgba(255, 255, 255, 0.85);
-        font: 500 12px var(--mono);
-        letter-spacing: 0.14em;
+        color: var(--accent);
+        font: 500 12px "DM Mono", monospace;
+        letter-spacing: 0.12em;
         text-transform: uppercase;
       }
-      .eyebrow::before {
-        content: "◈ ";
-        color: rgba(255, 255, 255, 0.55);
-      }
       .hero h1 {
-        margin: 15px 0 18px;
-        max-width: 640px;
-        font: 700 clamp(34px, 4.2vw, 56px) / 1.22 var(--serif);
-        letter-spacing: 0.01em;
-        text-shadow: 0 2px 20px rgba(8, 64, 66, 0.4);
+        margin: 14px 0 18px;
+        max-width: 620px;
+        font: 700 clamp(35px, 4.1vw, 58px) / 1.25 "Source Han Serif SC", serif;
+        letter-spacing: 0.015em;
       }
       .hero p {
-        max-width: 620px;
+        max-width: 610px;
         margin: 0;
-        color: rgba(240, 250, 247, 0.92);
-        font-size: 17.5px;
+        color: #4e6066;
+        font-size: 18px;
       }
-      /* 统计数字：玻璃盐晶卡片 + 渐变文字 */
       .stats {
         display: flex;
-        flex-wrap: wrap;
-        gap: 14px;
-        margin-top: 32px;
+        gap: 28px;
+        margin-top: 29px;
       }
       .stat {
-        min-width: 132px;
-        padding: 15px 20px;
-        border: 1px solid rgba(255, 255, 255, 0.3);
-        border-radius: 16px;
-        background: rgba(255, 255, 255, 0.13);
-        backdrop-filter: blur(4px);
+        padding-left: 13px;
+        border-left: 2px solid var(--gold);
       }
       .stat b {
         display: block;
-        color: #ffe9b8;
-        font: 600 25px/1 var(--mono);
-        background: linear-gradient(115deg, #fffdf4, #ffe9b8 45%, #cfeae0);
-        -webkit-background-clip: text;
-        background-clip: text;
-        -webkit-text-fill-color: transparent;
+        color: var(--accent);
+        font: 600 23px/1 "DM Mono", monospace;
       }
       .stat span {
-        display: block;
-        margin-top: 5px;
-        color: rgba(255, 255, 255, 0.85);
-        font-size: 12.5px;
-        letter-spacing: 0.04em;
+        color: var(--muted);
+        font-size: 12px;
       }
-
-      /* ══════════ 5. 内容区 ══════════ */
       section {
-        padding: 58px 0 12px;
+        padding: 55px 0 10px;
         scroll-margin-top: 15px;
       }
-      /* section 标题：左侧小菱形 ◆ */
       .section-title {
         display: flex;
         align-items: center;
-        gap: 12px;
-        margin: 0 0 26px;
-        font: 600 13px var(--mono);
-        letter-spacing: 0.12em;
-        color: var(--lake-deep);
+        gap: 13px;
+        margin: 0 0 25px;
+        font: 600 13px "DM Mono", monospace;
+        letter-spacing: 0.1em;
+        color: var(--accent);
         text-transform: uppercase;
-      }
-      .section-title::before {
-        content: "◆";
-        color: var(--gold);
-        font-size: 12px;
-        text-shadow: 0 0 12px rgba(201, 151, 72, 0.55);
       }
       .section-title::after {
         content: "";
         height: 1px;
+        background: var(--line);
         flex: 1;
-        background: linear-gradient(90deg, var(--line), transparent);
       }
-      /* "沉积层"分隔：几条不同深浅的渐变细线模拟地层 */
-      .strata {
-        display: flex;
-        flex-direction: column;
-        gap: 5px;
-        margin: 42px 0 2px;
-      }
-      .strata i {
-        display: block;
-        height: 1px;
-        border-radius: 1px;
-      }
-      .strata i:nth-child(1) {
-        background: linear-gradient(90deg, transparent, #e6eee9 25%, #e6eee9 75%, transparent);
-      }
-      .strata i:nth-child(2) {
-        background: linear-gradient(90deg, transparent, #c6ddd3 30%, #c6ddd3 70%, transparent);
-      }
-      .strata i:nth-child(3) {
-        background: linear-gradient(90deg, transparent, #82b6aa 42%, #82b6aa 58%, transparent);
-      }
-      .strata i:nth-child(4) {
-        background: linear-gradient(90deg, transparent, #2ab7a9 46%, #2ab7a9 54%, transparent);
-        opacity: 0.6;
-      }
-
       .bio {
-        max-width: 780px;
+        max-width: 760px;
         margin: 0;
         font-size: 18px;
-        color: #25494a;
       }
       .bio strong {
-        color: var(--lake-deep);
+        color: var(--accent);
         font-weight: 600;
       }
-      /* 标签：盐晶颗粒（旋转 45° 菱形图标 + 圆角方块） */
       .interests {
         display: flex;
         flex-wrap: wrap;
-        gap: 10px;
-        margin-top: 26px;
+        gap: 9px;
+        margin-top: 24px;
       }
       .tag {
-        position: relative;
-        padding: 8px 15px 8px 32px;
-        border: 1px solid #d7e4de;
-        border-radius: 12px;
-        background: linear-gradient(180deg, #fdfcf8, var(--grain));
-        color: #29585a;
+        padding: 6px 12px;
+        border: 1px solid #c9dad6;
+        color: #356468;
+        background: #f7fbfa;
         font-size: 14px;
-        box-shadow: 0 1px 3px rgba(11, 61, 61, 0.06);
-        transition: box-shadow 0.25s, transform 0.25s;
       }
-      .tag:hover {
-        transform: translateY(-1px);
-        box-shadow: 0 4px 10px rgba(11, 61, 61, 0.1);
-      }
-      .tag::before {
-        content: "";
-        position: absolute;
-        left: 12px;
-        top: 50%;
-        width: 10px;
-        height: 10px;
-        transform: translateY(-50%) rotate(45deg);
-        border-radius: 2.5px;
-        background: linear-gradient(135deg, var(--lake-mid), var(--lake-deep));
-        box-shadow: 0 0 0 3px rgba(42, 183, 169, 0.14);
-      }
-
-      /* ══════════ 6. 卡片（论文 / 项目） ══════════ */
-      .project,
-      .publication {
-        position: relative;
+      .publication,
+      .project {
         display: grid;
-        gap: 18px;
-        margin-bottom: 16px;
-        padding: 24px 26px;
-        border: 1px solid rgba(14, 124, 134, 0.15);
-        border-radius: 17px;
-        background: var(--salt);
-        box-shadow:
-          0 2px 10px rgba(11, 61, 61, 0.05),
-          inset 0 0 0 1px rgba(255, 255, 255, 0.65);
-        transition: transform 0.28s ease, box-shadow 0.28s ease, border-color 0.28s ease;
+        padding: 23px 0;
+        border-top: 1px solid var(--line);
+      }
+      .publication {
+        grid-template-columns: 65px 1fr;
+        gap: 17px;
+      }
+      .publication:first-of-type,
+      .project:first-of-type {
+        border-top: 0;
+        padding-top: 0;
       }
       .project {
-        grid-template-columns: 134px 1fr;
-      }
-      .publication {
-        grid-template-columns: 62px 1fr;
-      }
-      /* hover：微微浮起 + 涟漪扩散动画 */
-      .project:hover,
-      .publication:hover {
-        transform: translateY(-4px);
-        border-color: rgba(14, 124, 134, 0.32);
-        animation: ripple-ring 1.15s ease-out;
-      }
-      @keyframes ripple-ring {
-        0% {
-          box-shadow: 0 0 0 0 rgba(42, 183, 169, 0.28), 0 12px 26px rgba(11, 61, 61, 0.12);
-        }
-        100% {
-          box-shadow: 0 0 0 30px rgba(42, 183, 169, 0), 0 12px 26px rgba(11, 61, 61, 0.12);
-        }
+        grid-template-columns: 115px 1fr;
+        gap: 17px;
       }
       .project-meta {
         color: var(--gold);
-        font: 500 13px/1.55 var(--mono);
+        font: 500 13px/1.55 "DM Mono", monospace;
       }
       .project-title,
       .pub-title {
         margin: 0 0 5px;
-        font: 600 18px/1.42 var(--serif);
+        font-size: 18px;
+        font-weight: 600;
+        line-height: 1.4;
       }
       .project-detail {
         margin: 0;
@@ -579,14 +339,13 @@
       }
       .year {
         color: var(--gold);
-        font: 500 14px var(--mono);
+        font: 500 14px "DM Mono", monospace;
         padding-top: 3px;
       }
       .pub-title a:hover {
-        color: var(--lake-deep);
+        color: var(--accent);
         text-decoration: underline;
         text-underline-offset: 4px;
-        text-decoration-color: rgba(42, 183, 169, 0.55);
       }
       .authors,
       .venue {
@@ -595,12 +354,11 @@
         font-size: 15px;
       }
       .authors b {
-        color: var(--lake-deep);
+        color: var(--accent);
         font-weight: 600;
       }
       .venue {
         font-style: italic;
-        color: #6d8a86;
       }
       .pub-links {
         display: flex;
@@ -608,65 +366,56 @@
         margin-top: 9px;
       }
       .pub-links a {
-        color: var(--lake-deep);
-        font: 500 12px var(--mono);
+        color: var(--accent);
+        font: 500 12px "DM Mono", monospace;
       }
       .pub-links a:hover {
         color: var(--gold);
       }
-
-      /* ══════════ 7. 时间线 ══════════ */
       .timeline {
         position: relative;
       }
       .timeline::before {
         content: "";
         position: absolute;
-        top: 10px;
-        bottom: 10px;
-        left: 111.5px;
-        width: 2px;
-        border-radius: 2px;
-        background: linear-gradient(180deg, var(--lake-mid), var(--lake-shallow), transparent);
-        opacity: 0.7;
+        top: 8px;
+        bottom: 12px;
+        left: 110.5px;
+        border-left: 1px solid var(--line);
       }
       .entry {
         display: grid;
         grid-template-columns: 110px 1fr;
-        gap: 20px;
+        gap: 19px;
         position: relative;
-        padding: 0 0 26px;
+        padding: 0 0 25px;
       }
       .entry-year {
         color: var(--gold);
-        font: 500 13px var(--mono);
+        font: 500 13px "DM Mono", monospace;
       }
       .entry-content {
         position: relative;
       }
-      /* 时间线节点：盐水滴菱形 */
       .entry-content::before {
         content: "";
         position: absolute;
-        left: -23px;
-        top: 9px;
-        width: 11px;
-        height: 11px;
-        transform: rotate(45deg);
-        border-radius: 2.5px;
-        background: linear-gradient(135deg, var(--lake-mid), var(--lake-deep));
-        box-shadow: 0 0 0 4px rgba(42, 183, 169, 0.15);
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        left: -22px;
+        top: 8px;
+        background: var(--accent);
       }
       .entry h3 {
         margin: 0;
-        font: 600 17.5px/1.45 var(--serif);
+        font-size: 17px;
       }
       .entry p {
         margin: 2px 0 0;
         color: var(--muted);
         font-size: 15px;
       }
-
       .news {
         display: grid;
         gap: 0;
@@ -680,65 +429,44 @@
       }
       .news-date {
         color: var(--gold);
-        font: 12px var(--mono);
+        font: 12px "DM Mono", monospace;
         padding-top: 4px;
       }
       .news-item p {
         margin: 0;
       }
-
-      /* ══════════ 8. 页脚（湖岸线） ══════════ */
       footer {
-        position: relative;
-        margin-top: 46px;
-        padding-top: 36px;
-        color: #7c918d;
-        font: 12px var(--mono);
-        letter-spacing: 0.06em;
+        margin-top: 38px;
+        padding-top: 23px;
+        border-top: 1px solid var(--line);
+        color: #899593;
+        font: 12px "DM Mono", monospace;
         display: flex;
         justify-content: space-between;
         gap: 15px;
       }
-      footer::before {
-        content: "";
-        position: absolute;
-        left: -70px;
-        right: -70px;
-        top: 0;
-        height: 28px;
-        background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 26' preserveAspectRatio='none'%3E%3Cpath fill='%23e0ece6' d='M0,12 C25,24 50,0 75,10 C100,20 125,2 150,11 C175,20 190,8 200,12 L200,26 L0,26 Z'/%3E%3Cpath fill='none' stroke='%232ab7a9' stroke-opacity='0.5' stroke-width='1.6' d='M0,8 C25,20 50,-4 75,6 C100,16 125,-2 150,7 C175,16 190,4 200,8'/%3E%3C/svg%3E")
-          repeat-x top center;
-        background-size: 200px 26px;
-        opacity: 0.55;
-      }
-
-      /* ══════════ 9. Toast ══════════ */
       #toast {
         position: fixed;
         left: 50%;
-        bottom: 26px;
-        transform: translate(-50%, 100px);
-        padding: 11px 19px;
-        color: #f2fbf8;
-        background: linear-gradient(135deg, var(--lake-deep), var(--lake-mid));
-        border: 1px solid rgba(255, 255, 255, 0.28);
-        border-radius: 14px;
-        font: 500 14px var(--sans);
-        box-shadow: 0 10px 26px rgba(11, 61, 61, 0.32);
-        transition: transform 0.3s cubic-bezier(0.2, 0.9, 0.3, 1.2);
+        bottom: 25px;
+        transform: translate(-50%, 90px);
+        padding: 10px 17px;
+        color: white;
+        background: var(--ink);
+        border-radius: 2px;
+        font-size: 14px;
+        transition: transform 0.25s;
         z-index: 9;
       }
       #toast.show {
         transform: translate(-50%, 0);
       }
-
-      /* ══════════ 10. 响应式（移动端） ══════════ */
       @media (max-width: 800px) {
         .layout {
           display: block;
         }
         .layout aside {
-          padding: 26px 24px 22px;
+          padding: 27px 24px 23px;
           border-right: 0;
           border-bottom: 1px solid var(--line);
         }
@@ -759,7 +487,7 @@
         }
         .title {
           clear: both;
-          padding-top: 16px;
+          padding-top: 17px;
           margin-bottom: 14px;
         }
         .contact {
@@ -797,74 +525,58 @@
         main {
           padding: 0 24px 34px;
         }
-        /* 湖面横幅变矮、波浪简化 */
         .hero {
-          margin: 0 -24px;
           min-height: 0;
-          padding: 58px 24px 90px;
-        }
-        .hero::before {
-          height: 18px;
+          padding: 52px 0 42px;
         }
         .hero::after {
-          height: 32px;
-        }
-        .bubbles span:nth-child(n + 6) {
-          display: none;
+          width: 210px;
+          height: 210px;
+          right: -105px;
+          top: -105px;
+          box-shadow: 0 0 0 23px #f3f7f4, 0 0 0 24px #d7e6e1;
         }
         .hero h1 {
-          font-size: 32px;
+          font-size: 35px;
         }
         .hero p {
-          font-size: 15.5px;
+          font-size: 16px;
         }
         .stats {
-          gap: 10px;
-          margin-top: 26px;
-        }
-        .stat {
-          min-width: 0;
-          flex: 1 1 100px;
-          padding: 12px 14px;
+          gap: 17px;
         }
         .stat b {
-          font-size: 21px;
-        }
-        .stat span {
-          font-size: 11.5px;
+          font-size: 19px;
         }
         section {
-          padding-top: 44px;
-        }
-        .strata {
-          margin-top: 34px;
+          padding-top: 42px;
         }
         .bio {
           font-size: 16px;
         }
-        .project {
-          grid-template-columns: 1fr;
-          gap: 8px;
-          padding: 20px;
-        }
         .publication {
           grid-template-columns: 48px 1fr;
-          gap: 12px;
-          padding: 20px;
+          gap: 10px;
         }
-        .project-title,
+        .project {
+          grid-template-columns: 92px 1fr;
+          gap: 12px;
+        }
+        .project-title {
+          font-size: 16px;
+        }
         .pub-title {
           font-size: 16px;
         }
         .timeline::before {
-          left: 85px;
+          left: 83.5px;
         }
         .entry {
           grid-template-columns: 84px 1fr;
-          gap: 15px;
+          gap: 14px;
         }
         .entry-content::before {
-          left: -18.5px;
+          left: -18px;
         }
         .news-item {
           grid-template-columns: 76px 1fr;
@@ -875,23 +587,7 @@
         }
         footer span + span {
           display: block;
-          margin-top: 4px;
-        }
-        footer::before {
-          left: -24px;
-          right: -24px;
-        }
-      }
-
-      /* 尊重系统"减少动效"偏好 */
-      @media (prefers-reduced-motion: reduce) {
-        .bubbles span {
-          animation: none;
-          opacity: 0;
-        }
-        .project:hover,
-        .publication:hover {
-          animation: none;
+          margin-top: 3px;
         }
       }
     </style>
@@ -1002,16 +698,6 @@
       </aside>
       <main>
         <header class="hero" id="about">
-          <div class="bubbles" aria-hidden="true">
-            <span style="--s: 13px; --l: 6%; --d: 10s; --p: 0s"></span>
-            <span style="--s: 8px; --l: 16%; --d: 13s; --p: 2.5s"></span>
-            <span style="--s: 16px; --l: 26%; --d: 11s; --p: 5s"></span>
-            <span style="--s: 7px; --l: 38%; --d: 15s; --p: 1s"></span>
-            <span style="--s: 11px; --l: 52%; --d: 12s; --p: 6.5s"></span>
-            <span style="--s: 9px; --l: 64%; --d: 14s; --p: 3.5s"></span>
-            <span style="--s: 15px; --l: 76%; --d: 10.5s; --p: 7.5s"></span>
-            <span style="--s: 7px; --l: 88%; --d: 13.5s; --p: 4.5s"></span>
-          </div>
           <div class="hero-content">
             <div class="eyebrow">Hydrogeology · Groundwater Science</div>
             <h1 data-i18n="hero">
@@ -1046,9 +732,6 @@
             ><span class="tag" data-i18n="tag4">盐湖资源</span>
           </div>
         </section>
-        <div class="strata" aria-hidden="true">
-          <i></i><i></i><i></i><i></i>
-        </div>
         <section id="projects">
           <h2 class="section-title">
             02 / <span data-i18n="researchProjects">Research Projects</span>
@@ -1093,9 +776,6 @@
             </div>
           </article>
         </section>
-        <div class="strata" aria-hidden="true">
-          <i></i><i></i><i></i><i></i>
-        </div>
         <section id="publications">
           <h2 class="section-title">
             03 / <span data-i18n="publications">Selected Publications</span>
@@ -1111,7 +791,7 @@
                 >
               </h3>
               <p class="authors"><b>Zitao Wang</b>, Kai Chen, Jianping Wang</p>
-              <p class="venue">Environmental Modelling &amp; Software</p>
+              <p class="venue">Environmental Modelling & Software</p>
               <div class="pub-links">
                 <!--
               <a href="#">[PDF]</a>
@@ -1165,12 +845,9 @@
             </div>
           </article>
         </section>
-        <div class="strata" aria-hidden="true">
-          <i></i><i></i><i></i><i></i>
-        </div>
         <section id="education">
           <h2 class="section-title">
-            04 / <span data-i18n="education">Education &amp; Experience</span>
+            04 / <span data-i18n="education">Education & Experience</span>
           </h2>
           <div class="timeline">
             <div class="entry">
@@ -1331,17 +1008,10 @@
             "欢迎对地下水数值模拟、盐湖资源与水文地球化学感兴趣的同学通过邮件联系。",
         },
       };
+      // ——— 预览模式语言切换：本地切换，不改变 URL（主题预览用） ———
       let lang;
       const langButton = document.getElementById("language-toggle");
-      const languageFromPath = () =>
-        location.pathname.replace(/\/+$/, "").endsWith("/cn") ? "zh" : "en";
-      const languagePath = (language) => {
-        const base = location.pathname.replace(/\/(?:en|cn)\/?$/, "") || "/";
-        return `${base}${base.endsWith("/") ? "" : "/"}${
-          language === "zh" ? "cn" : "en"
-        }`;
-      };
-      function applyLanguage(nextLanguage, updateUrl = false) {
+      function applyLanguage(nextLanguage) {
         lang = nextLanguage;
         document.documentElement.lang = lang === "zh" ? "zh-CN" : "en";
         document
@@ -1358,23 +1028,13 @@
           lang === "zh" ? "Switch to English" : "Switch to Chinese"
         );
         document.title = "Zitao Wang (汪子涛) · Academic Homepage";
-        if (updateUrl)
-          history.pushState(
-            { lang },
-            "",
-            languagePath(lang) + location.search + location.hash
-          );
       }
-      // The root URL is normalized to /en so the default language is shareable too.
-      applyLanguage(
-        languageFromPath(),
-        !/\/(?:en|cn)\/?$/.test(location.pathname)
-      );
+      applyLanguage(location.pathname.includes("/cn/") ? "zh" : "en");
       langButton.addEventListener("click", () =>
-        applyLanguage(lang === "zh" ? "en" : "zh", true)
+        applyLanguage(lang === "zh" ? "en" : "zh")
       );
       window.addEventListener("popstate", () =>
-        applyLanguage(languageFromPath())
+        applyLanguage(location.pathname.includes("/cn/") ? "zh" : "en")
       );
       const showToast = (message) => {
         const toast = document.getElementById("toast");
