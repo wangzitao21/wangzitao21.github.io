@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#ffffff" />
+    <meta
+      name="description"
+      content="Zitao Wang, Assistant Professor of Hydrogeology at Anhui University of Science and Technology. Research projects, publications and academic background."
+    />
+    <title>Zitao Wang (汪子涛) · Academic Homepage</title>
+    <link rel="canonical" href="https://wangzitao21.github.io/" />
+    <link rel="icon" href="./assets/favicon.svg" type="image/svg+xml" />
+    <script>
+      (() => {
+        document.documentElement.classList.add("js");
+        let theme;
+        try {
+          theme = localStorage.getItem("academic-homepage-theme");
+        } catch {}
+        if (theme !== "light" && theme !== "dark")
+          theme = matchMedia("(prefers-color-scheme: dark)").matches
+            ? "dark"
+            : "light";
+        document.documentElement.dataset.theme = theme;
+      })();
+    </script>
+    <link rel="stylesheet" href="./assets/site.css" />
+    <script src="./assets/site.js" defer></script>
+  </head>
+  <body id="top">
+    <a class="skip-link" href="#about">Skip to content</a>
+    <header class="site-header">
+      <div class="wrap header-inner">
+        <a class="brand" href="#top">Zitao Wang</a>
+        <nav class="navigation" aria-label="Page sections">
+          <a href="#projects">Projects</a>
+          <a href="#publications">Publications</a>
+          <a href="#education">Experience</a>
+          <a href="#contact">Contact</a>
+        </nav>
+        <div class="preferences">
+          <button
+            class="theme-toggle"
+            id="theme-toggle"
+            type="button"
+            aria-pressed="false"
+            aria-label="Switch to dark mode"
+            data-light="Light"
+            data-dark="Dark"
+            data-switch-light="Switch to light mode"
+            data-switch-dark="Switch to dark mode"
+          >
+            <svg
+              class="moon"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.6"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <path
+                d="M20.5 13A8.5 8.5 0 0 1 11 3.5 8.5 8.5 0 1 0 20.5 13Z"
+              /></svg
+            ><svg
+              class="sun"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.6"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <circle cx="12" cy="12" r="4" />
+              <path
+                d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5"
+              /></svg
+            ><span data-theme-label>Dark</span>
+          </button>
+        </div>
+      </div>
+    </header>
+    <main class="wrap">
+      <section class="introduction" id="about" aria-labelledby="name">
+        <img
+          class="avatar"
+          src="./assets/avatar-placeholder.svg"
+          alt="Portrait placeholder"
+          width="180"
+          height="180"
+        />
+        <div class="intro-main">
+          <div class="identity">
+            <h1 class="name" id="name">Zitao Wang 汪子涛</h1>
+          </div>
+          <p class="role">Assistant Professor · Hydrogeology</p>
+          <p class="affiliation">
+            School of Earth and Environment<br />
+            Anhui University of Science and Technology
+          </p>
+          <p class="bio">
+            I study reactive transport in saline-lake groundwater, using
+            numerical modelling and data-driven methods to investigate
+            groundwater systems and salt-lake resources.
+          </p>
+          <div class="social-links">
+            <a href="mailto:zitao.wang@aust.edu.cn">Email</a
+            ><a
+              href="https://scholar.google.com/citations?user=aIXhXM4AAAAJ"
+              target="_blank"
+              rel="noopener noreferrer"
+              >Google Scholar<span class="external-mark" aria-hidden="true">
+                ↗</span
+              ></a
+            ><a
+              href="https://orcid.org/0000-0002-7776-4282"
+              target="_blank"
+              rel="noopener noreferrer"
+              >ORCID<span class="external-mark" aria-hidden="true"> ↗</span></a
+            ><a
+              href="https://github.com/wangzitao21"
+              target="_blank"
+              rel="noopener noreferrer"
+              >GitHub<span class="external-mark" aria-hidden="true"> ↗</span></a
+            >
+          </div>
+        </div>
+        <aside class="interests" aria-labelledby="interests-title">
+          <h2 id="interests-title">Research interests</h2>
+          <ul>
+            <li>Reactive transport</li>
+            <li>Groundwater modelling</li>
+            <li>Salt-lake resources</li>
+          </ul>
+        </aside>
+      </section>
+      <section class="section" id="projects" aria-labelledby="projects-title">
+        <div class="section-heading">
+          <h2 id="projects-title">Research projects</h2>
+        </div>
+        <ul class="research-list" id="project-list" data-expandable-list>
+          <li class="research-entry project">
+            <p class="entry-date">2027–2030</p>
+            <div>
+              <h3>
+                Water–salt dynamics and ecosystem response mechanisms in the
+                salt-lake region of the Qaidam Basin under the combined effects
+                of climate change and resource development
+              </h3>
+              <p class="funder">National Natural Science Foundation of China</p>
+              <p class="project-meta">
+                <span class="status ongoing">Ongoing</span
+                ><span class="project-role">Subproject Lead</span
+                ><span class="grant-id">No. U24A20598</span>
+              </p>
+            </div>
+          </li>
+          <li class="research-entry project">
+            <p class="entry-date">2026–2028</p>
+            <div>
+              <h3>
+                Dynamic evolution of saline-lake brine aquifers and mechanisms
+                of preferential flow-path formation
+              </h3>
+              <p class="funder">National Natural Science Foundation of China</p>
+              <p class="project-meta">
+                <span class="status ongoing">Ongoing</span
+                ><span class="project-role">Principal Investigator</span
+                ><span class="grant-id">No. 42502241</span>
+              </p>
+            </div>
+          </li>
+          <li class="research-entry project">
+            <p class="entry-date">2024–2026</p>
+            <div>
+              <h3>
+                Solid-liquid transformation mechanisms and reactive transport of
+                potash–lithium deposits under artificial solution mining
+              </h3>
+              <p class="funder">China Postdoctoral Science Foundation</p>
+              <p class="project-meta">
+                <span class="status completed">Completed</span
+                ><span class="project-role">Principal Investigator</span
+                ><span class="grant-id">No. 2024M760016</span>
+              </p>
+            </div>
+          </li>
+          <li class="research-entry project">
+            <p class="entry-date">2025–2026</p>
+            <div>
+              <h3>
+                Postdoctoral Fellowship Program of China Postdoctoral Science
+                Foundation
+              </h3>
+
+              <p class="project-meta">
+                <span class="status completed">Completed</span
+                ><span class="project-role">Principal Investigator</span
+                ><span class="grant-id">No. GZC20250302</span>
+              </p>
+            </div>
+          </li>
+          <li class="research-entry project">
+            <p class="entry-date">2024–2029</p>
+            <div>
+              <h3>
+                Enhanced extraction and efficient separation of hard-to-recover
+                potassium and lithium resources in salt lakes
+              </h3>
+              <p class="funder">
+                Strategic Priority Research Program of the Chinese Academy of
+                Sciences
+              </p>
+              <p class="project-meta">
+                <span class="status ongoing">Ongoing</span
+                ><span class="project-role">Project Participant</span
+                ><span class="grant-id">No. XDB1130101</span>
+              </p>
+            </div>
+          </li>
+          <li class="research-entry project" data-collapsed>
+            <p class="entry-date">2025–2029</p>
+            <div>
+              <h3>
+                Transport of low-grade potassium-bearing brines and mechanisms
+                of solid–liquid transformation under artificial solution mining
+              </h3>
+              <p class="funder">National Natural Science Foundation of China</p>
+              <p class="project-meta">
+                <span class="status ongoing">Ongoing</span
+                ><span class="project-role">Project Participant</span
+                ><span class="grant-id">No. U24A20598</span>
+              </p>
+            </div>
+          </li>
+        </ul>
+        <div class="list-controls" data-list-controls="project-list" hidden>
+          <p
+            class="list-count"
+            role="status"
+            aria-live="polite"
+            data-count-template="{shown} of {total} shown"
+          >
+            5 of 6 shown
+          </p>
+          <div class="list-actions">
+            <button
+              class="more-button"
+              type="button"
+              data-show-more
+              data-more-label="Show more"
+              aria-controls="project-list"
+              aria-expanded="false"
+            >
+              Show more</button
+            ><button
+              class="more-button"
+              type="button"
+              data-show-less
+              aria-controls="project-list"
+              aria-expanded="false"
+              hidden
+            >
+              Show less
+            </button>
+          </div>
+        </div>
+      </section>
+      <section
+        class="section"
+        id="publications"
+        aria-labelledby="publications-title"
+      >
+        <div class="section-heading">
+          <h2 id="publications-title">Publications</h2>
+          <a
+            href="https://scholar.google.com/citations?user=aIXhXM4AAAAJ"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="section-link"
+            >Google Scholar<span class="external-mark" aria-hidden="true">
+              ↗</span
+            ></a
+          >
+        </div>
+        <ul class="research-list" id="publication-list" data-expandable-list>
+          <li class="research-entry publication" lang="en">
+            <p class="entry-date">2026</p>
+            <div>
+              <h3 class="entry-title">
+                <a
+                  href="https://doi.org/10.1007/s00603-026-05863-8"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  >Lithology Controlled Pore-Scale Permeability Evolution in
+                  Heterogeneous Salt Lake Reservoirs Under Coupled THC
+                  Conditions<span class="external-mark" aria-hidden="true">
+                    ↗</span
+                  ></a
+                >
+              </h3>
+              <p class="authors">
+                Chao Yue, <strong>Zitao Wang</strong>, Jianping Wang, Jingkang
+                Li, Dongmei Yu, Yangan Ren
+              </p>
+              <p class="venue">Rock Mechanics and Rock Engineering</p>
+            </div>
+          </li>
+          <li class="research-entry publication" lang="en">
+            <p class="entry-date">2026</p>
+            <div>
+              <h3 class="entry-title">
+                <a
+                  href="https://doi.org/10.1007/s11707-026-0213-6"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  >Groundwater Potential mapping under data constraints: the
+                  critical roles of sample size and feature dimensionality<span
+                    class="external-mark"
+                    aria-hidden="true"
+                  >
+                    ↗</span
+                  ></a
+                >
+              </h3>
+              <p class="authors">
+                <strong>Zitao Wang</strong>, Jiansen Li, Yang Liu, Jinjun Han
+              </p>
+              <p class="venue">Frontiers of Earth Science</p>
+            </div>
+          </li>
+          <li class="research-entry publication" lang="en">
+            <p class="entry-date">2026</p>
+            <div>
+              <h3 class="entry-title">
+                <a
+                  href="https://doi.org/10.1007/s11442-026-2468-y"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  >Quantitative inversion of soil salinization in salt lake
+                  regions: Spatiotemporal variation and driving mechanisms<span
+                    class="external-mark"
+                    aria-hidden="true"
+                  >
+                    ↗</span
+                  ></a
+                >
+              </h3>
+              <p class="authors">
+                Jinjun Han, <strong>Zitao Wang</strong>, Jianping Wang, Chuntao
+                Zhao, Dongmei Yu, Zhaofeng Liu
+              </p>
+              <p class="venue">Journal of Geographical Sciences</p>
+            </div>
+          </li>
+          <li class="research-entry publication" lang="en">
+            <p class="entry-date">2026</p>
+            <div>
+              <h3 class="entry-title">
+                <a
+                  href="https://doi.org/10.1016/j.envsoft.2025.106755"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  >Enhancing Surrogate Assisted Optimization with SHAP Guided
+                  Two-Stage Sampling<span
+                    class="external-mark"
+                    aria-hidden="true"
+                  >
+                    ↗</span
+                  ></a
+                >
+              </h3>
+              <p class="authors">
+                <strong>Zitao Wang</strong>, Kai Chen, Jianping Wang
+              </p>
+              <p class="venue">Environmental Modelling &amp; Software</p>
+            </div>
+          </li>
+          <li class="research-entry publication" lang="en">
+            <p class="entry-date">2025</p>
+            <div>
+              <h3 class="entry-title">
+                <a
+                  href="https://doi.org/10.1016/j.ejrh.2025.102195"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  >Spatial modeling of brine level and salinity in the Qarhan
+                  Salt Lake using GIS and automated machine learning
+                  algorithms<span class="external-mark" aria-hidden="true">
+                    ↗</span
+                  ></a
+                >
+              </h3>
+              <p class="authors">
+                Dongmei Yu, <strong>Zitao Wang</strong>, Chao Yue, Jianping Wang
+              </p>
+              <p class="venue">Journal of Hydrology: Regional Studies</p>
+            </div>
+          </li>
+          <li class="research-entry publication" lang="en" data-collapsed>
+            <p class="entry-date">2024</p>
+            <div>
+              <h3 class="entry-title">
+                <a
+                  href="https://doi.org/10.1016/j.asoc.2024.111991"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  >An Optimization Framework with Dimensionality Reduction Using
+                  Markov Chain Monte Carlo and Genetic Algorithms for
+                  Groundwater Potential Assessment<span
+                    class="external-mark"
+                    aria-hidden="true"
+                  >
+                    ↗</span
+                  ></a
+                >
+              </h3>
+              <p class="authors">
+                <strong>Zitao Wang</strong>, Chao Yue, Jianping Wang
+              </p>
+              <p class="venue">Applied Soft Computing</p>
+            </div>
+          </li>
+          <li class="research-entry publication" lang="en" data-collapsed>
+            <p class="entry-date">2024</p>
+            <div>
+              <h3 class="entry-title">
+                <a
+                  href="https://doi.org/10.1007/s12145-024-01361-z"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  >Evaluating parameter inversion efficiency in Heterogeneous
+                  Groundwater models using Karhunen-Loève expansion: a
+                  comparative study of genetic algorithm, ensemble smoother, and
+                  MCMC<span class="external-mark" aria-hidden="true">
+                    ↗</span
+                  ></a
+                >
+              </h3>
+              <p class="authors">
+                <strong>Zitao Wang</strong>, Chao Yue, Jianping Wang
+              </p>
+              <p class="venue">Earth Science Informatics</p>
+            </div>
+          </li>
+          <li class="research-entry publication" lang="en" data-collapsed>
+            <p class="entry-date">2024</p>
+            <div>
+              <h3 class="entry-title">
+                <a
+                  href="https://doi.org/10.1007/s11356-023-31262-5"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  >Spatial predictions of groundwater potential using automated
+                  machine learning (AutoML): a comparative study of feature
+                  selection and training sample size in Qinghai Province,
+                  China<span class="external-mark" aria-hidden="true">
+                    ↗</span
+                  ></a
+                >
+              </h3>
+              <p class="authors">
+                <strong>Zitao Wang</strong>, Jianping Wang, Mengling Li
+              </p>
+              <p class="venue">Environmental Science and Pollution Research</p>
+            </div>
+          </li>
+          <li class="research-entry publication" lang="en" data-collapsed>
+            <p class="entry-date">2024</p>
+            <div>
+              <h3 class="entry-title">
+                <a
+                  href="https://doi.org/10.1016/j.rcar.2024.10.003"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  >Spatio-temporal change and driving mechanisms of land
+                  use/cover in Qarhan Salt Lake area during from 2000 to 2020,
+                  based on machine learning<span
+                    class="external-mark"
+                    aria-hidden="true"
+                  >
+                    ↗</span
+                  ></a
+                >
+              </h3>
+              <p class="authors">
+                Chao Yue, <strong>Zitao Wang</strong>, Jianping Wang
+              </p>
+              <p class="venue">Research in Cold and Arid Regions</p>
+            </div>
+          </li>
+        </ul>
+        <div class="list-controls" data-list-controls="publication-list" hidden>
+          <p
+            class="list-count"
+            role="status"
+            aria-live="polite"
+            data-count-template="{shown} of {total} shown"
+          >
+            5 of 9 shown
+          </p>
+          <div class="list-actions">
+            <button
+              class="more-button"
+              type="button"
+              data-show-more
+              data-more-label="Show more"
+              aria-controls="publication-list"
+              aria-expanded="false"
+            >
+              Show more</button
+            ><button
+              class="more-button"
+              type="button"
+              data-show-less
+              aria-controls="publication-list"
+              aria-expanded="false"
+              hidden
+            >
+              Show less
+            </button>
+          </div>
+        </div>
+      </section>
+      <section class="section" id="education" aria-labelledby="education-title">
+        <div class="section-heading">
+          <h2 id="education-title">Education &amp; experience</h2>
+        </div>
+        <ul class="research-list">
+          <li class="research-entry experience-entry">
+            <p class="entry-date">2024–Present</p>
+            <div>
+              <h3>Anhui University of Science and Technology</h3>
+              <p class="experience-role">Assistant Professor</p>
+              <p class="experience-detail">School of Earth and Environment</p>
+            </div>
+          </li>
+          <li class="research-entry experience-entry">
+            <p class="entry-date">2024–2026</p>
+            <div>
+              <h3>Anhui University of Science and Technology</h3>
+              <p class="experience-role">Postdoctoral Researcher</p>
+              <p class="experience-detail">School of Earth and Environment</p>
+            </div>
+          </li>
+          <li class="research-entry experience-entry">
+            <p class="entry-date">2021–2024</p>
+            <div>
+              <h3>University of Chinese Academy of Sciences</h3>
+              <p class="experience-role">PhD in Geology</p>
+              <p class="experience-detail">Advisor: Prof. Jianping Wang</p>
+            </div>
+          </li>
+        </ul>
+      </section>
+      <section
+        class="section contact"
+        id="contact"
+        aria-labelledby="contact-title"
+      >
+        <div class="section-heading"><h2 id="contact-title">Contact</h2></div>
+        <p class="contact-intro">
+          Research enquiries and academic correspondence are welcome.
+        </p>
+        <div class="contact-list">
+          <div class="contact-row">
+            <span class="contact-label">University</span
+            ><a class="email-address" href="mailto:zitao.wang@aust.edu.cn"
+              >zitao.wang@aust.edu.cn</a
+            ><button
+              type="button"
+              class="copy-button"
+              data-copy-email="zitao.wang@aust.edu.cn"
+              aria-label="Copy email address: zitao.wang@aust.edu.cn"
+            >
+              <svg
+                class="copy-icon"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.6"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <rect x="8" y="8" width="12" height="13" rx="2" />
+                <path d="M16 8V3H3v13h5" /></svg
+              ><span class="copy-label">Copy</span>
+            </button>
+          </div>
+          <div class="contact-row">
+            <span class="contact-label">Personal</span
+            ><a class="email-address" href="mailto:zitao.waung@gmail.com"
+              >zitao.waung@gmail.com</a
+            ><button
+              type="button"
+              class="copy-button"
+              data-copy-email="zitao.waung@gmail.com"
+              aria-label="Copy email address: zitao.waung@gmail.com"
+            >
+              <svg
+                class="copy-icon"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.6"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <rect x="8" y="8" width="12" height="13" rx="2" />
+                <path d="M16 8V3H3v13h5" /></svg
+              ><span class="copy-label">Copy</span>
+            </button>
+          </div>
+        </div>
+      </section>
+    </main>
+    <footer class="wrap site-footer">
+      <div class="footer-meta">
+        <span>© 2026 Zitao Wang</span><span>Updated September 2026</span>
+      </div>
+      <a class="back-top" href="#top">Back to top ↑</a>
+    </footer>
+    <div
+      class="toast"
+      id="toast"
+      role="status"
+      aria-live="polite"
+      data-success="Email copied"
+      data-failure="Copy unavailable. Please select the email address to copy it."
+    ></div>
+  </body>
+</html>
