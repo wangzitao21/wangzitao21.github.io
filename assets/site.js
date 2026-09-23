@@ -42,12 +42,12 @@
       collapseButton.hidden = shown <= 5;
       button.setAttribute('aria-expanded', String(shown > 5));
       collapseButton.setAttribute('aria-expanded', String(shown > 5));
-      button.textContent = `${button.dataset.moreLabel} (${Math.min(shown * 2, items.length) - shown})`;
+      button.textContent = `${button.dataset.moreLabel} (${items.length - shown})`;
     }
     renderList();
     button.addEventListener('click', () => {
       const firstNewItem = items[shown];
-      shown = Math.min(shown * 2, items.length);
+      shown = items.length;
       renderList();
       const focusTarget = firstNewItem.querySelector('a, h3');
       if (focusTarget) {

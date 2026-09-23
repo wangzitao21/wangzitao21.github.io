@@ -97,4 +97,11 @@ export const publications = [ { year: '2026',
     authors: [ '汪子涛', '王建萍', '韩光' ],
     venue: '盐湖研究',
     doi: '10.12119/j.yhyj.202202005',
-    url: 'https://doi.org/10.12119/j.yhyj.202202005' } ];
+    url: 'https://doi.org/10.12119/j.yhyj.202202005' },
+  { year: '2019',
+    title: '淮南煤田地下水水化学空间分布及其形成作用',
+    language: 'zh-CN',
+    authors: [ '汪子涛', '刘启蒙', '刘瑜' ],
+    venue: '煤田地质与勘探',
+    doi: '10.3969/j.issn.1001-1986.2019.05.006',
+    url: 'https://doi.org/10.3969/j.issn.1001-1986.2019.05.006' } ];
