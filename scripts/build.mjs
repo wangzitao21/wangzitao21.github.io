@@ -14,8 +14,7 @@ const copy = icon('copy-icon', '<rect x="8" y="8" width="12" height="13" rx="2"/
 function page() {
   const text = labels;
   const heading = (id, title, link = '') => `<div class="section-heading"><h2 id="${id}">${escape(title)}</h2>${link}</div>`;
-  const roleOrder = {pi: 0, subprojectLead: 1, participant: 2};
-  const sortedProjects = [...projects].sort((a, b) => Number(Boolean(b.pinned)) - Number(Boolean(a.pinned)) || roleOrder[a.role] - roleOrder[b.role]);
+  const sortedProjects = projects;
   const listControls = (id, total) => `<div class="list-controls" data-list-controls="${id}" hidden><p class="list-count" role="status" aria-live="polite" data-count-template="${escape(text.count)}">${escape(text.count.replace('{shown}', Math.min(5, total)).replace('{total}', total))}</p><div class="list-actions"><button class="more-button" type="button" data-show-more data-more-label="${escape(text.more)}" aria-controls="${id}" aria-expanded="false">${escape(text.more)}</button><button class="more-button" type="button" data-show-less aria-controls="${id}" aria-expanded="false" hidden>${escape(text.less)}</button></div></div>`;
   const projectRows = sortedProjects.map((project, index) => `<li class="research-entry project"${index >= 5 ? ' data-collapsed' : ''}>
           <p class="entry-date">${escape(project.period || '')}</p>
@@ -24,10 +23,10 @@ function page() {
             <p class="project-meta"><span class="status ${project.status}">${escape(text[project.status])}</span><span class="project-role">${escape(text[project.role])}</span><span class="grant-id">No. ${escape(project.number)}</span></p>
           </div>
         </li>`).join('\n        ');
-  const paperRows = publications.map((publication, index) => `<li class="research-entry publication" lang="en"${index >= 5 ? ' data-collapsed' : ''}>
+  const paperRows = publications.map((publication, index) => `<li class="research-entry publication" lang="${escape(publication.language || 'en')}"${index >= 5 ? ' data-collapsed' : ''}>
           <p class="entry-date">${escape(publication.year)}</p>
-          <div><h3 class="entry-title">${external(publication.url, escape(publication.title))}</h3>
-            <p class="authors">${publication.authors.map(name => name === profile.name ? `<strong>${escape(name)}</strong>` : escape(name)).join(', ')}</p>
+          <div><h3 class="entry-title">${external(publication.url, `${escape(publication.title)}${publication.language === 'zh-CN' ? '<span lang="en"> (in Chinese)</span>' : ''}`)}</h3>
+            <p class="authors">${publication.authors.map(name => name === profile.name || name === profile.nameChinese ? `<strong>${escape(name)}</strong>` : escape(name)).join(', ')}</p>
             <p class="venue">${escape(publication.venue)}</p>
           </div>
         </li>`).join('\n        ');
@@ -45,7 +44,7 @@ function page() {
   <meta name="color-scheme" content="light dark">
   <meta name="theme-color" content="#ffffff">
   <meta name="description" content="Zitao Wang, Assistant Professor of Hydrogeology at Anhui University of Science and Technology. Research projects, publications and academic background.">
-  <title>Zitao Wang · Academic Homepage</title>
+  <title>${escape(profile.name)} (${escape(profile.nameChinese)}) · Academic Homepage</title>
   <link rel="canonical" href="https://wangzitao21.github.io/">
   <link rel="icon" href="./assets/favicon.svg" type="image/svg+xml">
   <script>
@@ -80,7 +79,7 @@ function page() {
     <section class="introduction" id="about" aria-labelledby="name">
       <img class="avatar" src="./${escape(profile.photo)}" alt="${escape(profile.photo.endsWith('avatar-placeholder.svg') ? text.photoPlaceholder : text.portrait)}" width="180" height="180">
       <div class="intro-main">
-        <div class="identity"><h1 class="name" id="name">${escape(profile.name)}</h1></div>
+        <div class="identity"><h1 class="name" id="name">${escape(profile.name)} ${escape(profile.nameChinese)}</h1></div>
         <p class="role">${escape(profile.role)}</p>
         <p class="affiliation">${escape(profile.department)}<br>${escape(profile.institution)}</p>
         <p class="bio">${escape(profile.introduction)}</p>
